@@ -20,12 +20,15 @@ export PATH=$PATH:/sbin
 
 
 # Nix
+# please remove /etc/zshrc 
+
 if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
     . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 fi
 # End Nix
 
-
+# no analytics
+export HOMEBREW_NO_ANALYTICS=1
 
 # termcolor info
 # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/
