@@ -1,0 +1,44 @@
+# ignore everything
+*
+
+# except these
+!.gitignore
+!README.md
+!.nix-channels
+!.meta
+!.meta/**
+!bin
+!bin/**
+
+# liberally include everything in our .config
+!.config
+!.config/**
+
+# and then ignore things we don't want
+.DS_Store
+.config/.wrangler
+.config/configstore
+.config/direnv
+.config/dnsproxy/debug.log
+.config/gcloud
+.config/gh/hosts.yml
+.config/gh/state.yml
+.config/github-copilot
+.config/iterm2/
+.config/nixpkgs/**/result
+.config/nvim/.netrwhist
+.config/nvim/autoload
+.config/nvim/tmp/bak/*~
+.config/nvim/tmp/swp
+.config/nvim/tmp/undo
+.config/op/*
+.config/ssh/keys/*.pem
+.config/tmux/plugins
+.config/wslu
+
+# work things
+.config/sh/env.work
+.config/sh/functions.work
+.config/ssh/config.d/work
+.config/git/work
+bin/work/**
