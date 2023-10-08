@@ -4,6 +4,7 @@
 # except these
 !.gitignore
 !README.md
+!Makefile
 !.nix-channels
 !.meta
 !.meta/**
@@ -18,6 +19,7 @@
 .DS_Store
 .config/.wrangler
 .config/configstore
+.config/fontconfig
 .config/direnv
 .config/dnsproxy/debug.log
 .config/gcloud

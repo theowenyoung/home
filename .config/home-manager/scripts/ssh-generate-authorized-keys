@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Generates SSH authorized_keys file from keys in ~/.config/ssh/keys
+
+cd "$HOME/.config/ssh" || exit
+
+rm -f authorized_keys
+
+for pub in keys/*.pub; do
+        echo "# $pub" >>authorized_keys
+        cat "$pub" >>authorized_keys
+done
+
+# The following works around SSH's lack of support for XDG config paths. Could
+# technically edit the /etc/ssh/sshd_config on every machine we touch instead,
+# but I'd rather not...
+
+if ! [ -L ~/.ssh/authorized_keys ]; then
+        rm -rf ~/.ssh
+        mkdir -p ~/.ssh
+        ln -sf ~/.config/ssh/authorized_keys ~/.ssh/authorized_keys
+fi
+
+if ! [ -L ~/.ssh/config ]; then
+        rm -rf ~/.ssh/config
+        ln -sf ~/.config/ssh/config ~/.ssh/config
+fi
