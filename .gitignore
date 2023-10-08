@@ -10,6 +10,8 @@
 !.meta/**
 !bin
 !bin/**
+!Brewfile
+!.zshrc
 
 # liberally include everything in our .config
 !.config
