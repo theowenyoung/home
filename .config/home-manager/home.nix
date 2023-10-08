@@ -14,6 +14,7 @@
       git
       nodejs
       deno
+      mas
       tmux
       neovim
       ripgrep

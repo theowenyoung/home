@@ -3,7 +3,6 @@ tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
-brew "mas"
 cask "firefox-developer-edition"
 cask "google-chrome"
 cask "iterm2"
@@ -16,7 +15,3 @@ mas "Microsoft Word", id: 462054704
 mas "S3", id: 6447647340
 mas "WeChat", id: 836500024
 mas "Xcode", id: 497799835
-vscode "bbenoist.Nix"
-vscode "GitHub.copilot"
-vscode "GitHub.copilot-chat"
-vscode "ms-vscode.makefile-tools"
