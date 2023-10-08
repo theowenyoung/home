@@ -13,6 +13,7 @@
       devenv
       git
       nodejs
+      deno
       tmux
       neovim
       ripgrep
