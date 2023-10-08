@@ -50,8 +50,13 @@ sh <(curl -L https://nixos.org/nix/install)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+4. 安装gui软件
 
-4. 下载[keepassxc](https://keepassxc.org/download/) GUI 软件，用于恢复我的 ssh 文件，随后用于 github repo下载，加密解密密钥等。
+```
+brew bundle
+```
+
+4. 用于恢复我的 ssh 文件，随后用于 github repo下载，加密解密密钥等。
 
 5. 在浏览器打开 Github 上存放 keepassxc 加密文件的repo，下载密钥文件 `main.kdbx`, 用 keepassxc 打开，找到我之前保存的 ssh 条目，下载该条目下的附件到 `~/.ssh/`, （finder 无法直接选中 `~/.ssh`文件夹，需要`cmd+shift+g` 手动输入该文件夹，选择后，keepassxc软件就会帮我把我的主ssh 下载到本机电脑了，之后各种需要密钥的操作都依赖这个）
 
