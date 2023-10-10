@@ -3,6 +3,7 @@ local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+-- nvim tree grep in special folder
 local function grep_in()
   -- print
   local node = require("nvim-tree.lib").get_node_at_cursor()
@@ -21,7 +22,6 @@ end
 
 M.disabled = {
   n = {
-    ["<leader>x"] = "",
     ["<C-j>"] = "",
     ["<C-k>"] = "",
   },
@@ -33,7 +33,7 @@ M.disabled = {
 }
 
 -- h(elllllll)
-
+-- hello
 -- general
 M.general = {
   n = {

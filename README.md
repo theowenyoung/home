@@ -28,7 +28,7 @@ mas "Xcode", id: 497799835
 ## Macos Setup
 
 
-1.
+1. install xcode tools
 
 ```
 xcode-select --install
