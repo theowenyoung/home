@@ -1,0 +1,17 @@
+{
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "javascript",
+          "typescript",
+          "javascriptreact",
+          "vue",
+          "svelte",
+          "typescriptreact"
+        ],
+        "path": "./javascript/javascript.json"
+      }
+    ]
+  }
+}

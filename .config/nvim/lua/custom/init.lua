@@ -28,7 +28,7 @@ opt.foldmethod = "indent"
 -- opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- snippets path
-g.luasnippets_path = "./snippets"
+g.vscode_snippets_path = "./snippets"
 
 local autocmd = vim.api.nvim_create_autocmd
 

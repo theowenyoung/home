@@ -1,0 +1,10 @@
+{
+  "try/catch": {
+    "prefix": "tc",
+    "body": "try {\n\t${0}\n} catch (${1:err}) {\n\t\n}"
+  },
+  "console.log": {
+    "prefix": "cl",
+    "body": "console.log(\"${0}\", ${0})"
+  }
+}
