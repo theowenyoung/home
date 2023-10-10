@@ -1,7 +1,8 @@
 [user]
     name = Owen Young
     email = theowenyoung@users.noreply.github.com
-
+[push]
+  autoSetupRemote = true
 [init]
 
 	defaultBranch = main

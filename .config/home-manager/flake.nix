@@ -4,11 +4,10 @@
   inputs = {
     nixos.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
     nixpkgs-webextfixed.url = "github:wingdeans/nixpkgs/web-ext-node-env";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
-
     devenv.url = "github:cachix/devenv/latest"; # don't follow 
   };
 

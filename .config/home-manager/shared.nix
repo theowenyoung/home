@@ -44,6 +44,3 @@
   ]);
 }
 
-# (pkgs.writeText "hello" ''
-#   echo ${pkgs.bash-completion}
-# '')
