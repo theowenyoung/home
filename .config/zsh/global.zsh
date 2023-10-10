@@ -27,8 +27,16 @@ if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
 fi
 # End Nix
 
+# homebrew
 # no analytics
 export HOMEBREW_NO_ANALYTICS=1
+
+
+# whistle
+export WHISTLE_PATH="$HOME/secret/.WhistleAppData"
+alias w2start="w2 start --socksPort 8889"
+
+
 
 # termcolor info
 # https://gpanders.com/blog/the-definitive-guide-to-using-tmux-256color-on-macos/

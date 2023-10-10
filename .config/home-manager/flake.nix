@@ -56,7 +56,7 @@
                 home.homeDirectory = if homedir != "" then homedir else lib.my.homedir username;
                 home.stateVersion = "22.11";
               }
-              ./home.nix
+              ./shared.nix
             ]
             ++ extraModules;
 

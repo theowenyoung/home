@@ -2,14 +2,33 @@ local M = {}
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
+
+local function grep_in()
+  -- print
+  local node = require("nvim-tree.lib").get_node_at_cursor()
+  if not node then
+    return
+  end
+  local path = node.absolute_path or uv.cwd()
+  if node.type ~= "directory" and node.parent then
+    path = node.parent.absolute_path
+  end
+  require("telescope.builtin").live_grep {
+    search_dirs = { path },
+    prompt_title = string.format("Grep in [%s]", vim.fs.basename(path)),
+  }
+end
+
 M.disabled = {
   n = {
     ["<leader>x"] = "",
     ["<C-j>"] = "",
+    ["<C-k>"] = "",
   },
 
   i = {
     ["<C-j>"] = "",
+    ["<C-k>"] = "",
   },
 }
 
@@ -148,5 +167,16 @@ M.lsp_config = {
     },
   },
 }
+
+M.nvimtree = {
+  plugin = true,
+  n = {
+    ["<C-A-n>"] = {
+      grep_in,
+      "search this folder",
+    },
+  },
+}
+
 -- more keybinds!
 return M
