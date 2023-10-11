@@ -4,7 +4,7 @@
   inputs = {
     nixos.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/master";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-webextfixed.url = "github:wingdeans/nixpkgs/web-ext-node-env";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -62,7 +62,7 @@
             extraSpecialArgs = {
               pkgs-stable = import nixos { inherit system; config.allowUnfree = true; };
               devenv = devenv.packages.${system}.devenv;
-              web-ext = nixpkgs-webextfixed.legacyPackages.${system}.nodePackages."web-ext";
+              # web-ext = nixpkgs-webextfixed.legacyPackages.${system}.nodePackages."web-ext";
             };
           };
     in

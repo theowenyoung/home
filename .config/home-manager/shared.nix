@@ -3,10 +3,10 @@
 , pkgs
 , pkgs-stable
 , devenv
-, web-ext
 , ...
 }:
 {
+  home.enableNixpkgsReleaseCheck = false;
   home.packages = with pkgs;
     [
       bashInteractive

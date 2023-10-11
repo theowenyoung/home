@@ -6,5 +6,6 @@
     coreutils
     whistle
     web-ext
+    nodePackages.thelounge
   ];
 }
