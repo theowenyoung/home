@@ -1,5 +1,3 @@
 api.map("a","gf");
-api.unmap("<Ctrl-j>");
-api.unmap("<Ctrl-k>");
-api.map("<Ctrl-k>","E");
-api.map("<Ctrl-j>","R");
+api.map("K","E");
+api.map("J","R");
