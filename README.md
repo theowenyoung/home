@@ -90,5 +90,6 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
   6. Profile -> Text -> Font -> FiraCode Nerd Font
 
 
+9. surfingkeys 扩展配置
 
-
+加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
