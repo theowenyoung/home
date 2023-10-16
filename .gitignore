@@ -12,6 +12,8 @@
 !bin/**
 !Brewfile
 !.zshrc
+!.librewolf
+!.librewolf/**
 
 # liberally include everything in our .config
 !.config

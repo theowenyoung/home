@@ -31,6 +31,9 @@ fi
 # no analytics
 export HOMEBREW_NO_ANALYTICS=1
 
+# flox
+# no analytics
+export FLOX_DISABLE_METRICS=true
 
 # whistle
 export WHISTLE_PATH="$HOME/secret/.WhistleAppData"
