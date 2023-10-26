@@ -22,6 +22,7 @@
 # and then ignore things we don't want
 .DS_Store
 .config/raycast
+.config/clash
 .config/.wrangler
 .config/configstore
 .config/fontconfig

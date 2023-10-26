@@ -12,6 +12,7 @@
       bashInteractive
       devenv
       git
+      fzf
       nodejs
       nodePackages.npm
       deno
