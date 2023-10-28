@@ -1,3 +1,5 @@
+[core]
+  editor = vi
 [user]
     name = Owen Young
     email = theowenyoung@users.noreply.github.com

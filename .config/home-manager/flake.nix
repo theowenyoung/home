@@ -5,7 +5,6 @@
     nixos.url = "github:nixos/nixpkgs/nixos-23.05";
     nixos-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    nixpkgs-webextfixed.url = "github:wingdeans/nixpkgs/web-ext-node-env";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
     devenv.url = "github:cachix/devenv/latest"; # don't follow 
@@ -18,7 +17,6 @@
     , nixpkgs-unstable
     , home-manager
     , devenv
-    , nixpkgs-webextfixed
     , ...
     }:
     let
@@ -30,6 +28,8 @@
           extraModules = cfg.extraModules;
         in
         #username: system: extraModules: hostName:
+        
+        # this is a general function, in general, you do not need to change it
         home-manager.lib.homeManagerConfiguration
           rec {
             pkgs = nixpkgs-unstable.legacyPackages.${system}; # or just reimport again
@@ -47,13 +47,13 @@
               {
                 # alternatively, we can set these in `import nixpkgs { ... }`
                 # instead of using legacyPackages above
-                nixpkgs.config.allowUnfreePredicate = (pkg: true); # https://github.com/nix-community/home-manager/issues/2942
+                nixpkgs.config.allowUnfreePredicate = (pkg: true); # <https://github.com/nix-community/home-manager/issues/2942>
                 nixpkgs.overlays = lib.my.overlays;
               }
               {
                 home.username = username;
                 home.homeDirectory = if homedir != "" then homedir else lib.my.homedir username;
-                home.stateVersion = "22.11";
+                home.stateVersion = "23.05";
               }
               ./shared.nix
             ]
@@ -62,7 +62,6 @@
             extraSpecialArgs = {
               pkgs-stable = import nixos { inherit system; config.allowUnfree = true; };
               devenv = devenv.packages.${system}.devenv;
-              # web-ext = nixpkgs-webextfixed.legacyPackages.${system}.nodePackages."web-ext";
             };
           };
     in
@@ -73,7 +72,7 @@
           extraModules = [ ./wsl.nix ];
         };
         x86_64-darwin = homeConfig "x86_64-darwin" {
-          # aarch64-darwin ?
+          # change this to your username
           username = "green";
           homedir = "/Users/green";
           extraModules = [ ./macos.nix ];

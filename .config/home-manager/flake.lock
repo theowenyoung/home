@@ -231,22 +231,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-webextfixed": {
-      "locked": {
-        "lastModified": 1695927022,
-        "narHash": "sha256-U4gjs92ZU8sDDWtqSB+EVK8iAE5mRJrrqWacbicpsSI=",
-        "owner": "wingdeans",
-        "repo": "nixpkgs",
-        "rev": "f8a86c202752b228452e724f8b204f5281ef4ffc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "wingdeans",
-        "ref": "web-ext-node-env",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": [
@@ -281,8 +265,7 @@
         "home-manager": "home-manager",
         "nixos": "nixos",
         "nixos-unstable": "nixos-unstable",
-        "nixpkgs-unstable": "nixpkgs-unstable",
-        "nixpkgs-webextfixed": "nixpkgs-webextfixed"
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     }
   },

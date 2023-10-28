@@ -92,6 +92,10 @@ local plugins = {
       }
     end,
   },
+  {
+    "dhruvasagar/vim-open-url",
+    lazy = false,
+  },
 
   -- To make a plugin not be loaded
   -- {

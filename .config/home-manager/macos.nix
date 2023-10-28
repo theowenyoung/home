@@ -3,10 +3,10 @@
 }:
 {
   home.packages = with pkgs; [
-    coreutils
-    ruby
-    whistle
-    web-ext
-    nodePackages.thelounge
+    # coreutils
+    # ruby
+    # whistle
+    # web-ext
+    # nodePackages.thelounge
   ];
 }
