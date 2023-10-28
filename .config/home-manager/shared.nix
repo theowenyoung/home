@@ -27,13 +27,17 @@
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
     ];
 
-  fonts.fontconfig.enable = true;
-  # Let Home Manager install and manage itself.
-  # programs.home-manager.enable = true;
-  home.activation = lib.my.activationScripts (map toString [
-    ''
+    fonts.fontconfig.enable = true;
+    home.activation.firstScript = lib.hm.dag.entryAfter [
+        "installPackages"
+        "onFilesChange"
+        "reloadSystemd"
+    ] ''
       mkdir -p ~/.{cache,config,local,run}
-    ''
-  ]);
+    '';
+
+  home.activation.secondScript = lib.hm.dag.entryAfter ["firstScript"] ''
+    echo "Everything is ready now!"
+  '';
 }
 
