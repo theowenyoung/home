@@ -51,7 +51,7 @@
     };
 
     # profile for x86_64-linux proxy machine with less packages
-    packages."x86_64-linux".pure = let
+    packages."x86_64-linux".proxy = let
 	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
     in pkgs.buildEnv {
       name = "global-env";
