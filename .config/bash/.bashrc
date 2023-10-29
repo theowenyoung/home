@@ -2,9 +2,6 @@
 
 source "$HOME/.config/bash/git-completion.bash"
 source "$HOME/.config/bash/ssh-completion.bash"
-# If you do not plan on having Home Manager manage your shell configuration then you must source the file
-# https://nix-community.github.io/home-manager/
-source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 
 # alias
 

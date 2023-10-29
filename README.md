@@ -3,6 +3,24 @@
 `~` config files repo.
 
 
+
+## load home config
+
+
+```
+cd "$HOME"
+rm -rf .git
+git init
+git remote add origin https://github.com/theowenyoung/home.git
+git fetch origin main
+git reset --hard origin/main
+git branch --set-upstream-to origin/main main
+git remote set-url --push origin git@github.com:theowenyoung/home.git
+git remote -v
+```
+
+
+
 ## GUI 应用只使用 homebrew 安装
 
 `~/Brewfile`
@@ -112,3 +130,8 @@ sudo apt update -y \
 
 
 
+
+## 参考
+
+
+- [andreykaipov home](https://github.com/andreykaipov/home)
