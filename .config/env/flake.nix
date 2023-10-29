@@ -58,6 +58,7 @@
       paths = with pkgs; [
       bashInteractive
       git
+      shadowsocks-rust
       ];
     };
   };
