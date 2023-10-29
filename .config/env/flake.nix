@@ -60,6 +60,7 @@
         gnumake
         gcc
         bashInteractive
+        iptables
         git
         shadowsocks-rust
         tmux
