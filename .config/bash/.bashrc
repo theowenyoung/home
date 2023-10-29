@@ -18,7 +18,7 @@ alias stop="sudo systemctl stop"
 alias restart="sudo systemctl restart"
 alias reload="sudo systemctl daemon-reload"
 
-alias pg="ps aux | grep "
+alias pg="ps aux | grep"
 
 alias ll="ls -l "
 alias la="ls -la "

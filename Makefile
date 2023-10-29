@@ -15,6 +15,11 @@ init-pproxy:
 install:
 	nix profile upgrade --refresh --verbose  '.*'
 
+
+.PHONY: i
+i:
+	make install
+
 #	 nix run home-manager -- switch --flake ~/.config/home-manager#x86_64-darwin
 
 .PHONY: gc
