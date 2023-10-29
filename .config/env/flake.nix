@@ -51,8 +51,8 @@
     };
 
     # profile for x86_64-linux proxy machine with less packages
-    packages."x86_64-darwin".pure = let
-	      pkgs = nixpkgs.legacyPackages."x86_64-darwin";
+    packages."x86_64-linux".pure = let
+	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [

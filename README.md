@@ -74,6 +74,22 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 ```
 
 
+## Linux init
+
+1. 安装更新和nix
+
+```
+sudo apt update -y \
+&& sudo apt upgrade -y\
+&& sh <(curl -L https://nixos.org/nix/install) --no-daemon\
+&& source ~/.profile\
+&& nix profile install ./.config/env#proxy
+&& nix profile install github:theowenyoung/home?directory=/.config/env#proxy
+```
+
+2. 安装flake
+
+
 
 
 
@@ -93,3 +109,6 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 9. surfingkeys 扩展配置
 
 加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
+
+
+
