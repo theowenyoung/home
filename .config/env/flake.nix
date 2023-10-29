@@ -44,6 +44,7 @@
       bashInteractive
       git
       tmux
+      fzf
       neovim
       ripgrep
       (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
@@ -60,6 +61,8 @@
       bashInteractive
       git
       shadowsocks-rust
+      fzf
+      ripgrep
       neovim
       tmux
       ];
