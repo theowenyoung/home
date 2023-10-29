@@ -117,6 +117,30 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
+5. 使用配置中的bashrc
+
+```bash
+if ! grep -q "# green-bashrc-start" ~/.bashrc; then
+
+	cat >>~/.bashrc <<EOF
+# green-bashrc-start
+
+if [ -f ~/.config/bash/.bashrc ]; then
+    source ~/.config/bash/.bashrc
+fi
+
+# green-bashrc-end
+EOF
+
+fi
+```
+
+6. source it 
+
+```bash
+. ~/.bashrc
+```
+
 
 
 
