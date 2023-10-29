@@ -56,11 +56,11 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
+      build-essential
       bashInteractive
       git
       shadowsocks-rust
       nvim
-      make
       ];
     };
   };
