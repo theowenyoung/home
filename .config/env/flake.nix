@@ -56,7 +56,7 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-      build-essential
+      gnumake
       bashInteractive
       git
       shadowsocks-rust
