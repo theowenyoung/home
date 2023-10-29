@@ -78,9 +78,9 @@ bind '"\e[Z":menu-complete-backward'
 if [ -z "$EDITOR_FORCE" ]; then
 	# check is nvim exists
 	if command -v nvim >/dev/null 2>&1; then
-		export EDITOR_FORCE=nvim
+		export VIM_EDITOR=nvim
 	else
-		export EDITOR_FORCE=vi
+		export VIM_EDITOR=vi
 	fi
 else
 	export VIM_EDITOR="$EDITOR_FORCE"
@@ -89,6 +89,7 @@ export MAIN_EDITOR=$VIM_EDITOR
 export EDITOR=$MAIN_EDITOR
 export VISUAL=$EDITOR
 export TMUX_EDITOR="tmux-$EDITOR"
+alias vi="$EDITOR"
 
 # direnv init
 # if ~/.nix-profile/bin/direnv exists, load it.
