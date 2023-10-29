@@ -57,14 +57,17 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-      gnumake
-      bashInteractive
-      git
-      shadowsocks-rust
-      fzf
-      ripgrep
-      neovim
-      tmux
+        gnumake
+        bashInteractive
+        git
+        shadowsocks-rust
+        tmux
+        neovim
+        fzf
+        ripgrep
+        unzip
+        nodejs
+        nodePackages.npm
       ];
     };
   };
