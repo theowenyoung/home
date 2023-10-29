@@ -59,6 +59,7 @@
       bashInteractive
       git
       shadowsocks-rust
+      nvim
       ];
     };
   };

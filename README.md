@@ -19,6 +19,10 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
+## Todo
+
+- bash show current branch
+
 
 
 ## GUI 应用只使用 homebrew 安装
