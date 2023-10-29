@@ -4,20 +4,6 @@
 
 
 
-## load home config
-
-
-```
-cd "$HOME"
-rm -rf .git
-git init
-git remote add origin https://github.com/theowenyoung/home.git
-git fetch origin main
-git reset --hard origin/main
-git branch --set-upstream-to origin/main main
-git remote set-url --push origin git@github.com:theowenyoung/home.git
-git remote -v
-```
 
 ## Todo
 
@@ -98,18 +84,38 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 
 ## Linux init
 
-1. 安装更新和nix
+1. 安装nix 
 
 ```
-sudo apt update -y \
-&& sudo apt upgrade -y\
-&& sh <(curl -L https://nixos.org/nix/install) --no-daemon\
-&& source ~/.profile\
-&& nix profile install ./.config/env#proxy
-&& nix profile install github:theowenyoung/home?directory=/.config/env#proxy
+sh <(curl -L https://nixos.org/nix/install) --daemon --yes
 ```
 
-2. 安装flake
+2. 重新进入 sheel
+
+```
+exit
+# reconnect to ssh
+```
+
+3. 安装对应的环境软件
+
+```
+nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/.config/env#proxy
+```
+
+4. 下载 dotfiles
+
+```
+cd "$HOME"
+rm -rf .git
+git init -b main
+git remote add origin https://github.com/theowenyoung/home.git
+git fetch origin main
+git reset --hard origin/main
+git branch --set-upstream-to origin/main main
+git remote set-url --push origin git@github.com:theowenyoung/home.git
+git remote -v
+```
 
 
 
