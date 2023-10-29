@@ -1,0 +1,23 @@
+{
+  "servers": [
+    {
+      "address": "::",
+      "port": 36001,
+      "method": "chacha20-ietf-poly1305",
+      "password": "${SS_PASSWORD}",
+      "mode": "tcp_and_udp",
+      "fast_open": false,
+      "timeout": 7200
+    },
+    {
+      "address": "::",
+      "port": 36002,
+      "method": "chacha20-ietf-poly1305",
+      "password": "${SS_GUEST_PASSWORD}",
+      "mode": "tcp_and_udp",
+      "fast_open": false,
+      "timeout": 7200
+    }
+  ]
+}
+

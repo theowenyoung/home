@@ -28,6 +28,7 @@
 .config/direnv
 .config/dnsproxy/debug.log
 .config/gcloud
+.config/systemd/user/default.target.wants
 .config/gh/hosts.yml
 .config/gh/state.yml
 .config/github-copilot

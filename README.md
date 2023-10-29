@@ -141,6 +141,21 @@ fi
 . ~/.bashrc
 ```
 
+7. 安装并启动 ss 的service
+
+```
+# start_service 是我的bash 里的一个简单的函数
+start_service ss
+```
+
+8. 修改 iptables , 以释放更多的端口
+
+```
+sudo ~/.config/ss/init-iptables.sh
+```
+
+everything is ok now.
+
 
 
 
