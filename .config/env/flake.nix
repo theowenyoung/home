@@ -60,6 +60,7 @@
       git
       shadowsocks-rust
       nvim
+      make
       ];
     };
   };
