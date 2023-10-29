@@ -117,6 +117,21 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
+5. 安装并启动 ss 的service
+
+```
+# start_service 是我的bash 里的一个简单的函数
+start_service ss
+```
+
+6. 修改 iptables , 以释放更多的端口
+
+```
+sudo ~/.config/ss/init-iptables.sh
+```
+
+everything is ok now.
+
 
 
 

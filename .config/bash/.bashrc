@@ -54,6 +54,58 @@ function gskip() {
 	git commit -a -m "[skip ci] $*" && git push
 }
 
+install_service() {
+	local UNIT="$1"
+
+	if [[ -z "$UNIT" ]]; then
+		echo "Please provide a unit name."
+		return 1
+	fi
+
+	systemctl --user enable "$UNIT"
+	systemctl --user daemon-reload
+	systemctl --user restart "$UNIT"
+	systemctl --user status "$UNIT"
+}
+uninstall_service() {
+	local UNIT="$1"
+
+	if [[ -z "$UNIT" ]]; then
+		echo "Please provide a unit name."
+		return 1
+	fi
+
+	systemctl --user stop "$UNIT"
+	systemctl --user disable "$UNIT"
+	systemctl --user daemon-reload
+}
+
+install_system_service() {
+	local UNIT="$1"
+
+	if [[ -z "$UNIT" ]]; then
+		echo "Please provide a unit name."
+		return 1
+	fi
+
+	sudo systemctl enable "$UNIT"
+	sudo systemctl daemon-reload
+	sudo systemctl restart "$UNIT"
+	sudo systemctl status "$UNIT"
+}
+uninstall_system_service() {
+	local UNIT="$1"
+
+	if [[ -z "$UNIT" ]]; then
+		echo "Please provide a unit name."
+		return 1
+	fi
+
+	sudo systemctl stop "$UNIT"
+	sudo systemctl disable "$UNIT"
+	sudo systemctl daemon-reload
+}
+
 proxy() {
 	export HTTP_PROXY="http://127.0.0.1:7890"
 	export HTTPS_PROXY="http://127.0.0.1:7890"
@@ -67,12 +119,13 @@ noproxy() {
 }
 
 # other config
-
+# if [ -t 1 ]; then
 # bash config
 # Enable tab completion
-bind 'set show-all-if-ambiguous on'
-bind 'TAB:menu-complete'
-bind '"\e[Z":menu-complete-backward'
+# bind 'set show-all-if-ambiguous on'
+# bind 'TAB:menu-complete'
+# bind '"\e[Z":menu-complete-backward'
+# fi
 
 # editor
 if [ -z "$EDITOR_FORCE" ]; then

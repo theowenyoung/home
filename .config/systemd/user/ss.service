@@ -1,0 +1,17 @@
+[Unit]
+Description=service
+After=network.target
+
+[Service]
+Type=simple
+Environment=RUST_LOG=error
+ExecStart=%h/.nix-profile/bin/ssserver -c %h/.config/ss/config.json
+Restart=on-failure
+WorkingDirectory=%h/.config/ss
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+LimitNPROC=512
+StandardOutput=null
+[Install]
+WantedBy=default.target
+
