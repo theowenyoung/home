@@ -9,6 +9,7 @@
 
 - encrypt env and password
 - bash show current branch
+- /etc/nix/nix.conf to add trusted user and features
 
 
 
