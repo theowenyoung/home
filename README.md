@@ -7,6 +7,7 @@
 
 ## Todo
 
+- encrypt env and password
 - bash show current branch
 
 
