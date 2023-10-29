@@ -58,6 +58,7 @@
       name = "global-env";
       paths = with pkgs; [
         gnumake
+        gcc
         bashInteractive
         git
         shadowsocks-rust
