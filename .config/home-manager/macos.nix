@@ -3,8 +3,8 @@
 }:
 {
   home.packages = with pkgs; [
-    # coreutils
-    # ruby
+    coreutils
+    ruby
     # whistle
     # web-ext
     # nodePackages.thelounge
