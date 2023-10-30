@@ -21,6 +21,7 @@
         fzf
         nodejs
         nodePackages.npm
+        nodePackages.pnpm
         deno
         mas
         tmux

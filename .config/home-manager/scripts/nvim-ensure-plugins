@@ -1,6 +1,0 @@
-#!/bin/sh
-#
-# Ensure nvim plugins are installed (but not necessarily up-to-date).
-
-# sleep to spot errors, if any
-TMUX= tmux new-session -s temp nvim +PlugInstall +PlugClean! +PlugStatus +'!sleep 0.5' +qa
