@@ -79,8 +79,7 @@ M.general = {
   i = {
     ["<C-s>"] = { "<ESC>:w<CR>", "save file" },
     ["<C-a>"] = { "<ESC>^i", "beginning of line" },
-    ["<C-A-w"] = { "<ESC><C-w>", "open window manager" },
-    ["<D-s>"] = { "<ESC>:w<CR>", "save file" },
+    ["<C-A-w>"] = { "<ESC><C-w>", "open window manager" },
   },
   t = {
     ["<C-A-w>"] = { termcodes "<C-\\><C-N><C-w>", "open window manager" },
