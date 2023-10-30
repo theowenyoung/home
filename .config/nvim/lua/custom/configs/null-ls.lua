@@ -29,11 +29,11 @@ local sources = {
   b.diagnostics.shellcheck.with { diagnostics_format = "#{m} [#{c}]" },
 
   -- cpp
-  b.formatting.clang_format,
-  b.formatting.rustfmt,
+  -- b.formatting.clang_format,
+  -- b.formatting.rustfmt,
 }
 
 null_ls.setup {
-  debug = false,
+  debug = true,
   sources = sources,
 }
