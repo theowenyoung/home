@@ -8,14 +8,15 @@
   outputs = { self, nixpkgs,devenv }: {
     # default profile for my x86_64-darwin machine
     packages."x86_64-darwin".default = let
-	      pkgs = nixpkgs.legacyPackages."x86_64-darwin";
+        system = "x86_64-darwin";
+	      pkgs = nixpkgs.legacyPackages."${system}";
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
         bashInteractive
         cachix
-        devenv
         direnv
+        devenv.packages."${system}".default
         nix-direnv
         git
         fzf

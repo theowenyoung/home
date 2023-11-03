@@ -6,7 +6,6 @@ tap "homebrew/services"
 cask "firefox-developer-edition"
 cask "librewolf"
 cask "google-chrome"
-cask "clash"
 cask "loom"
 cask "iterm2"
 cask "clashx"
@@ -15,6 +14,7 @@ cask "the-unarchiver"
 cask "visual-studio-code"
 cask "raycast"
 cask "keepassxc"
+cask "Calibre"
 mas "CoffeeTea - Prevent Sleep", id: 6443935401
 mas "Immersive Translate", id: 6447957425
 mas "iPic", id: 1101244278
