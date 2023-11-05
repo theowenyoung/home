@@ -24,6 +24,7 @@
 .config/raycast
 .config/clash
 .config/.wrangler
+.config/hcp
 .config/configstore
 .config/fontconfig
 .config/direnv
