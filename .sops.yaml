@@ -1,0 +1,4 @@
+creation_rules:
+    # other files use KMS set C
+    - pgp: 'B12C44A2E9386B993A8FFC53F822CE4444B1D606'
+      age: 'age154d73sxvppr3fwgwey6he76ctxm7jn2y4e0f2ckaumx6edlnzvssz8kw0l'

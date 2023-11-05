@@ -50,3 +50,11 @@ autocmd("BufWritePre", {
   pattern = "*",
   command = "silent! lua vim.lsp.buf.format()",
 })
+
+-- fix https://github.com/neovim/neovim/issues/21856
+-- https://www.reddit.com/r/neovim/comments/14bcfmb/nonzero_exit_code/
+vim.api.nvim_create_autocmd({ "VimLeave" }, {
+  callback = function()
+    vim.cmd "sleep 10m"
+  end,
+})

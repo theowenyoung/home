@@ -4,6 +4,7 @@
 # except these
 !.gitignore
 !README.md
+!.sops.yaml
 !Makefile
 !.meta
 !.meta/**
