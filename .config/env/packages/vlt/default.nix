@@ -6,7 +6,7 @@
 
 let 
   sha256s = {
-    linux_amd64 = "";
+    linux_amd64 = "sha256-Gnq1nLFkRvOUEthcqyTscpmGymrA96SdCuIQ4nkCS/I=";
     darwin_amd64 = "sha256-R7DJnMiP1ejg3mDyg/htD12bpG3RC7Smw8binu/f4ds=";
   };
   vlt_os = if stdenv.hostPlatform.isLinux then "linux" else "darwin";

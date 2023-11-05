@@ -63,11 +63,11 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
+        git
         gnumake
         gcc
         bashInteractive
         iptables
-        git
         tmux
         neovim
         fzf
@@ -76,6 +76,8 @@
         nodejs
         nodePackages.npm
         shadowsocks-rust
+        sops
+        (pkgs.callPackage ./packages/vlt/default.nix {})
       ];
     };
   };
