@@ -34,6 +34,10 @@
         # custom packages
         (pkgs.callPackage ./packages/whistle/default.nix {})
         (pkgs.callPackage ./packages/web-ext/default.nix {})
+        gnupg
+        age
+        sops
+        (pkgs.callPackage ./packages/vlt/default.nix {})
       ];
     };
 
@@ -64,7 +68,6 @@
         bashInteractive
         iptables
         git
-        shadowsocks-rust
         tmux
         neovim
         fzf
@@ -72,6 +75,7 @@
         unzip
         nodejs
         nodePackages.npm
+        shadowsocks-rust
       ];
     };
   };

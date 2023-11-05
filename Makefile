@@ -13,12 +13,16 @@ init-pproxy:
 
 .PHONY: install
 install:
-	nix profile upgrade --refresh --verbose  '.*'
+	if git status --porcelain | grep '^??'; then echo 'Please git add your untracked files.'; exit 1; else 	nix profile upgrade --refresh --verbose  '.*'; fi
 
 
 .PHONY: i
 i:
 	make install
+
+.PHONY: debug
+debug:
+	nix-build ./.config/env/debug.nix
 
 #	 nix run home-manager -- switch --flake ~/.config/home-manager#x86_64-darwin
 
