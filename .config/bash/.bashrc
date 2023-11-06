@@ -2,6 +2,7 @@
 
 source "$HOME/.config/bash/git-completion.bash"
 source "$HOME/.config/bash/ssh-completion.bash"
+source "$HOME/.config/bash/make-completion.bash"
 
 # alias
 

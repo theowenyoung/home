@@ -5,7 +5,7 @@
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "7.6.2";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
