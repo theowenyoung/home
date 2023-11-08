@@ -11,10 +11,10 @@ buildNpmPackage rec {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-tFMngcoHFA3QmR0AK68elUVpli37PsVlcL978o7DQCs=";
+    hash = "sha256-hrf47k4FxZOSyq8jPYcYjkcHIf+6hvMBNGcDf9VVZoY=";
   };
 
-  npmDepsHash = "sha256-KPBKUjCxva11w/E+Qhlx+1vikpCL7Hr9MiKenYHEVSU=";
+  npmDepsHash = "sha256-D9d3hFwkxRzYfLaGSOJntdhx54rR1gFalMJY8THO2NI=";
 
   # web-ext defaults to development builds:
   #   https://github.com/mozilla/web-ext/blob/master/CONTRIBUTING.md#build-web-ext

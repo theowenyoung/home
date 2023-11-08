@@ -9,7 +9,7 @@
     # default profile for my x86_64-darwin machine
     packages."x86_64-darwin".default = let
         system = "x86_64-darwin";
-	      pkgs = nixpkgs.legacyPackages."${system}";
+        pkgs = (nixpkgs.legacyPackages.${system}.extend (import ./overlays.nix));
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
@@ -21,8 +21,9 @@
         git
         fzf
         nodejs
-        nodePackages.npm
-        nodePackages.pnpm
+        (pkgs.callPackage ./packages/nodejs/default.nix {})
+        # nodePackages.npm
+        # nodePackages.pnpm
         deno
         mas
         tmux
