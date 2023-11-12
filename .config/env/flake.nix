@@ -70,6 +70,7 @@
         bashInteractive
         iptables
         tmux
+        deno
         neovim
         fzf
         ripgrep
