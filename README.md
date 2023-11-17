@@ -179,6 +179,18 @@ everything is ok now.
 
 加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
 
+10. vimium 配置
+
+```bash
+unmapAll
+map j scrollDown
+map k scrollUp
+map d scrollPageDown
+map a LinkHints.activateModeToOpenInNewTab
+map J nextTab
+map K previousTab
+```
+
 
 
 
