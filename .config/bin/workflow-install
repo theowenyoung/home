@@ -1,0 +1,222 @@
+#!/usr/bin/env python3
+# https://gist.github.com/giovannicoppola/7c106f8cc7221e7776f6c38df011b869
+# -*- coding: utf-8 -*-
+
+# # Copyright (c) 2013 <deanishe@deanishe.net>.
+#
+# MIT Licence. See http://opensource.org/licenses/MIT
+#
+# Created on 2013-11-01
+
+# simplified and updated to Python3 by @giovannicoppola on Wednesday, April 6, 2022
+# – Light rain 🌦   🌡️+48°F (feels +42°F, 89%) 🌬️↙13mph 🌒 Wed Apr  6 06:26:01 2022
+# dropped support for Alfred 3, for config from JSON file, user-defined workflow directory, fancy logging
+# like for the previous version, you need to either install docopt, or have the docopt.py file in the same directory
+
+"""workflow-install [options] [<workflow-directory>...]
+
+Install Alfred workflow(s).
+
+You can specify where to install by specifying an Alfred version
+with --alfred or a specific directory with -w or in ~/.workflow-install.json
+
+By default, it should install in the latest version of Alfred.
+
+If <workflow-directory> is not specified, the script will search the
+current working directory recursively for a workflow (a directory
+containing an `info.plist` file).
+
+Usage:
+    workflow-install [-v|-q|-d] [-s]
+        [<workflow-directory>...]
+    workflow-install (-h|--help)
+
+Options:
+    -s, --symlink                   symlink workflow directory instead of
+                                    copying it
+    -V, --version                   show version number and exit
+    -h, --help                      show this message and exit
+    -q, --quiet                     show error messages and above
+    -v, --verbose                   show info messages and above
+    -d, --debug                     show debug messages
+
+"""
+
+#from __future__ import print_function, unicode_literals # not needed
+
+import sys
+import os
+import logging
+import json
+import plistlib
+import shutil
+
+
+__version__ = "0.5.0"
+__author__ = "giovanni from @deanishe"
+
+
+DEFAULT_LOG_LEVEL = logging.WARNING #log level
+ALFRED_PREFS = os.path.expanduser(
+    '~/Library/Application Support/Alfred/prefs.json')
+
+DEFAULT_DIR = os.path.expanduser('~/Library/Appplication Support/Alfred')
+
+
+
+def printable_path(dirpath):
+    """Replace $HOME with ~."""
+    return dirpath.replace(os.getenv('HOME'), '~')
+
+
+
+
+def install_workflow(workflow_dir, install_base, symlink=False):
+    """Install workflow at `workflow_dir` under directory `install_base`."""
+    if symlink:
+        logging.debug("Linking workflow at %r to %r", workflow_dir, install_base)
+    else:
+        logging.debug("Installing workflow at %r to %r",
+                  workflow_dir, install_base)
+
+    infopath = os.path.join(workflow_dir, 'info.plist')
+    if not os.path.exists(infopath):
+        logging.error('info.plist not found : %s', infopath)
+        return False
+
+    with open(infopath, 'rb') as fp:
+        info = plistlib.load(fp)
+    
+    name = info['name']
+    bundleid = info['bundleid']
+
+    if not bundleid:
+        logging.error('Bundle ID is not set : %s', infopath)
+        return False
+
+    logging.debug("name: %r bundle: %r", name, bundleid)
+    install_path = os.path.join(install_base, bundleid)
+    logging.debug(install_path)
+
+    action = ('Installing', 'Linking')[symlink]
+    logging.info('%s workflow `%s` to `%s` ...',
+             action, name, printable_path(install_path))
+
+    # delete existing workflow
+    if os.path.exists(install_path) or os.path.lexists(install_path):
+
+        logging.info('Deleting existing workflow ...')
+
+        if os.path.islink(install_path) or os.path.isfile(install_path):
+            os.unlink(install_path)
+        elif os.path.isdir(install_path):
+            logging.info('Directory : %s', install_path)
+            shutil.rmtree(install_path)
+        else:
+            logging.info('Something else : %s', install_path)
+            os.unlink(install_path)
+
+    # Symlink or copy workflow to destination
+    if symlink:
+        relpath = os.path.relpath(workflow_dir, os.path.dirname(install_path))
+        logging.debug('relative path : %r', relpath)
+        os.symlink(relpath, install_path)
+    else:
+        shutil.copytree(workflow_dir, install_path)
+
+    return True
+
+
+
+def get_workflow_directory():
+    """Return path to Alfred's workflow directory."""
+    
+    if os.path.exists(ALFRED_PREFS):
+        with open(ALFRED_PREFS, 'rb') as fp:
+            prefs = json.load(fp) #reading preferences
+    
+        s = prefs.get('current')
+        logging.debug('workflow sync dir: %r', s)
+        return os.path.join(s, 'workflows')
+    else:
+        return os.path.join(DEFAULT_DIR, 'Alfred.alfredpreferences','workflows')
+    
+def find_workflow_dir(dirpath):
+    """Recursively search `dirpath` for a workflow.
+
+    A workflow is a directory containing an `info.plist` file.
+
+    """
+    for root, _, filenames in os.walk(dirpath):
+        if 'info.plist' in filenames:
+            logging.debug('Workflow found at %r', root)
+            return root
+
+    return None
+
+
+def main(args=None):
+    """Run program."""
+    from docopt import docopt
+    args = docopt(__doc__, version=__version__)
+    #print (args)
+    if args.get('--verbose'):
+        logging.basicConfig(level=logging.INFO)
+        #log.setLevel(logging.INFO)
+    elif args.get('--quiet'):
+        logging.basicConfig(level=logging.ERROR)
+        #log.setLevel(logging.ERROR)
+    elif args.get('--debug'):
+        logging.basicConfig(level=logging.DEBUG)
+        #log.setLevel(logging.DEBUG)
+    else:
+        logging.basicConfig(level=DEFAULT_LOG_LEVEL)
+        #log.setLevel(DEFAULT_LOG_LEVEL)
+
+    myCurrentLogLevel = logging.getLevelName(logging.getLogger().getEffectiveLevel())
+    
+    logging.debug("Set log level to {}".format(myCurrentLogLevel)) 
+
+    #logging.debug('args : \n%s', args)
+
+    ## Findimg out the directory Alfred is installing workflows, dropping Alfred 3 support
+    workflows_directory = ( 
+        get_workflow_directory() # to eliminate support for Alfred 3
+    
+    )
+    logging.debug(workflows_directory)
+       
+    workflow_paths = args.get('<workflow-directory>')
+    logging.debug("workflow path: %r",workflow_paths)
+
+    if not workflow_paths:
+        cwd = os.getcwd() #getting current working directory
+        logging.debug(cwd)
+        wfdir = find_workflow_dir(cwd)
+        if not wfdir:
+            logging.critical('No workflow found under %r', cwd)
+            return 1
+        workflow_paths = [wfdir]
+    errors = False
+    logging.debug(workflow_paths)
+    
+    for path in workflow_paths:
+        path = os.path.abspath(path)
+        logging.debug(path)
+        if not os.path.exists(path):
+            logging.error('Directory does not exist : %s', path)
+            continue
+        if not os.path.isdir(path):
+            logging.error('Not a directory : %s', path)
+            continue
+        if not install_workflow(path, workflows_directory,
+                                args.get('--symlink')):
+            errors = True
+
+    if errors:
+        return 1
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))

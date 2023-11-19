@@ -3,6 +3,7 @@
 
 # except these
 !.gitignore
+!.prettierrc
 !README.md
 !.sops.yaml
 !Makefile

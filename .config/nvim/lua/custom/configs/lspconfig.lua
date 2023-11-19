@@ -19,7 +19,7 @@ for _, lsp in ipairs(servers) do
   }
   if lsp == "tsserver" then
     options.root_dir = parent_lspconfig.util.root_pattern "package.json"
-    options.single_file_support = false
+    options.single_file_support = true
   end
   if lsp == "denols" then
     options.root_dir = parent_lspconfig.util.root_pattern("deno.json", "deno.jsonc")

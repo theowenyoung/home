@@ -4,6 +4,9 @@ source "$HOME/.config/bash/git-completion.bash"
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 
+# add path
+export PATH="$HOME/.config/bin:$PATH"
+
 # alias
 
 alias w2start="w2 start --socksPort 8889"
@@ -27,7 +30,9 @@ alias la="ls -la "
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ~='cd ~'
+
 alias ss='source ~/.bashrc'
+alias bb='brew bundle --cleanup'
 
 # git commit
 alias gpull="git pull"
@@ -37,7 +42,12 @@ alias gs="git status 2>/dev/null"
 alias gv="git remote -v"
 
 function gc() {
-	git clone ssh://git@github.com/"$*"
+	# check is starts with git@ or https:
+	if [[ "$*" =~ ^git@ || "$*" =~ ^https: ]]; then
+		git clone "$*"
+	else
+		git clone ssh://git@github.com/"$*"
+	fi
 }
 function gg() {
 	git commit -m "$*" -a
