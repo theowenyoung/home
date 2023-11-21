@@ -9,7 +9,7 @@ let
   arch = if stdenv.hostPlatform.isx86 then "x64" else "arm64";
   sha256s = {
     linux_x64 = "sha256-Gnq1nLFkRvOUEthcqyTscpmGymrA96SdCuIQ4nkCS/I=";
-darwin_x64 = "sha256-Zeu5G/ecnXUh05S/dqRLZzY4lTAuuYzRMbVAdhISAWo=";
+darwin_x64 = "";
     # darwin_x64_6_17_1 = "sha256-gDPgel2nWa8A23NkwjRPEe7/c7UWR9OZJr+jbyExuZA=";
   };
 in

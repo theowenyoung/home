@@ -20,11 +20,13 @@
         nix-direnv
         git
         fzf
-        nodejs
+        # nodejs16
         (pkgs.callPackage ./packages/nodejs/default.nix {})
-        # nodePackages.npm
-        # nodePackages.pnpm
+        nodePackages.npm
+        nodePackages.pnpm
+        nodePackages.nodemon
         deno
+        wget
         mas
         tmux
         neovim
