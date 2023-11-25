@@ -2,16 +2,11 @@
 
 `~` config files repo.
 
-
-
-
 ## Todo
 
 - encrypt env and password
 - bash show current branch
 - /etc/nix/nix.conf to add trusted user and features
-
-
 
 ## GUI 应用只使用 homebrew 安装
 
@@ -34,9 +29,7 @@ mas "Xcode", id: 497799835
 
 ## 命令行应用只使用 nixos 安装
 
-
 ## Macos Setup
-
 
 1. install xcode tools
 
@@ -83,10 +76,9 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 ~/inbox/home/.meta/init.sh
 ```
 
-
 ## Linux init
 
-1. 安装nix 
+1. 安装nix
 
 ```
 sh <(curl -L https://nixos.org/nix/install) --daemon --yes
@@ -137,7 +129,7 @@ EOF
 fi
 ```
 
-6. source it 
+6. source it
 
 ```bash
 . ~/.bashrc
@@ -158,24 +150,18 @@ sudo ~/.config/ss/init-iptables.sh
 
 everything is ok now.
 
-
-
-
-
-
 ## GUI 软件配置
 
 8. 打开 iterm2:
 
-  1. Profile -> Window -> Style[Full Screen]
-  2. Profile -> Keys -> Left Option Key -> Esc+
-  3. Profile -> Keys -> Right Option Key -> Esc+
-  4. General -> Selections -> Applications in terminal may access clipboard.
-  5. General -> Selections -> double click performs smart selections
-  6. Profile -> Text -> Font -> FiraCode Nerd Font
+1. Profile -> Window -> Style[Full Screen]
+1. Profile -> Keys -> Left Option Key -> Esc+
+1. Profile -> Keys -> Right Option Key -> Esc+
+1. General -> Selections -> Applications in terminal may access clipboard.
+1. General -> Selections -> double click performs smart selections
+1. Profile -> Text -> Font -> FiraCode Nerd Font
 
-
-9. surfingkeys 扩展配置
+1. surfingkeys 扩展配置
 
 加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
 
@@ -187,14 +173,15 @@ map j scrollDown
 map k scrollUp
 map d scrollPageDown
 map a LinkHints.activateModeToOpenInNewTab
+map f LinkHints.activateMode
 map J nextTab
 map K previousTab
+map gg scrollToTop
+map G scrollToBottom
+map h scrollLeft
+map l scrollRight
 ```
 
-
-
-
 ## 参考
-
 
 - [andreykaipov home](https://github.com/andreykaipov/home)
