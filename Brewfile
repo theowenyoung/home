@@ -16,6 +16,8 @@ cask "visual-studio-code"
 cask "alfred"
 cask "keepassxc"
 cask "Calibre"
+cask "Zettlr"
+cask "cleanshot"
 cask "sequel-ace"
 mas "CoffeeTea - Prevent Sleep", id: 6443935401
 mas "Immersive Translate", id: 6447957425

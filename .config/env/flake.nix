@@ -20,8 +20,9 @@
         nix-direnv
         git
         fzf
-        # nodejs16
-        (pkgs.callPackage ./packages/nodejs/default.nix {})
+        miniserve # http serve
+        nodejs
+        # (pkgs.callPackage ./packages/nodejs/default.nix {})
         nodePackages.npm
         nodePackages.pnpm
         nodePackages.nodemon
@@ -41,6 +42,7 @@
         age
         sops
         (pkgs.callPackage ./packages/vlt/default.nix {})
+        asciidoctor
       ];
     };
 
