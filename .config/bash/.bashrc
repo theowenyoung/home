@@ -44,7 +44,7 @@ alias gv="git remote -v"
 function gc() {
 	# check is starts with git@ or https:
 	if [[ "$*" =~ ^git@ || "$*" =~ ^https: ]]; then
-		git clone "$*"
+		git clone "$1"
 	else
 		git clone ssh://git@github.com/"$*"
 	fi

@@ -20,12 +20,14 @@
         nix-direnv
         git
         fzf
+        jq
         miniserve # http serve
         nodejs
         # (pkgs.callPackage ./packages/nodejs/default.nix {})
         nodePackages.npm
         nodePackages.pnpm
         nodePackages.nodemon
+        nodePackages.grunt-cli
         deno
         wget
         mas
