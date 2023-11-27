@@ -14,6 +14,7 @@ cask "transmission"
 cask "the-unarchiver"
 cask "visual-studio-code"
 cask "alfred"
+cask "selfcontrol" # 自控
 cask "keepassxc"
 cask "Calibre"
 cask "Zettlr"
