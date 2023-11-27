@@ -11,8 +11,8 @@ init-pure:
 init-proxy:
 	nix profile install ./.config/env#proxy
 
-.PHONY: clean
-clean:
+.PHONY: uninstallall
+uninstallall:
 	nix profile remove 0
 
 .PHONY: install

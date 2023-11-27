@@ -1,6 +1,11 @@
 #! /bin/bash
 
+# check is git exist
+
+if [[ -x ~/.nix-profile/bin/git ]]; then
 source "$HOME/.config/bash/git-completion.bash"
+fi
+
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 
