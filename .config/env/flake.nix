@@ -22,9 +22,8 @@
         fzf
         jq
         miniserve # http serve
-        nodejs
+        nodejs_20
         # (pkgs.callPackage ./packages/nodejs/default.nix {})
-        nodePackages.npm
         nodePackages.pnpm
         nodePackages.nodemon
         nodePackages.grunt-cli
