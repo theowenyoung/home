@@ -96,6 +96,10 @@ local plugins = {
     "dhruvasagar/vim-open-url",
     lazy = false,
   },
+  {
+    "folke/which-key.nvim",
+    enabled = false,
+  },
 
   -- To make a plugin not be loaded
   -- {

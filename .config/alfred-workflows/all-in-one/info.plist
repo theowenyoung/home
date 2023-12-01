@@ -8,47 +8,11 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
-		<key>04E7C2F4-9F9A-4087-BB12-9CC80A17F469</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>5B338C75-6967-4799-9143-F4ECB790ED07</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>BF036634-2C70-4EB9-96D0-BA404E3B5A39</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>5B338C75-6967-4799-9143-F4ECB790ED07</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>C4B41742-B137-4767-91DB-55BC7B710472</string>
-				<key>modifiers</key>
-				<integer>1048576</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
-				<string>AAA51207-26C9-41F4-89CB-0C0954772F29</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -145,25 +109,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>787D7E0A-A358-4D87-B730-CB84D4925653</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>alignment</key>
 				<integer>0</integer>
 				<key>backgroundcolor</key>
@@ -193,6 +138,25 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>787D7E0A-A358-4D87-B730-CB84D4925653</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -208,9 +172,9 @@
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
-				<true/>
+				<false/>
 				<key>queuedelaymode</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>queuemode</key>
 				<integer>1</integer>
 				<key>runningsubtext</key>
@@ -231,7 +195,7 @@ NODE_PATHS=(
 # Loop through the paths and use the first one that exists
 for node in "${NODE_PATHS[@]}"; do
 	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH zh-CN "$@"
+		"$node" $SCRIPT_PATH "$@"
 		exit
 	fi
 done
@@ -246,7 +210,7 @@ exit 1
 				<key>subtext</key>
 				<string></string>
 				<key>title</key>
-				<string>翻译单词或句子</string>
+				<string>翻译中...</string>
 				<key>type</key>
 				<integer>11</integer>
 				<key>withspace</key>
@@ -265,7 +229,7 @@ exit 1
 				<key>subtext</key>
 				<string>自动识别单词和句子</string>
 				<key>text</key>
-				<string>翻译为中文</string>
+				<string>中英互译</string>
 			</dict>
 			<key>type</key>
 			<string>alfred.workflow.trigger.fallback</string>
@@ -294,90 +258,6 @@ exit 1
 			<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>subtext</key>
-				<string>自动识别单词和句子</string>
-				<key>text</key>
-				<string>翻译为英文</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.trigger.fallback</string>
-			<key>uid</key>
-			<string>04E7C2F4-9F9A-4087-BB12-9CC80A17F469</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>Translating...</string>
-				<key>script</key>
-				<string>#!/bin/bash
-
-SCRIPT_PATH="translate.mjs" # Change this to your script's path
-
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
-)
-
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH en "$@"
-		exit
-	fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>翻译单词或句子</string>
-				<key>type</key>
-				<integer>11</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>5B338C75-6967-4799-9143-F4ECB790ED07</string>
-			<key>version</key>
-			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -523,13 +403,6 @@ exit 1
 	<string>Owen's tool for alfred</string>
 	<key>uidata</key>
 	<dict>
-		<key>04E7C2F4-9F9A-4087-BB12-9CC80A17F469</key>
-		<dict>
-			<key>xpos</key>
-			<real>65</real>
-			<key>ypos</key>
-			<real>220</real>
-		</dict>
 		<key>21635651-08E7-47A4-9EE6-6E3FB8069FD3</key>
 		<dict>
 			<key>xpos</key>
@@ -550,13 +423,6 @@ exit 1
 			<real>65</real>
 			<key>ypos</key>
 			<real>55</real>
-		</dict>
-		<key>5B338C75-6967-4799-9143-F4ECB790ED07</key>
-		<dict>
-			<key>xpos</key>
-			<real>330</real>
-			<key>ypos</key>
-			<real>220</real>
 		</dict>
 		<key>60559819-5D23-4156-8252-18CBAC9EDE17</key>
 		<dict>

@@ -20,6 +20,7 @@
         nix-direnv
         git
         fzf
+        awscli2
         jq
         miniserve # http serve
         nodejs_20

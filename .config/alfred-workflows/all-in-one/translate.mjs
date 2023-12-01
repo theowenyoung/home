@@ -6,13 +6,24 @@ import { encode } from "punycode";
 // Alfred translate script
 async function main() {
   const args = process.argv.slice(2);
-  const targetLanguage = args[0];
-  let sourceText = args[1];
+  let sourceText = args[0];
   if (sourceText) {
     sourceText = sourceText.trim();
   } else {
     return;
   }
+  let targetLanguage = args[1];
+
+  if (!targetLanguage) {
+    // check ascci
+    const isAscii = /^[\x00-\x7F]*$/.test(sourceText);
+    if (isAscii) {
+      targetLanguage = "zh";
+    } else {
+      targetLanguage = "en";
+    }
+  }
+
   const isEnglishWord = /^[a-zA-Z]+$/.test(sourceText);
 
   if (sourceText.length > 4000 || (isEnglishWord && sourceText.length < 3)) {
@@ -74,7 +85,7 @@ async function main() {
     {
       title: deeplTranslationText,
       subtitle:
-        "By Deepl, Enter 复制, cmd+L 放大显示并复制, 按 shift 在浏览器中打开, -> 其他操作",
+        "By Deepl, Enter 复制, cmd+L 放大显示并复制, 右方向键 -> 更多操作",
       arg: deeplTranslationText,
       action: {
         url: deeplSiteUrl,
@@ -99,7 +110,7 @@ async function main() {
     {
       title: translationText,
       subtitle:
-        "By Google, Enter 复制, cmd+L 放大显示并复制, 按 shift 在浏览器中打开, -> 其他操作",
+        "By Google, Enter 复制, cmd+L 放大显示并复制,  右方向键 -> 更多操作",
       arg: translationText,
       action: {
         url: siteUrl,
