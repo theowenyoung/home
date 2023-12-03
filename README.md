@@ -165,7 +165,11 @@ everything is ok now.
 
 加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
 
-10. vimium 配置
+9. alfred 工作流
+
+1. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
+
+1. vimium 配置
 
 ```bash
 unmapAll

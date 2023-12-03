@@ -20,6 +20,7 @@
         nix-direnv
         git
         fzf
+        inetutils # telnet
         awscli2
         jq
         miniserve # http serve
