@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "web-ext";
-  version = "7.8.0";
+  version = "7.9.0";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "web-ext";
     rev = version;
-    hash = "sha256-hrf47k4FxZOSyq8jPYcYjkcHIf+6hvMBNGcDf9VVZoY=";
+    hash = "sha256-7fBUWQFUsIGQnyNhZISvdtAQMAMZ38mbzGuC+6Cwu1Y=";
   };
 
-  npmDepsHash = "sha256-D9d3hFwkxRzYfLaGSOJntdhx54rR1gFalMJY8THO2NI=";
+  npmDepsHash = "sha256-3Dq4sNPZm9fDxPxOZL+rDxFA/FEs2/+zdz8sF3JFJ3s=";
 
   # web-ext defaults to development builds:
   #   https://github.com/mozilla/web-ext/blob/master/CONTRIBUTING.md#build-web-ext

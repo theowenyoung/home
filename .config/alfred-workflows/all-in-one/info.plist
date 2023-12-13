@@ -73,6 +73,16 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
+				<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
 				<string>AAA51207-26C9-41F4-89CB-0C0954772F29</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -262,6 +272,25 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>browser</key>
 				<string></string>
 				<key>skipqueryencode</key>
@@ -423,6 +452,13 @@ exit 1
 			<real>65</real>
 			<key>ypos</key>
 			<real>55</real>
+		</dict>
+		<key>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</key>
+		<dict>
+			<key>xpos</key>
+			<real>605</real>
+			<key>ypos</key>
+			<real>135</real>
 		</dict>
 		<key>60559819-5D23-4156-8252-18CBAC9EDE17</key>
 		<dict>
