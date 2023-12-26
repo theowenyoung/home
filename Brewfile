@@ -13,6 +13,7 @@ cask "arc"
 cask "iterm2"
 cask "NetNewsWire" # rss 阅读器
 cask "telegram"
+cask "bruno" # api 调试
 cask "transmission"
 cask "the-unarchiver"
 cask "visual-studio-code"
