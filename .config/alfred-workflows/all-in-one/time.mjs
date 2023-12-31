@@ -5,37 +5,52 @@ function main() {
     return;
   }
   query = query.trim();
+  let date = null;
 
-  // is number
-  if (/^\d+$/.test(query)) {
-    // is timestamp millisecond or second
-    if (query.length <= 10) {
-      query = query + "000";
+  if (!query) {
+    date = new Date();
+  } else if (query === "now") {
+    date = new Date();
+  } else {
+    // is number
+    if (/^\d+$/.test(query)) {
+      // is timestamp millisecond or second
+      if (query.length <= 10) {
+        query = query + "000";
+      }
+      date = new Date(parseInt(query));
+    } else {
+      date = new Date(query);
     }
-    const date = new Date(parseInt(query));
-    console.log(
-      JSON.stringify({
-        items: [
-          {
-            title: getBeijingTime(date),
-            subtitle: "北京时间",
-            arg: getBeijingTime(date),
-          },
-          {
-            title: getLocalTime(date),
-            subtitle: "本地时间",
-            arg: getLocalTime(date),
-          },
-          {
-            title: getUtcTime(date),
-            subtitle: "UTC时间",
-            arg: getUtcTime(date),
-          },
-        ],
-      }),
-    );
-    return;
   }
+
+  console.log(
+    JSON.stringify({
+      items: [
+        {
+          title: getBeijingTime(date),
+          subtitle: "北京时间",
+          arg: getBeijingTime(date),
+        },
+        {
+          title: getLocalTime(date),
+          subtitle: "本地时间",
+          arg: getLocalTime(date),
+        },
+        {
+          title: getUtcTime(date),
+          subtitle: "UTC时间",
+          arg: getUtcTime(date),
+        },
+        {
+          title: date.getTime(),
+          subtitle: "时间戳",
+          arg: date.getTime(),
+        },
+      ],
+    }),
+  );
+  return;
 }
 
 export function getBeijingTime(date) {
@@ -56,7 +71,7 @@ export function getLocalTime(date) {
 export function getUtcTime(date) {
   const newDate = new Date(date);
   const isoString = newDate.toISOString();
-  return isoString.replace("T", " ").replace("Z", "");
+  return isoString;
 }
 
 main();

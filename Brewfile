@@ -10,6 +10,7 @@ cask "google-chrome"
 cask "loom"
 cask "iina"
 cask "arc"
+cask "transmission" # p2p
 cask "iterm2"
 cask "NetNewsWire" # rss 阅读器
 cask "telegram"

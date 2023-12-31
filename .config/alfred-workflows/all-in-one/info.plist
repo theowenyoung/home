@@ -8,6 +8,19 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
+		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<array>
 			<dict>
@@ -327,6 +340,25 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>alfredfiltersresults</key>
 				<false/>
 				<key>alfredfiltersresultsmatchmode</key>
@@ -501,6 +533,13 @@ exit 1
 			<real>855</real>
 			<key>ypos</key>
 			<real>350</real>
+		</dict>
+		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
+		<dict>
+			<key>xpos</key>
+			<real>420</real>
+			<key>ypos</key>
+			<real>355</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
