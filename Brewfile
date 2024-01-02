@@ -23,7 +23,6 @@ cask "Calibre"
 cask "Zettlr"
 cask "cleanshot"
 cask "sequel-ace"
-mas "CoffeeTea - Prevent Sleep", id: 6443935401
 mas "Immersive Translate", id: 6447957425
 mas "iPic", id: 1101244278
 mas "Microsoft Word", id: 462054704
