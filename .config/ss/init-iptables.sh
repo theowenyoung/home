@@ -3,10 +3,10 @@
 set -e
 
 # Must use root
-if [ "$(whoami)" != "root" ]; then
-	echo "Must run as root"
-	exit 1
-fi
+# if [ "$(whoami)" != "root" ]; then
+# 	echo "Must run as root"
+# 	exit 1
+# fi
 
 SS_PORT="36000"
 TEMP_SS_START_PORT="35000"
@@ -31,11 +31,11 @@ add_iptables_rule() {
 }
 
 # Add iptables rules for IPv4
-add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
-add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+sudo add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+sudo add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 
 # Save IPv4 rules
-iptables-save >/etc/iptables/rules.v4
+sudo iptables-save >/etc/iptables/rules.v4
 
 # Function to check and add ip6tables rule if not exists
 add_ip6tables_rule() {
@@ -53,11 +53,11 @@ add_ip6tables_rule() {
 }
 
 # Add ip6tables rules for IPv6
-add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
-add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+sudo add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+sudo add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 
 # Save IPv6 rules
-ip6tables-save >/etc/iptables/rules.v6
+sudo ip6tables-save >/etc/iptables/rules.v6
 
 # service for user service
 
