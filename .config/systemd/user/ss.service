@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 Environment=RUST_LOG=error
 EnvironmentFile=%h/.infisicalenv
-ExecStart=%h/.config/ss/up.sh
+ExecStart=%h/.config/ss/run.sh
 Restart=on-failure
 WorkingDirectory=%h/.config/ss
 TimeoutStopSec=5s

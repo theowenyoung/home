@@ -70,14 +70,3 @@ add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_GUEST_START_PORT $TEMP_SS_GUEST_E
 
 # Save IPv6 rules
 sudo sh -c 'ip6tables-save > /etc/iptables/rules.v6'
-
-# service for user service
-# we alread has ss service on ~/.config/systemd/user/ss.service
-
-UNIT=ss
-
-systemctl --user enable $UNIT
-
-systemctl --user daemon-reload
-systemctl --user restart $UNIT
-systemctl --user status $UNIT

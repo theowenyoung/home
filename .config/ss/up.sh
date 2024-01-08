@@ -1,3 +1,12 @@
 #!/bin/bash
 
-$HOME/.nix-profile/bin/infisical run --env=prod -- $HOME/.nix-profile/bin/sops exec-env $HOME/.config/env/secrets.yaml '$HOME/.nix-profile/bin/ssserver -c $HOME/.config/ss/config.json'
+# service for user service
+# we alread has ss service on ~/.config/systemd/user/ss.service
+
+UNIT=ss
+
+systemctl --user enable $UNIT
+
+systemctl --user daemon-reload
+systemctl --user restart $UNIT
+systemctl --user status $UNIT
