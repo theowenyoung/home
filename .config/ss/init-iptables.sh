@@ -70,7 +70,8 @@ After=network.target
 [Service]
 Type=simple
 Environment=RUST_LOG=error
-ExecStart=%h/.nix-profile/bin/ssserver -c %h/secret/ss/config.json
+EnvironmentFile=%s/.infisicalenv
+ExecStart=%h/.config/ss/up.sh
 Restart=on-failure
 WorkingDirectory=%h/secret/ss
 TimeoutStopSec=5s

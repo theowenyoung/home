@@ -97,6 +97,14 @@ exit
 nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/.config/env#proxy
 ```
 
+4. 写入 密钥token
+
+在[这里](https://app.infisical.com/project/6547bc625cd2f14fb4bfc19f/members)获取服务器密钥，根据需要选择过期时间
+
+```
+touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=XXX" > ~/.infisicalenv
+```
+
 4. 下载 dotfiles
 
 ```
