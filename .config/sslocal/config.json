@@ -1,0 +1,13 @@
+{
+  "servers": [
+    {
+      "server": "::",
+      "port": 36000,
+      "method": "chacha20-ietf-poly1305",
+      "password": "${SS_PASSWORD}",
+      "mode": "tcp_and_udp",
+      "fast_open": false,
+      "timeout": 7200
+    }
+  ]
+}
