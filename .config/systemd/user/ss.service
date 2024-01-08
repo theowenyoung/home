@@ -5,10 +5,10 @@ After=network.target
 [Service]
 Type=simple
 Environment=RUST_LOG=error
-EnvironmentFile=%s/.infisicalenv
+EnvironmentFile=%h/.infisicalenv
 ExecStart=%h/.config/ss/up.sh
 Restart=on-failure
-WorkingDirectory=%h/secret/ss
+WorkingDirectory=%h/.config/ss
 TimeoutStopSec=5s
 LimitNOFILE=1048576
 LimitNPROC=512
