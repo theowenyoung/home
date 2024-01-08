@@ -12,6 +12,10 @@ SS_PORT="36000"
 TEMP_SS_START_PORT="35000"
 TEMP_SS_END_PORT="35999"
 
+SS_GUEST_PORT="36001"
+TEMP_SS_GUEST_START_PORT="34000"
+TEMP_SS_GUEST_END_PORT="34999"
+
 # Create directory for iptables rules
 mkdir -p /etc/iptables
 
@@ -28,11 +32,15 @@ add_iptables_rule() {
 	if ! iptables -t "$table" -C "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port" &>/dev/null; then
 		sudo iptables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
 	fi
+
 }
 
 # Add iptables rules for IPv4
 add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+
+# Add guest iptables rules for IPv4
+add_iptables_rule nat PREROUTING tcp $TEMP_SS_GUEST_START_PORT $TEMP_SS_GUEST_END_PORT $SS_GUEST_PORT
 
 # Save IPv4 rules
 sudo sh -c 'iptables-save > /etc/iptables/rules.v4'
@@ -55,6 +63,8 @@ add_ip6tables_rule() {
 # Add ip6tables rules for IPv6
 add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+## Add guest iptables rules for IPv6
+add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_GUEST_START_PORT $TEMP_SS_GUEST_END_PORT $SS_GUEST_PORT
 
 # Save IPv6 rules
 sudo sh -c 'ip6tables-save > /etc/iptables/rules.v6'
