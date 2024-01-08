@@ -29,6 +29,7 @@
         nodePackages.pnpm
         nodePackages.nodemon
         nodePackages.grunt-cli
+        shadowsocks-rust
         deno
         infisical
         wget

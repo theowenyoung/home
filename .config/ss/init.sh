@@ -2,6 +2,8 @@
 
 set -e
 
+# change iptable rules and add ss service
+
 # Must use root
 # if [ "$(whoami)" != "root" ]; then
 # 	echo "Must run as root"

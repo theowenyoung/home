@@ -119,7 +119,8 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
-5. 使用配置中的bashrc
+5. 使用我的bashrc
+   shadowsocks-rust
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
@@ -146,17 +147,12 @@ fi
 7. 安装 ss 的service
 
 ```
-# start_service 是我的bash 里的一个简单的函数
-start_service ss
-```
-
-8. 修改 iptables , 以释放更多的端口(只需1次)
-
-```
-sudo ~/.config/ss/init-iptables.sh
+./.config/ss/init.sh
 ```
 
 everything is ok now.
+
+## 客户端 ss
 
 ## GUI 软件配置
 
