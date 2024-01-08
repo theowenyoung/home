@@ -2,9 +2,9 @@
 
 set -e
 
-# must use root
+# Must use root
 if [ "$(whoami)" != "root" ]; then
-	echo "must use root"
+	echo "Must run as root"
 	exit 1
 fi
 
@@ -12,18 +12,84 @@ SS_PORT="36000"
 TEMP_SS_START_PORT="35000"
 TEMP_SS_END_PORT="35999"
 
-# Write config.json to /etc/opt/ss/config.json
+# Create directory for iptables rules
 mkdir -p /etc/iptables
 
-# change iptables for multiple ports
-iptables -t nat -A PREROUTING -p tcp --dport $TEMP_SS_START_PORT:$TEMP_SS_END_PORT -j REDIRECT --to-port $SS_PORT
-iptables -t nat -A PREROUTING -p udp --dport $TEMP_SS_START_PORT:$TEMP_SS_END_PORT -j REDIRECT --to-port $SS_PORT
+# Function to check and add iptables rule if not exists
+add_iptables_rule() {
+	local table=$1
+	local chain=$2
+	local protocol=$3
+	local dport_start=$4
+	local dport_end=$5
+	local to_port=$6
+
+	# Check if the rule exists
+	if ! iptables -t "$table" -C "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port" &>/dev/null; then
+		iptables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
+	fi
+}
+
+# Add iptables rules for IPv4
+add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+
+# Save IPv4 rules
 iptables-save >/etc/iptables/rules.v4
 
-# change iptables for multiple ports ipv6
-ip6tables -t nat -A PREROUTING -p tcp --dport $TEMP_SS_START_PORT:$TEMP_SS_END_PORT -j REDIRECT --to-port $SS_PORT
-ip6tables -t nat -A PREROUTING -p udp --dport $TEMP_SS_START_PORT:$TEMP_SS_END_PORT -j REDIRECT --to-port $SS_PORT
+# Function to check and add ip6tables rule if not exists
+add_ip6tables_rule() {
+	local table=$1
+	local chain=$2
+	local protocol=$3
+	local dport_start=$4
+	local dport_end=$5
+	local to_port=$6
 
-# save iptables when restart
+	# Check if the rule exists
+	if ! ip6tables -t "$table" -C "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port" &>/dev/null; then
+		ip6tables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
+	fi
+}
 
+# Add ip6tables rules for IPv6
+add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+
+# Save IPv6 rules
 ip6tables-save >/etc/iptables/rules.v6
+
+# service for user service
+
+ss_service="$(
+	cat <<EOF
+[Unit]
+Description=service
+After=network.target
+
+[Service]
+Type=simple
+Environment=RUST_LOG=error
+ExecStart=%h/.nix-profile/bin/ssserver -c %h/secret/ss/config.json
+Restart=on-failure
+WorkingDirectory=%h/secret/ss
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+LimitNPROC=512
+StandardOutput=null
+[Install]
+WantedBy=default.target
+EOF
+)"
+
+# write ss_service to /etc/systemd/system/ss.service
+
+echo "$ss_service" >/etc/systemd/user/ss.service
+
+UNIT=ss
+
+systemctl --user enable $UNIT
+
+systemctl --user daemon-reload
+systemctl --user restart $UNIT
+systemctl --user status $UNIT

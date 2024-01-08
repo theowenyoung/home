@@ -30,6 +30,7 @@
         nodePackages.nodemon
         nodePackages.grunt-cli
         deno
+        infisical
         wget
         mas
         tmux
@@ -85,6 +86,7 @@
         nodejs
         nodePackages.npm
         shadowsocks-rust
+        infisical
         sops
         (pkgs.callPackage ./packages/vlt/default.nix {})
       ];
