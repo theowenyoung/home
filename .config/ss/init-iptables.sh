@@ -60,32 +60,7 @@ add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_
 sudo sh -c 'ip6tables-save > /etc/iptables/rules.v6'
 
 # service for user service
-
-ss_service="$(
-	cat <<EOF
-[Unit]
-Description=service
-After=network.target
-
-[Service]
-Type=simple
-Environment=RUST_LOG=error
-EnvironmentFile=%s/.infisicalenv
-ExecStart=%h/.config/ss/up.sh
-Restart=on-failure
-WorkingDirectory=%h/secret/ss
-TimeoutStopSec=5s
-LimitNOFILE=1048576
-LimitNPROC=512
-StandardOutput=null
-[Install]
-WantedBy=default.target
-EOF
-)"
-
-# write ss_service to /etc/systemd/system/ss.service
-
-echo "$ss_service" >/etc/systemd/user/ss.service
+# we alread has ss service on ~/.config/systemd/user/ss.service
 
 UNIT=ss
 

@@ -5,14 +5,13 @@ After=network.target
 [Service]
 Type=simple
 Environment=RUST_LOG=error
-; EnvironmentFile=/etc/my_service/my_service.conf
-ExecStart=%h/.nix-profile/bin/ssserver -c %h/.config/ss/config.json
+EnvironmentFile=%s/.infisicalenv
+ExecStart=%h/.config/ss/up.sh
 Restart=on-failure
-WorkingDirectory=%h/.config/ss
+WorkingDirectory=%h/secret/ss
 TimeoutStopSec=5s
 LimitNOFILE=1048576
 LimitNPROC=512
 StandardOutput=null
 [Install]
 WantedBy=default.target
-
