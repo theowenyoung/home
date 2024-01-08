@@ -26,16 +26,16 @@ add_iptables_rule() {
 
 	# Check if the rule exists
 	if ! iptables -t "$table" -C "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port" &>/dev/null; then
-		iptables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
+		sudo iptables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
 	fi
 }
 
 # Add iptables rules for IPv4
-sudo add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
-sudo add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_iptables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_iptables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 
 # Save IPv4 rules
-sudo iptables-save >/etc/iptables/rules.v4
+sudo sh -c 'iptables-save > /etc/iptables/rules.v4'
 
 # Function to check and add ip6tables rule if not exists
 add_ip6tables_rule() {
@@ -48,16 +48,16 @@ add_ip6tables_rule() {
 
 	# Check if the rule exists
 	if ! ip6tables -t "$table" -C "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port" &>/dev/null; then
-		ip6tables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
+		sudo ip6tables -t "$table" -A "$chain" -p "$protocol" --dport "$dport_start":"$dport_end" -j REDIRECT --to-port "$to_port"
 	fi
 }
 
 # Add ip6tables rules for IPv6
-sudo add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
-sudo add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_ip6tables_rule nat PREROUTING tcp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
+add_ip6tables_rule nat PREROUTING udp $TEMP_SS_START_PORT $TEMP_SS_END_PORT $SS_PORT
 
 # Save IPv6 rules
-sudo ip6tables-save >/etc/iptables/rules.v6
+sudo sh -c 'ip6tables-save > /etc/iptables/rules.v6'
 
 # service for user service
 
