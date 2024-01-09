@@ -78,6 +78,11 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 
 ## Linux init
 
+0. 打开端口
+
+TCP: 34000-37000
+UDP: 34000-37000
+
 1. 安装nix
 
 ```
@@ -89,6 +94,12 @@ sh <(curl -L https://nixos.org/nix/install) --daemon --yes
 ```
 exit
 # reconnect to ssh
+```
+
+3. 启用 linger (这样让用户级别的任务即使退出也能运行)
+
+```
+sudo loginctl enable-linger $USER
 ```
 
 3. 安装对应的环境软件
