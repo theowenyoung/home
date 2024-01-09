@@ -110,6 +110,8 @@ nix --extra-experimental-features "nix-command flakes" profile install github:th
 
 4. 写入 密钥token
 
+// infisical 似乎被墙了...?
+
 在[这里](https://app.infisical.com/project/6547bc625cd2f14fb4bfc19f/members)获取服务器密钥，根据需要选择过期时间
 
 ```
@@ -149,7 +151,7 @@ EOF
 fi
 ```
 
-6. source it
+6. source it(可选)
 
 ```bash
 . ~/.bashrc
@@ -159,6 +161,12 @@ fi
 
 ```
 ./.config/ss/init.sh
+```
+
+8. 启动 ss
+
+```
+./.config/ss/up.sh
 ```
 
 everything is ok now.
