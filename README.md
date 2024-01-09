@@ -130,7 +130,7 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
-5. 使用我的bashrc
+5. 使用我的bashrc(可选)
    shadowsocks-rust
 
 ```bash

@@ -19,7 +19,7 @@ TEMP_SS_GUEST_START_PORT="34000"
 TEMP_SS_GUEST_END_PORT="34999"
 
 # Create directory for iptables rules
-mkdir -p /etc/iptables
+sudo mkdir -p /etc/iptables
 
 # Function to check and add iptables rule if not exists
 add_iptables_rule() {
