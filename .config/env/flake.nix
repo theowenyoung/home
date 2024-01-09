@@ -98,12 +98,7 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-        git
-        gnumake
-        gcc
-        bashInteractive
         iptables
-        unzip
         shadowsocks-rust
         infisical
         sops
