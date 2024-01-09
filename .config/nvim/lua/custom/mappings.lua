@@ -174,6 +174,7 @@ M.nvimtree = {
       grep_in,
       "search this folder",
     },
+    ["<C-h>"] = { termcodes "<C-\\><C-N>" .. "<C-w>h", "switch left window" },
   },
 }
 
