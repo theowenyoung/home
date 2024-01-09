@@ -98,6 +98,7 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
+        git
         iptables
         shadowsocks-rust
         infisical
