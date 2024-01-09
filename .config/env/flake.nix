@@ -67,8 +67,8 @@
       ];
     };
 
-    # profile for x86_64-linux proxy machine with less packages
-    packages."x86_64-linux".proxy = let
+    # profile for x86_64-linux proxy build machine with less packages
+    packages."x86_64-linux".proxybuild = let
 	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
     in pkgs.buildEnv {
       name = "global-env";
@@ -89,8 +89,26 @@
         shadowsocks-rust
         infisical
         sops
-        (pkgs.callPackage ./packages/vlt/default.nix {})
       ];
     };
+
+        # profile for x86_64-linux proxy machine with less packages
+    packages."x86_64-linux".proxy = let
+	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    in pkgs.buildEnv {
+      name = "global-env";
+      paths = with pkgs; [
+        git
+        gnumake
+        gcc
+        bashInteractive
+        iptables
+        unzip
+        shadowsocks-rust
+        infisical
+        sops
+      ];
+    };
+
   };
 }
