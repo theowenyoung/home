@@ -17,13 +17,12 @@ cask "telegram"
 cask "the-unarchiver"
 cask "visual-studio-code"
 cask "alfred"
+cask "tencent-meeting"
 cask "selfcontrol" # 自控
 cask "keepassxc"
 cask "Calibre"
-cask "Zettlr"
 cask "cleanshot"
 cask "sequel-ace"
-mas "Immersive Translate", id: 6447957425
 mas "iPic", id: 1101244278
 mas "Microsoft Word", id: 462054704
 mas "S3", id: 6447647340
