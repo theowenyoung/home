@@ -23,6 +23,7 @@ cask "keepassxc"
 cask "Calibre"
 cask "cleanshot"
 cask "sequel-ace"
+mas "Outline", id: 1356178125
 mas "iPic", id: 1101244278
 mas "Microsoft Word", id: 462054704
 mas "S3", id: 6447647340

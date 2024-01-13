@@ -3,7 +3,7 @@
 # check is git exist
 
 if [[ -x ~/.nix-profile/bin/git ]]; then
-source "$HOME/.config/bash/git-completion.bash"
+	source "$HOME/.config/bash/git-completion.bash"
 fi
 
 source "$HOME/.config/bash/ssh-completion.bash"
@@ -37,8 +37,7 @@ alias ...='cd ../..'
 alias ~='cd ~'
 
 alias ss='source ~/.bashrc'
-alias bb='brew bundle --cleanup'
-
+alias bb='brew bundle --cleanup --file $HOME/Brewfile'
 # git commit
 alias gpull="git pull"
 alias gpush="git push"

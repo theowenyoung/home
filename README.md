@@ -76,7 +76,7 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 ~/inbox/home/.meta/init.sh
 ```
 
-## Linux init
+## Linux proxy init
 
 0. 打开端口
 
