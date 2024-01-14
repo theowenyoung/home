@@ -143,7 +143,7 @@
     packages."x86_64-linux".rootonly = let
 	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
     in pkgs.buildEnv {
-      name = "homedebian";
+      name = "rootonly";
       paths = with pkgs; [
         git
         gnumake
