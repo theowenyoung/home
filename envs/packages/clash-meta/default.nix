@@ -4,7 +4,7 @@ let
   os = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
   arch = if stdenv.hostPlatform.isx86 then "amd64" else "arm64";
   sha256s = {
-    linux_amd64 = "";
+    linux_amd64 = "sha256-8chjjVfgqAcFhUKG7J0KJmgfwYRB19cIvmuTSQKVVKw=";
     darwin_amd64 = "sha256-ogJfYM6/bZRovtxJW67jnmveE6dYhcj5BgTZm4i4D7w=";
   };
 in

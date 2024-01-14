@@ -105,7 +105,7 @@ sudo loginctl enable-linger $USER
 4. 安装对应的环境软件
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/envs#proxy
+nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=envs#proxy
 ```
 
 5. 写入 密钥token
@@ -119,6 +119,21 @@ touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=XXX"
 ```
 
 4. 下载 dotfiles
+
+只读：
+
+```
+cd "$HOME"
+rm -rf .git
+git init -b main
+git remote add origin https://github.com/theowenyoung/home.git
+git fetch origin main
+git reset --hard origin/main
+git branch --set-upstream-to origin/main main
+
+```
+
+后期可写：
 
 ```
 cd "$HOME"
