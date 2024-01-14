@@ -83,6 +83,25 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 TCP: 34000-37000
 UDP: 34000-37000
 
+0. 如果需要代理的话，在这里启动，请查看 `./.config/bin/ssnow.sh`
+
+```
+sudo apt-get -y update
+sudo apt -y install snapd
+sudo apt -y install sudo
+sudo snap install shadowsocks-rust
+
+# use your own ss://xxxxx
+export SERVER_URL=
+
+/snap/bin/shadowsocks-rust.sslocal -b 127.0.0.1:1080 --server-url $SERVER_URL &
+/snap/bin/shadowsocks-rust.sslocal --protocol http -b 127.0.0.1:8080 --server-url $SERVER_URL &
+export http_proxy=http://127.0.0.1:8080
+export https_proxy=http://127.0.0.1:8080
+export all_proxy=socks5://127.0.0.1:1080
+
+```
+
 1. 安装nix
 
 ```
@@ -106,6 +125,27 @@ sudo loginctl enable-linger $USER
 
 ```
 nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#proxy
+```
+
+如果需要安装root only：
+
+```
+sudo su
+```
+
+如果需要代理：
+
+```
+export http_proxy=http://127.0.0.1:8080
+export https_proxy=http://127.0.0.1:8080
+export all_proxy=socks5://127.0.0.1:1080
+```
+
+安装 rootonly
+
+```
+nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#rootonly
+
 ```
 
 5. 写入 密钥token

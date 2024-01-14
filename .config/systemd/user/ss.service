@@ -7,8 +7,8 @@ Type=simple
 Environment=RUST_LOG=error
 EnvironmentFile=%h/.infisicalenv
 ExecStart=%h/.config/ss/run.sh
-Restart=on-failure
 WorkingDirectory=%h/.config/ss
+Restart=on-failure
 TimeoutStopSec=5s
 LimitNOFILE=1048576
 LimitNPROC=512

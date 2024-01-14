@@ -12,6 +12,8 @@ fi
 
 # use run.sh
 
+PNAME=clash
+
 service_content="$(
 	cat <<EOF
 [Unit]
@@ -20,9 +22,10 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/opt/ss/bin/sslocal -c /etc/opt/ss/config.json
+EnvironmentFile=%h/.infisicalenv
+ExecStart=%h/.config/clash/run.sh
+WorkingDirectory=%h/.config/clash
 Restart=on-failure
-WorkingDirectory=/etc/opt/ss
 TimeoutStopSec=5s
 LimitNOFILE=1048576
 LimitNPROC=512
@@ -32,14 +35,9 @@ WantedBy=multi-user.target
 EOF
 )"
 
-# write ss_service to /etc/systemd/system/ss.service
+echo "$service_content" >/etc/systemd/system/$PNAME.service
 
-echo "$ss_service" >/etc/systemd/system/ss.service
-
-UNIT=ss
-
-systemctl enable $UNIT
-
-systemctl daemon-reload
-systemctl restart $UNIT
-systemctl status $UNIT
+sudo systemctl enable $PNAME
+sudo systemctl daemon-reload
+sudo systemctl restart $PNAME
+sudo systemctl status $PNAME
