@@ -139,7 +139,7 @@ sudo loginctl enable-linger $USER
 4. 安装对应的环境软件
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#proxy
+nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home?dir=envs#proxy"
 ```
 
 （可选）如果需要安装root only：
@@ -159,7 +159,7 @@ export all_proxy=socks5://127.0.0.1:1080
 安装 rootonly
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#rootonly
+nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home?dir=envs#rootonly"
 ```
 
 5. 写入 密钥token
@@ -208,7 +208,6 @@ git remote -v
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
-
 cat >>~/.bashrc <<EOF
 # green-bashrc-start
 
@@ -218,7 +217,6 @@ fi
 
 # green-bashrc-end
 EOF
-
 fi
 ```
 

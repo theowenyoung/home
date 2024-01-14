@@ -145,6 +145,7 @@
       paths = with pkgs; [
         git
         gnumake
+        caddy
         gcc
         bashInteractive
         iptables
