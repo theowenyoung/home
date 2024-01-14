@@ -105,7 +105,7 @@ sudo loginctl enable-linger $USER
 4. 安装对应的环境软件
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=envs#proxy
+nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#proxy
 ```
 
 5. 写入 密钥token
@@ -148,12 +148,11 @@ git remote -v
 ```
 
 5. 使用我的bashrc(可选)
-   shadowsocks-rust
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
 
-	cat >>~/.bashrc <<EOF
+cat >>~/.bashrc <<EOF
 # green-bashrc-start
 
 if [ -f ~/.config/bash/.bashrc ]; then
@@ -183,6 +182,8 @@ fi
 ```
 ./.config/ss/up.sh
 ```
+
+9. （可选）安装 Clash meta
 
 everything is ok now.
 

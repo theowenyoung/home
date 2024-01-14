@@ -139,5 +139,23 @@
       ];
     };
 
+    # profile for x86_64-linux rootonly build machine with less packages
+    packages."x86_64-linux".rootonly = let
+	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    in pkgs.buildEnv {
+      name = "homedebian";
+      paths = with pkgs; [
+        git
+        gnumake
+        gcc
+        bashInteractive
+        iptables
+        infisical
+        sops
+        (pkgs.callPackage ./packages/clash-meta/default.nix {})
+
+      ];
+    };
+
   };
 }
