@@ -78,12 +78,12 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 
 ## Linux proxy init
 
-0. 打开端口
+0. (可选) 打开端口
 
 TCP: 34000-37000
 UDP: 34000-37000
 
-0. 如果需要代理的话，在这里启动，请查看 `./.config/bin/ssnow.sh`
+0. (可选) 如果需要代理的话，在这里启动，请查看 `./.config/bin/ssnow.sh`
 
 ```
 sudo apt-get -y update
@@ -115,6 +115,21 @@ exit
 # reconnect to ssh
 ```
 
+（可选）
+
+临时代理需要重新开启：
+
+```
+export SERVER_URL=
+
+/snap/bin/shadowsocks-rust.sslocal -b 127.0.0.1:1080 --server-url $SERVER_URL &
+/snap/bin/shadowsocks-rust.sslocal --protocol http -b 127.0.0.1:8080 --server-url $SERVER_URL &
+export http_proxy=http://127.0.0.1:8080
+export https_proxy=http://127.0.0.1:8080
+export all_proxy=socks5://127.0.0.1:1080
+
+```
+
 3. 启用 linger (这样让用户级别的任务即使退出也能运行)
 
 ```
@@ -127,7 +142,7 @@ sudo loginctl enable-linger $USER
 nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#proxy
 ```
 
-如果需要安装root only：
+（可选）如果需要安装root only：
 
 ```
 sudo su
@@ -154,9 +169,10 @@ nix --extra-experimental-features "nix-command flakes" profile install --refresh
 在[这里](https://app.infisical.com/project/6547bc625cd2f14fb4bfc19f/members)获取服务器密钥，根据需要选择过期时间
 
 ```
-touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=XXX" > ~/.infisicalenv
-# 导出环境变量
-while read -r line; do export "$line"; done < ~/.infisicalenv
+# Get infisical token
+export INFISICAL_TOKEN=
+# 写入到该地址，root 和 普通用户 应该都需要一份
+touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=$INFISICAL_TOKEN" > ~/.infisicalenv
 ```
 
 4. 下载 dotfiles
@@ -212,7 +228,7 @@ fi
 . ~/.bashrc
 ```
 
-7. 安装 ss 的service
+7. 安装 ss 的service（只能普通用户）
 
 ```
 ./.config/ss/init.sh

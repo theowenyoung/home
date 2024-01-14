@@ -32,7 +32,6 @@ Restart=on-failure
 TimeoutStopSec=5s
 LimitNOFILE=1048576
 LimitNPROC=512
-StandardOutput=null
 [Install]
 WantedBy=multi-user.target
 EOF
