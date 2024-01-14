@@ -30,6 +30,8 @@
         nodePackages.nodemon
         nodePackages.grunt-cli
         shadowsocks-rust
+        # clash-meta # clash
+        (pkgs.callPackage ./packages/clash-meta/default.nix {})
         deno
         infisical
         wget
