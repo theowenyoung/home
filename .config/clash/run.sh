@@ -17,7 +17,7 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	config_target_path="$HOME/.config/clash/config.yml"
 
 	if [ ! -f "$config_linux_add_path" ]; then
-		echo "config_linux_add.yml not exist"
+		echo "$HOME/.config/clash/config_linux_add.yml not exist"
 		exit 1
 	fi
 
