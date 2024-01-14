@@ -26,6 +26,7 @@ After=network.target
 [Service]
 Type=simple
 EnvironmentFile=%h/.infisicalenv
+Environment="HOME=/root"
 ExecStart=%h/.config/clash/run.sh
 WorkingDirectory=%h/.config/clash
 Restart=on-failure
