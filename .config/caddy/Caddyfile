@@ -1,0 +1,17 @@
+http://clash.test {
+   reverse_proxy 127.0.0.1:9090
+}
+http://dns.test {
+      reverse_proxy 127.0.0.1:13000
+}
+http://huawei.test {
+	reverse_proxy 192.168.101.1:80
+}
+
+http://q.test {
+    reverse_proxy 127.0.0.1:10002
+}
+
+http://o.test {
+	reverse_proxy 127.0.0.1:10004
+}
