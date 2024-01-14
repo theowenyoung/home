@@ -91,4 +91,4 @@ else
 	exit 1
 fi
 
-$HOME/.nix-profile/bin/infisical run --env=prod -- $HOME/.nix-profile/bin/sops exec-env $HOME/envs/secrets.yaml '$HOME/.nix-profile/bin/clash-with-ui -f $HOME/.config/clash/config.yml -d $HOME/.config/clash'
+$HOME/.nix-profile/bin/clash-with-ui -f $HOME/.config/clash/config.yml -d $HOME/.config/clash
