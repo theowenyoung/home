@@ -17,6 +17,7 @@
 !.zshrc
 !.librewolf
 !.librewolf/**
+.config/caddy/autosave.json
 
 # liberally include everything in our .config
 !.config
