@@ -26,7 +26,7 @@ After=network.target network-online.target
 Requires=network-online.target
 
 [Service]
-Type=notify
+Type=simple
 Environment="HOME=/root"
 ExecStart=%h/.config/caddy/run.sh
 WorkingDirectory=%h/.config/caddy
