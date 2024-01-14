@@ -27,8 +27,6 @@ Requires=network-online.target
 
 [Service]
 Type=notify
-User=caddy
-Group=caddy
 Environment="HOME=/root"
 ExecStart=%h/.config/caddy/run.sh
 WorkingDirectory=%h/.config/caddy
