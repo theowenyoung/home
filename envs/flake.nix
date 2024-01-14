@@ -59,7 +59,7 @@
     packages."x86_64-darwin".pure = let
 	      pkgs = nixpkgs.legacyPackages."x86_64-darwin";
     in pkgs.buildEnv {
-      name = "global-env";
+      name = "pure-env";
       paths = with pkgs; [
       bashInteractive
       git
@@ -75,7 +75,7 @@
     packages."x86_64-linux".proxybuild = let
 	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
     in pkgs.buildEnv {
-      name = "global-env";
+      name = "proxy-build";
       paths = with pkgs; [
         git
         gnumake
@@ -107,6 +107,35 @@
         shadowsocks-rust
         infisical
         sops
+      ];
+    };
+
+
+
+    # profile for x86_64-linux homedebian build machine with less packages
+    packages."x86_64-linux".homedebian = let
+	      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    in pkgs.buildEnv {
+      name = "homedebian";
+      paths = with pkgs; [
+        git
+        gnumake
+        gcc
+        bashInteractive
+        iptables
+        tmux
+        deno
+        neovim
+        fzf
+        ripgrep
+        unzip
+        nodejs
+        nodePackages.npm
+        shadowsocks-rust
+        infisical
+        sops
+        (pkgs.callPackage ./packages/clash-meta/default.nix {})
+
       ];
     };
 

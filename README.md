@@ -102,13 +102,13 @@ exit
 sudo loginctl enable-linger $USER
 ```
 
-3. 安装对应的环境软件
+4. 安装对应的环境软件
 
 ```
 nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/envs#proxy
 ```
 
-4. 写入 密钥token
+5. 写入 密钥token
 
 // infisical 似乎被墙了...?
 
