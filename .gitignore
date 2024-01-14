@@ -17,7 +17,6 @@
 !.zshrc
 !.librewolf
 !.librewolf/**
-.config/caddy/autosave.json
 
 # liberally include everything in our .config
 !.config
@@ -30,6 +29,7 @@
 !.config/clash/config_template.yml
 !.config/clash/config_linux_add.yml
 !.config/clash/*.sh
+.config/caddy/autosave.json
 .config/.wrangler
 .config/hcp
 .config/configstore
