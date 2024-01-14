@@ -1,0 +1,85 @@
+allow-lan: true
+external-controller: 0.0.0.0:9090
+log-level: warning
+mode: rule
+ipv6: true
+mixed-port: 7890
+bind-address: "*"
+secret: ""
+proxies:
+  - name: awsko
+    server: 1.1.1.1
+    cipher: chacha20-ietf-poly1305
+    password: xxxxxxxxxxx
+    port: 22222
+    type: ss
+    udp: true
+proxy-groups:
+  - name: Unknown
+    type: select
+    proxies:
+      - Proxy
+      - DIRECT
+  - name: Proxy
+    type: select
+    proxies:
+      - awsko
+rules:
+  - IP-CIDR,127.0.0.0/8,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,17.0.0.0/8,DIRECT
+  - IP-CIDR,100.64.0.0/10,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+  - IP-CIDR6,fe80::/10,DIRECT
+  - GEOIP,LAN,DIRECT
+  - GEOSITE,icloud@cn,DIRECT
+  - GEOSITE,apple@cn,DIRECT
+  - GEOSITE,apple-cn,DIRECT
+  - GEOSITE,microsoft@cn,DIRECT
+  - GEOSITE,facebook,Proxy
+  - GEOSITE,youtube,Proxy
+  - GEOSITE,geolocation-cn,DIRECT
+  - GEOSITE,geolocation-!cn,Proxy
+  #GEOIP规则
+  - GEOIP,telegram,Proxy
+  - GEOIP,private,DIRECT
+  - GEOIP,cn,DIRECT
+  - DST-PORT,1080,Unknown
+  - DST-PORT,1100,Unknown
+  - DST-PORT,1241,Unknown
+  - DST-PORT,1352,Unknown
+  - DST-PORT,1337,Unknown
+  - DST-PORT,2810,Unknown
+  - DST-PORT,6969,Unknown
+  - DST-PORT,1738,Unknown
+  - DST-PORT,2710,Unknown
+  - DST-PORT,6961,Unknown
+  - DST-PORT,1433,Unknown
+  - DST-PORT,1434,Unknown
+  - DST-PORT,1521,Unknown
+  - DST-PORT,1944,Unknown
+  - DST-PORT,2301,Unknown
+  - DST-PORT,3000,Unknown
+  - DST-PORT,3128,Unknown
+  - DST-PORT,3306,Unknown
+  - DST-PORT,4000,Unknown
+  - DST-PORT,4001,Unknown
+  - DST-PORT,4002,Unknown
+  - DST-PORT,4100,Unknown
+  - DST-PORT,5000,Unknown
+  - DST-PORT,5432,Unknown
+  - DST-PORT,5800,Unknown
+  - DST-PORT,5801,Unknown
+  - DST-PORT,5802,Unknown
+  - DST-PORT,6346,Unknown
+  - DST-PORT,6347,Unknown
+  - DST-PORT,7001,Unknown
+  - DST-PORT,7002,Unknown
+  - DST-PORT,8080,Unknown
+  - DST-PORT,8443,Unknown
+  - DST-PORT,8888,Unknown
+  - DST-PORT,30821,Unknown
+  - DST-PORT,1-1024,Unknown
+  - MATCH,DIRECT

@@ -105,7 +105,7 @@ sudo loginctl enable-linger $USER
 3. 安装对应的环境软件
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/.config/env#proxy
+nix --extra-experimental-features "nix-command flakes" profile install github:theowenyoung/home?dir=/envs#proxy
 ```
 
 4. 写入 密钥token

@@ -1,7 +1,7 @@
-# All my env
+# All my Tools
 
 ## Debug new package
 
 ```
-nix-build ~/.config/env/debug.nix
+nix-build ~/envs/debug.nix
 ```

@@ -20,6 +20,8 @@
         nix-direnv
         git
         fzf
+        # yq
+        (pkgs.callPackage ./packages/yq/default.nix {})
         inetutils # telnet
         awscli2
         jq
