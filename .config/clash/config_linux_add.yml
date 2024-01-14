@@ -8,6 +8,10 @@ tun:
   #   - tcp://any:53
   auto-route: true # auto set global route
   auto-detect-interface: true # conflict with interface-name
+
+hosts:
+  "*.test": 192.168.101.2
+
 profile:
   # Store the `select` results in $HOME/.config/clash/.cache
   # set false If you don't want this behavior
