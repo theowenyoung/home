@@ -37,7 +37,7 @@ alias ...='cd ../..'
 alias ~='cd ~'
 
 alias ss='source ~/.bashrc'
-alias bb='brew bundle --cleanup --file $HOME/Brewfile'
+alias bb='brew bundle --cleanup --file $HOME/envs/Brewfile'
 # git commit
 alias gpull="git pull"
 alias gpush="git push"

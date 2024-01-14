@@ -5,6 +5,8 @@
 !.gitignore
 !.prettierrc
 !README.md
+!envs/
+!envs/**
 !.sops.yaml
 !Makefile
 !.meta
@@ -23,7 +25,9 @@
 # and then ignore things we don't want
 .DS_Store
 .config/raycast
-.config/clash
+.config/clash/**
+!.config/clash/config_template.yml
+!.config/clash/*.sh
 .config/.wrangler
 .config/hcp
 .config/configstore

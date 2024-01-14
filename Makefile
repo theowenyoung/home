@@ -1,15 +1,15 @@
 .PHONY: init
 init:
-	nix profile install ./.config/env
+	nix profile install --refresh ./envs
 
 .PHONY: init-pure
 init-pure:
-	nix profile install ./.config/env#pure
+	nix profile install ./envs#pure
 
 
 .PHONY: init-proxy
 init-proxy:
-	nix profile install ./.config/env#proxy
+	nix profile install ./envs#proxy
 
 .PHONY: uninstallall
 uninstallall:
@@ -21,7 +21,7 @@ install:
 
 .PHONY: update
 update:
-	nix flake update ./.config/env
+	nix flake update ./envs
 
 
 
@@ -31,7 +31,7 @@ i:
 
 .PHONY: debug
 debug:
-	nix-build ./.config/env/debug.nix
+	nix-build ./envs/debug.nix
 
 #	 nix run home-manager -- switch --flake ~/.config/home-manager#x86_64-darwin
 
