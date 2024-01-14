@@ -134,8 +134,6 @@
         shadowsocks-rust
         infisical
         sops
-        (pkgs.callPackage ./packages/clash-meta/default.nix {})
-
       ];
     };
 
