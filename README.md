@@ -145,7 +145,6 @@ export all_proxy=socks5://127.0.0.1:1080
 
 ```
 nix --extra-experimental-features "nix-command flakes" profile install --refresh github:theowenyoung/home?dir=envs#rootonly
-
 ```
 
 5. 写入 密钥token
@@ -156,6 +155,8 @@ nix --extra-experimental-features "nix-command flakes" profile install --refresh
 
 ```
 touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=XXX" > ~/.infisicalenv
+# 导出环境变量
+while read -r line; do export "$line"; done < ~/.infisicalenv
 ```
 
 4. 下载 dotfiles
@@ -224,6 +225,16 @@ fi
 ```
 
 9. （可选）安装 Clash meta
+
+**Clone secret**
+
+```
+git clone git@github.com:theowenyoung/secret.git
+```
+
+```
+./.config/clash/init.sh
+```
 
 everything is ok now.
 

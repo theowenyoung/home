@@ -10,6 +10,9 @@ fi
 
 # add to systemd service
 
+# wget data first
+wget https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb -O ~/.config/clash/Country.mmdb
+wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202401132209/geosite.dat -O ~/.config/clash/geosite.dat
 # use run.sh
 
 PNAME=clash
