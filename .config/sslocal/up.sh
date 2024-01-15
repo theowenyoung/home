@@ -3,7 +3,7 @@
 # service for user service
 # we alread has ss service on ~/.config/systemd/user/ss.service
 
-UNIT=ss
+UNIT=sslocal
 
 systemctl --user enable $UNIT
 
