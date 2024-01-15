@@ -1,0 +1,17 @@
+[Unit]
+Description=service
+After=network.target
+
+[Service]
+Type=simple
+Environment=RUST_LOG=error
+EnvironmentFile=%h/.infisicalenv
+ExecStart=%h/.config/sslocal/run.sh
+WorkingDirectory=%h/.config/sslocal
+Restart=on-failure
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+LimitNPROC=512
+StandardOutput=null
+[Install]
+WantedBy=default.target
