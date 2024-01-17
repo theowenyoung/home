@@ -16,6 +16,6 @@ export https_proxy=http://127.0.0.1:8080
 export all_proxy=socks5://127.0.0.1:1080
 
 # remove http proxy and socks5 proxy
-# unset https_proxy
-# unset http_proxy
-# unset all_proxy
+unset https_proxy
+unset http_proxy
+unset all_proxy

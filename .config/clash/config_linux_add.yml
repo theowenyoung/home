@@ -51,6 +51,7 @@ dns:
   # involved. Clash answers the DNS question with the first result gathered.
   nameserver:
     # - "[2402:4e00::]:53"
+    - 192.168.101.1
     - tls://dot.pub
     - https://doh.pub/dns-query # tencent
     - tls://dns.alidns.com
