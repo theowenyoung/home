@@ -1,2 +1,2 @@
 let pkgs = import <nixpkgs> {}; in
-pkgs.callPackage ./packages/vlt/default.nix {}
+pkgs.callPackage ./packages/daed/default.nix {}

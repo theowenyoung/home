@@ -16,7 +16,7 @@ init-proxy:
 
 .PHONY: uninstallall
 uninstallall:
-	nix profile remove 0
+	nix profile remove ".*"
 
 .PHONY: install
 install:
