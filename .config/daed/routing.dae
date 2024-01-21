@@ -1,0 +1,55 @@
+pname(NetworkManager, systemd-resolved, dnsmasq) -> must_direct
+dip(224.0.0.0/3, 'ff00::/8') -> direct
+dip(geoip:private) -> direct
+dport(22) -> direct
+domain(suffix: music.youtube.com) -> youtubemusic
+domain(suffix: googlevideo.com) -> youtubemusic
+domain(suffix: paypal.com) -> paypal
+domain(suffix: bing.com) -> usa
+domain(suffix: openai.com) -> usa
+domain(suffix: azureedge.net) -> usa
+domain(suffix: intercom.io) -> usa
+domain(suffix: stripe.com) -> usa
+domain(suffix: intercomcdn.com) -> usa
+domain(suffix: stripe.network) -> usa
+domain(suffix: stripe.com) -> usa
+dport(1080) -> proxy
+dport(1100) -> proxy
+dport(1241) -> proxy
+dport(1352) -> proxy
+dport(1337) -> proxy
+dport(2810) -> proxy
+dport(6969) -> proxy
+dport(1738) -> proxy
+dport(2710) -> proxy
+dport(6961) -> proxy
+dport(1433) -> proxy
+dport(1434) -> proxy
+dport(1521) -> proxy
+dport(1944) -> proxy
+dport(2301) -> proxy
+dport(3000) -> proxy
+dport(3128) -> proxy
+dport(3306) -> proxy
+dport(4000) -> proxy
+dport(4001) -> proxy
+dport(4002) -> proxy
+dport(4100) -> proxy
+dport(5000) -> proxy
+dport(5432) -> proxy
+dport(5800) -> proxy
+dport(5801) -> proxy
+dport(5802) -> proxy
+dport(6346) -> proxy
+dport(6347) -> proxy
+dport(7001) -> proxy
+dport(7002) -> proxy
+dport(8080) -> proxy
+dport(8443) -> proxy
+dport(8888) -> proxy
+dport(30821) -> proxy
+dport(1-1024) -> proxy
+l4proto(udp) && dport(443) -> block
+dip(geoip:cn) -> direct
+domain(geosite:cn) -> direct
+fallback: proxy
