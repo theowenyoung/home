@@ -147,6 +147,7 @@
         gnumake
         caddy
         gcc
+        adguardhome
         bashInteractive
         iptables
         infisical
