@@ -290,6 +290,8 @@ map h scrollLeft
 map l scrollRight
 ```
 
+## 一键ss
+
 ## 参考
 
 - [andreykaipov home](https://github.com/andreykaipov/home)

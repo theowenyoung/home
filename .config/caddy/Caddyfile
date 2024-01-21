@@ -2,6 +2,11 @@ http://clash.test {
    redir / /ui/
    reverse_proxy 127.0.0.1:9090
 }
+
+http://dae.test {
+   redir / /ui/
+   reverse_proxy 127.0.0.1:2023
+}
 http://dns.test {
       reverse_proxy 127.0.0.1:13000
 }
