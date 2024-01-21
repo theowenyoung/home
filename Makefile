@@ -2,6 +2,9 @@
 init:
 	nix profile install --refresh ./envs
 
+.PHONY: initroot
+initroot:
+	nix profile install --refresh ./envs#rootonly
 .PHONY: init-pure
 init-pure:
 	nix profile install ./envs#pure
@@ -17,7 +20,7 @@ uninstallall:
 
 .PHONY: install
 install:
-	if git status --porcelain | grep '^??'; then echo 'Please git add your untracked files.'; exit 1; else 	nix profile upgrade -L --refresh --verbose  '.*'; fi
+	if git status --porcelain | grep '^??'; then echo 'Please git add your untracked files.'; exit 1; else nix flake update --flake ./envs && nix profile upgrade -L --refresh ".*"; fi
 
 .PHONY: update
 update:
@@ -34,7 +37,7 @@ debug:
 	nix-build ./envs/debug.nix
 
 #	 nix run home-manager -- switch --flake ~/.config/home-manager#x86_64-darwin
-
+s
 .PHONY: gc
 gc:
 	nix-collect-garbage -d

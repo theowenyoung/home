@@ -1,13 +1,14 @@
 {unzip, makeWrapper,gzip, fetchgit, lib, stdenv, fetchurl, git}:
 
+# only linux
 
 stdenv.mkDerivation rec {
-    showPhaseHeader = true;
+    # showPhaseHeader = true;
     name = "daed";
     version = "0.4.0rc1";
     src = fetchurl {
         url = "https://github.com/daeuniverse/${name}/releases/download/v${version}/${name}-linux-x86_64.zip";
-        sha256 = sha256s."${os}_amd64";
+        sha256 = "sha256-Udfqjkd8tZ7SgbmLuy647NHWPENp9GKQTyLXdV58MZI=";
     };
     buildInputs = [ unzip ];
     phases = ["unpackPhase" "installPhase"];
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     installPhase = ''
         ls -l
         pwd
-        install -D ./vlt $out/bin/daed
+        install -D ./daed-linux-x86_64 $out/bin/daed
     '';
 }
 

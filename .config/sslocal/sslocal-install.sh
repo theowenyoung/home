@@ -8,11 +8,11 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
+export SS_SERVER_URL=$1
 sudo apt-get -y update
 sudo apt -y install snapd
 sudo apt -y install sudo
 sudo snap install shadowsocks-rust
-export SS_SERVER_URL=$1
 sudo mkdir -p /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d/
 sudo tee /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d/override.conf >/dev/null <<EOF
 [Service]
