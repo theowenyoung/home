@@ -42,12 +42,6 @@ sudo systemctl status snap.shadowsocks-rust.ssserver-daemon | head -n 100
 
 # then print ss://link
 
-echo "$SS_SERVER_URL"
-
-qrencode -o - -t UTF8 "$SS_SERVER_URL"
-
-echo "$SS_SERVER_URL"
-
 echo "You can copy the bash script below to install sslocal on your linux machine."
 echo " "
 
@@ -75,3 +69,16 @@ sudo systemctl status snap.shadowsocks-rust.sslocal-daemon | head -n 100
 export http_proxy=http://127.0.0.1:8080
 export https_proxy=http://127.0.0.1:8080
 EOYY
+
+printf "\n\nEND\n\n"
+
+echo "$SS_SERVER_URL"
+
+qrencode -o - -t UTF8 "$SS_SERVER_URL"
+
+echo "$SS_SERVER_URL"
+
+# print one key command
+#
+
+printf "curl -sSL sslocal.owenyoung.com | bash -s -- %s && export http_proxy=http://127.0.0.1:8080 && export https_proxy=http://127.0.0.1:8080\n\n" "$SS_SERVER_URL"
