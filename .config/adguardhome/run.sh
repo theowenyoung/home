@@ -1,3 +1,3 @@
 #!/bin/bash
 
-$HOME/.nix-profile/bin/addgnupghome
+$HOME/.nix-profile/bin/adguardhome
