@@ -4,11 +4,10 @@ http://clash.test {
 }
 
 http://dae.test {
-   redir / /ui/
    reverse_proxy 127.0.0.1:2023
 }
-http://dns.test {
-      reverse_proxy 127.0.0.1:13000
+http://ad.test {
+      reverse_proxy 127.0.0.1:3000
 }
 http://huawei.test {
 	reverse_proxy 192.168.101.1:80
