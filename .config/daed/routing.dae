@@ -1,7 +1,14 @@
 pname(NetworkManager, systemd-resolved, dnsmasq) -> must_direct
 dip(224.0.0.0/3, 'ff00::/8') -> direct
 dip(geoip:private) -> direct
-dport(22) -> direct
+domain(suffix: dns.alidns.com ) -> must_direct
+domain(suffix: .test) -> proxy
+l4proto(udp) -> direct
+l4proto(udp) && dport(443) -> block
+dip(geoip:cn) -> direct
+domain(geosite:cn) -> direct
+domain(suffix: github.com) -> proxy
+domain(suffix: raw.githubusercontent.com) -> proxy
 domain(suffix: music.youtube.com) -> youtubemusic
 domain(suffix: googlevideo.com) -> youtubemusic
 domain(suffix: paypal.com) -> paypal
@@ -49,7 +56,4 @@ dport(8443) -> proxy
 dport(8888) -> proxy
 dport(30821) -> proxy
 dport(1-1024) -> proxy
-l4proto(udp) && dport(443) -> block
-dip(geoip:cn) -> direct
-domain(geosite:cn) -> direct
 fallback: proxy

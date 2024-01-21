@@ -1,12 +1,14 @@
 upstream {
   alidns: 'udp://223.5.5.5:53'
-  tencentdns: 'tls://dot.pub'
-  defaultdns: '192.168.101.1'
+  tencentdns: 'udp://119.29.29.29'
+  defaultdns: 'udp://192.168.101.1'
   googledns: 'tcp+udp://8.8.8.8:53'
+  adguard: 'udp://127.0.0.1:5353'
 }
 routing {
   request {
+    qname(suffix: .test) -> adguard
     qname(geosite:cn) -> defaultdns
-    fallback: tencentdns
+    fallback: adguard
   }
 }
