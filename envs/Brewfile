@@ -13,6 +13,7 @@ cask "arc"
 cask "transmission" # p2p
 cask "iterm2"
 cask "NetNewsWire" # rss 阅读器
+cask "xquartz" # 用户x11 转发，这样远程服务器的内容就是复制到本地了
 cask "telegram"
 cask "the-unarchiver"
 cask "visual-studio-code"

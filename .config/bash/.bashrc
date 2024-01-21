@@ -12,6 +12,9 @@ source "$HOME/.config/bash/make-completion.bash"
 # add path
 export PATH="$HOME/.config/bin:$PATH"
 
+# x11 forward
+export DISPLAY=:0
+
 # alias
 
 alias w2start="w2 start --socksPort 8889"
