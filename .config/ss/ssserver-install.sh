@@ -98,4 +98,4 @@ urlencode() {
 
 encoded_ss_url=$(urlencode "$SS_SERVER_URL")
 
-printf "<https://sslocal.owenyoung.com?ss=${encoded_ss_url}>"
+printf "<https://sslocal.owenyoung.com?ss=%s>" "$encoded_ss_url"
