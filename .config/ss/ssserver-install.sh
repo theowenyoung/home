@@ -82,3 +82,14 @@ echo "$SS_SERVER_URL"
 #
 
 printf "curl -sSL sslocal.owenyoung.com | bash -s -- %s && export http_proxy=http://127.0.0.1:8080 && export https_proxy=http://127.0.0.1:8080\n\n" "$SS_SERVER_URL"
+
+# url encode ss url
+
+urlencode() {
+	local length="${#1}"
+	if [ $length -gt 0 ]; then
+		curl -Gso /dev/null -w %{url_effective} --data-urlencode "$1=" ""
+	fi
+}
+
+printf "<https://sslocal.owenyoung.com?ss=$(urlencode $SS_SERVER_URL)>"
