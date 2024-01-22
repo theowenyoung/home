@@ -9,19 +9,10 @@ if [ -z "$1" ]; then
 fi
 
 export SS_SERVER_URL=$1
-export SS_lOCAL_PORT=8080
+export SS_lOCAL_PORT=${2:="1080"}
 
-# if s2 exists, use it
-if [ -f s2 ]; then
-	export SS_lOCAL_PORT=$2
-fi
+export SS_PROTOCOL=${3:="socks"}
 
-export SS_PROTOCOL=socks
-
-# if s3 exists, use it
-if [ -f s3 ]; then
-	export SS_PROTOCOL=$3
-fi
 sudo apt-get -y update
 sudo apt -y install snapd
 sudo apt -y install sudo
