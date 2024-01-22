@@ -34,7 +34,7 @@ ${getCommand(ssUrl, 8082, "http")}
       return new Response(browserHtml);
     } else {
       const response = await fetch(
-        "https://raw.githubusercontent.com/theowenyoung/home/main/.config/ss/sslocal-install.sh",
+        "https://raw.githubusercontent.com/theowenyoung/home/main/.config/sslocal/sslocal-install.sh",
       );
       const text = await response.text();
       return new Response(text);
