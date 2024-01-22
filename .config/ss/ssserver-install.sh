@@ -87,9 +87,15 @@ printf "curl -sSL sslocal.owenyoung.com | bash -s -- %s && export http_proxy=htt
 
 urlencode() {
 	local length="${#1}"
-	if [ $length -gt 0 ]; then
-		curl -Gso /dev/null -w %{url_effective} --data-urlencode "$1=" ""
-	fi
+	for ((i = 0; i < length; i++)); do
+		local c="${1:i:1}"
+		case $c in
+		[a-zA-Z0-9.~_-]) printf "$c" ;;
+		*) printf '%%%02X' "'$c" ;;
+		esac
+	done
 }
 
-printf "<https://sslocal.owenyoung.com?ss=$(urlencode $SS_SERVER_URL)>"
+encoded_ss_url=$(urlencode "$SS_SERVER_URL")
+
+printf "<https://sslocal.owenyoung.com?ss=${encoded_ss_url}>"

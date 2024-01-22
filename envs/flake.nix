@@ -30,6 +30,7 @@
         # (pkgs.callPackage ./packages/nodejs/default.nix {})
         nodePackages.pnpm
         nodePackages.nodemon
+        nodePackages_latest.wrangler
         nodePackages.grunt-cli
         shadowsocks-rust
         # clash-meta # clash
