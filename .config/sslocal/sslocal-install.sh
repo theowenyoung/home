@@ -30,7 +30,7 @@ sudo mkdir -p /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d
 sudo tee /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d/override.conf >/dev/null <<EOF
 [Service]
 ExecStart=
-ExecStart=/usr/bin/snap run shadowsocks-rust.sslocal-daemon -b "[::1]:$SS_LOCAL_PORT" --protocol $SS_PROTOCOL --server-url $SS_SERVER_URL -U
+ExecStart=/usr/bin/snap run shadowsocks-rust.sslocal-daemon -b "127.0.0.1:$SS_LOCAL_PORT" --protocol $SS_PROTOCOL --server-url $SS_SERVER_URL -U
 EOF
 sudo systemctl daemon-reload
 sudo systemctl enable snap.shadowsocks-rust.sslocal-daemon
