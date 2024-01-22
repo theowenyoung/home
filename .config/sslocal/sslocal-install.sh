@@ -9,8 +9,7 @@ if [ -z "$1" ]; then
 fi
 
 export SS_SERVER_URL=$1
-export SS_lOCAL_PORT=${2:="1080"}
-
+export SS_LOCAL_PORT=${2:="1080"}
 export SS_PROTOCOL=${3:="socks"}
 
 sudo apt-get -y update
