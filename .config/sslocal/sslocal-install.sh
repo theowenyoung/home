@@ -20,6 +20,8 @@ SS_CONFIG=$(
 	cat <<EOF
 {
   "mode": "tcp_and_udp",
+  "no_delay": true,
+  "ipv6_first": true,
   "locals":[
     {
       "local_address":"127.0.0.1",
@@ -32,6 +34,8 @@ SS_CONFIG=$(
     },
     {
       "protocol": "redir",
+      "tcp_redir": "tproxy",
+      "udp_redir": "tproxy",
       "local_address": "127.0.0.1",
       "local_port": $SS_LOCAL_REDIR_PORT
     }
@@ -40,18 +44,37 @@ SS_CONFIG=$(
 EOF
 )
 
-echo "$SS_CONFIG"
+# echo "$SS_CONFIG"
+command_is_exists() {
+	type -P "$1" &>/dev/null
+}
+group_is_exists() {
+	grep -q "^$1:" /etc/group
+}
+
+create_group() {
+	if command_is_exists groupadd; then
+		groupadd "$1" || log_error "failed to create group:'$1' via groupadd, exit-code: $?"
+	elif command_is_exists addgroup; then
+		addgroup "$1" || log_error "failed to create group:'$1' via addgroup, exit-code: $?"
+	else
+		log_error "group:'$1' not exists, and groupadd/addgroup are not found, please create it manually"
+	fi
+}
+# 打印错误消息，并退出脚本
+log_error() {
+	echo "$(font_bold $(color_yellow '[ERROR]')) $*" 1>&2
+	exit 1
+}
 
 # write config json to file
 mkdir -p /etc/ss
 echo "$SS_CONFIG" >/etc/ss/config.json
 
 sudo apt-get -y update
-sudo apt -y install sudo
-
+sudo apt -y install sudo perl
 get_latest_release() {
 	api_url="https://sslocal.owenyoung.com/proxy/api.github.com/repos/$1/releases/latest"
-	echo "$api_url"
 	curl --silent "$api_url" | json_pp | grep '"tag_name" :' | sed -E 's/.*"v([^"]+)".*/\1/'
 }
 NAME="ss"
@@ -62,19 +85,29 @@ cd /tmp
 file_name="shadowsocks-v${latest_version}.x86_64-unknown-linux-gnu"
 url="https://sslocal.owenyoung.com/proxy/github.com/$REPO_NAME/releases/download/v${latest_version}/${file_name}.tar.xz"
 echo "$url"
-curl -O -L "$url"
+wget "$url"
 mkdir -p ${NAME}
 tar -xf ${file_name}.tar.xz --directory ${NAME}
 sudo mkdir -p /opt/ss/bin
+
+# try to stop sslocal service first if exists
+sudo systemctl stop sslocal || true
+sudo systemctl disable sslocal || true
+
 sudo cp -R ${NAME}/* /opt/ss/bin/
 sudo ln -sf /opt/ss/bin/sslocal /usr/bin/sslocal
 
-sudo tee /etc/systemd/system/sslocal.service.d/override.conf >/dev/null <<EOF
+# 为 ss-tproxy 创建 proxy 用户组
+proxy_procgroup="proxy"
+group_is_exists "$proxy_procgroup" || create_group "$proxy_procgroup"
+
+sudo tee /etc/systemd/system/sslocal.service >/dev/null <<EOF
 [Unit]
 Description=sslocal service
 After=network.target
 
 [Service]
+Group=proxy
 Type=simple
 Environment=RUST_LOG=error
 ExecStart=/opt/ss/bin/sslocal -c /etc/ss/config.json --server-url $SS_SERVER_URL -U
