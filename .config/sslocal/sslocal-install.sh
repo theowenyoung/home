@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # install
 
 # must pass an ss url $1
@@ -47,18 +47,50 @@ mkdir -p /etc/ss
 echo "$SS_CONFIG" >/etc/ss/config.json
 
 sudo apt-get -y update
-sudo apt -y install snapd
 sudo apt -y install sudo
-sudo snap install shadowsocks-rust
-sudo mkdir -p /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d/
-sudo tee /etc/systemd/system/snap.shadowsocks-rust.sslocal-daemon.service.d/override.conf >/dev/null <<EOF
+
+get_latest_release() {
+	api_url="https://sslocal.owenyoung.com/proxy/api.github.com/repos/$1/releases/latest"
+	echo "$api_url"
+	curl --silent "$api_url" | json_pp | grep '"tag_name" :' | sed -E 's/.*"v([^"]+)".*/\1/'
+}
+NAME="ss"
+REPO_NAME="shadowsocks/shadowsocks-rust"
+latest_version=$(get_latest_release $REPO_NAME)
+echo start install $REPO_NAME latest v${latest_version}
+cd /tmp
+file_name="shadowsocks-v${latest_version}.x86_64-unknown-linux-gnu"
+url="https://sslocal.owenyoung.com/proxy/github.com/$REPO_NAME/releases/download/v${latest_version}/${file_name}.tar.xz"
+echo "$url"
+curl -O -L "$url"
+mkdir -p ${NAME}
+tar -xf ${file_name}.tar.xz --directory ${NAME}
+sudo mkdir -p /opt/ss/bin
+sudo cp -R ${NAME}/* /opt/ss/bin/
+sudo ln -sf /opt/ss/bin/sslocal /usr/bin/sslocal
+
+sudo tee /etc/systemd/system/sslocal.service.d/override.conf >/dev/null <<EOF
+[Unit]
+Description=sslocal service
+After=network.target
+
 [Service]
-ExecStart=
-ExecStart=/usr/bin/snap run shadowsocks-rust.sslocal-daemon -c /etc/ss/config.json --server-url $SS_SERVER_URL -U
+Type=simple
+Environment=RUST_LOG=error
+ExecStart=/opt/ss/bin/sslocal -c /etc/ss/config.json --server-url $SS_SERVER_URL -U
+Restart=on-failure
+WorkingDirectory=/etc/ss
+TimeoutStopSec=5s
+LimitNOFILE=1048576
+LimitNPROC=512
+StandardOutput=null
+[Install]
+WantedBy=multi-user.target
 EOF
+
 sudo systemctl daemon-reload
-sudo systemctl enable snap.shadowsocks-rust.sslocal-daemon
-sudo systemctl restart snap.shadowsocks-rust.sslocal-daemon
-sudo systemctl status snap.shadowsocks-rust.sslocal-daemon | head -n 100
+sudo systemctl enable sslocal
+sudo systemctl restart sslocal
+sudo systemctl status sslocal | head -n 100
 export http_proxy=http://127.0.0.1:$SS_LOCAL_PORT
 export https_proxy=http://127.0.0.1:$SS_LOCAL_PORT
