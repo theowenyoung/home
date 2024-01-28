@@ -44,3 +44,7 @@ gc:
 .PHONY: devworker
 devworker:
 	wrangler dev ~/.config/sslocal/worker.js
+
+.PHONY: upgrade
+upgrade:
+	./envs/upgrade.sh
