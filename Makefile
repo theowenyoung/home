@@ -41,3 +41,6 @@ debug:
 .PHONY: gc
 gc:
 	nix-collect-garbage -d
+.PHONY: devworker
+devworker:
+	wrangler dev ~/.config/sslocal/worker.js
