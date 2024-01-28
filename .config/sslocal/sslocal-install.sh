@@ -45,27 +45,6 @@ EOF
 )
 
 # echo "$SS_CONFIG"
-command_is_exists() {
-	type -P "$1" &>/dev/null
-}
-group_is_exists() {
-	grep -q "^$1:" /etc/group
-}
-
-create_group() {
-	if command_is_exists groupadd; then
-		groupadd "$1" || log_error "failed to create group:'$1' via groupadd, exit-code: $?"
-	elif command_is_exists addgroup; then
-		addgroup "$1" || log_error "failed to create group:'$1' via addgroup, exit-code: $?"
-	else
-		log_error "group:'$1' not exists, and groupadd/addgroup are not found, please create it manually"
-	fi
-}
-# 打印错误消息，并退出脚本
-log_error() {
-	echo "$(font_bold $(color_yellow '[ERROR]')) $*" 1>&2
-	exit 1
-}
 
 # write config json to file
 mkdir -p /etc/ss
@@ -97,17 +76,12 @@ sudo systemctl disable sslocal || true
 sudo cp -R ${NAME}/* /opt/ss/bin/
 sudo ln -sf /opt/ss/bin/sslocal /usr/bin/sslocal
 
-# 为 ss-tproxy 创建 proxy 用户组
-proxy_procgroup="proxy"
-group_is_exists "$proxy_procgroup" || create_group "$proxy_procgroup"
-
 sudo tee /etc/systemd/system/sslocal.service >/dev/null <<EOF
 [Unit]
 Description=sslocal service
 After=network.target
 
 [Service]
-Group=proxy
 Type=simple
 Environment=RUST_LOG=error
 ExecStart=/opt/ss/bin/sslocal -c /etc/ss/config.json --server-url $SS_SERVER_URL -U
