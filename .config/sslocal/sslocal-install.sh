@@ -12,7 +12,7 @@ export SS_SERVER_URL=$1
 export SS_LOCAL_PORT=${2:="1080"}
 export SS_PROTOCOL=${3:="socks"}
 # http proxy port = ss local port + 1
-export SS_LOCAL_PORT_HTTP_PORT=$(($SS_LOCAL_PORT + 1))
+export SS_LOCAL_PORT_HTTP_PORT=$(($SS_LOCAL_PORT + 7000))
 export SS_LOCAL_REDIR_PORT=$(($SS_LOCAL_PORT + 59000))
 
 # set config json, do not change
