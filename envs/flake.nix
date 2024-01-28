@@ -153,8 +153,8 @@
         iptables
         infisical
         sops
-        # (pkgs.callPackage ./packages/clash-meta/default.nix {})
-        (pkgs.callPackage ./packages/daed/default.nix {})
+        (pkgs.callPackage ./packages/clash-meta/default.nix {})
+        # (pkgs.callPackage ./packages/daed/default.nix {})
 
       ];
     };

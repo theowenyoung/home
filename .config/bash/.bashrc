@@ -132,15 +132,17 @@ uninstall_system_service() {
 }
 
 proxy() {
-	export HTTP_PROXY="http://127.0.0.1:7890"
-	export HTTPS_PROXY="http://127.0.0.1:7890"
-	export SOCKS_PROXY="socks://127.0.0.1:7891"
+	export HTTP_PROXY="http://127.0.0.1:8080"
+	export HTTPS_PROXY="http://127.0.0.1:8080"
+	export SOCKS_PROXY="socks://127.0.0.1:1080"
+	export ALL_PROXY="socks://127.0.0.1:1080"
 }
 
 noproxy() {
 	unset HTTP_PROXY
 	unset HTTPS_PROXY
 	unset SOCKS_PROXY
+	unset ALL_PROXY
 }
 
 # other config
