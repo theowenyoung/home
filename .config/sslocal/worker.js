@@ -38,7 +38,7 @@ ${getCommand(ssUrl, 8082, "http")}
 
   - name: ko
     server: ${ssUrlObj.hostname}
-    cipher: ${ssUrlObj.method}} 
+    cipher: ${ssUrlObj.method} 
     password: ${ssUrlObj.password}
     port: ${ssUrlObj.port}
     type: ss

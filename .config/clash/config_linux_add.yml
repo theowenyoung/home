@@ -1,16 +1,11 @@
 tun:
   enable: true
   stack: system # or gvisor
-  dns-hijack:
-    - 8.8.8.8:53
-    - tcp://8.8.8.8:53
-  #   - any:53
-  #   - tcp://any:53
   auto-route: true # auto set global route
   auto-detect-interface: true # conflict with interface-name
 
 hosts:
-  "*.test": 192.168.101.2
+  "*.test": 192.168.31.2
 
 profile:
   # Store the `select` results in $HOME/.config/clash/.cache
@@ -25,15 +20,9 @@ dns:
   enable: true
   listen: :8053
   ipv6: true # when the false, response to AAAA questions will be empty
-  dns-hijack:
-    - tcp://8.8.8.8:53
-  # These nameservers are used to resolve the DNS nameserver hostnames below.
-  # Specify IP addresses only
   default-nameserver:
-    - 192.168.101.1
+    - 192.168.31.1
     - 119.29.29.29
-    - 114.114.114.114
-    - 8.8.8.8
   enhanced-mode: fake-ip # or redir-host (not recommended)
   # fake-ip-range: 198.18.0.1/16 # Fake IP addresses pool CIDR
   # use-hosts: true # lookup hosts and return IP record
@@ -51,7 +40,7 @@ dns:
   # involved. Clash answers the DNS question with the first result gathered.
   nameserver:
     # - "[2402:4e00::]:53"
-    - 192.168.101.1
+    - 192.168.31.1
     - tls://dot.pub
     - https://doh.pub/dns-query # tencent
     - tls://dns.alidns.com
