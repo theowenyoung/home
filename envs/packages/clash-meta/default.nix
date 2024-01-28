@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     version = "alpha-9bd70e1";
     # linux_amd64 or darwin_amd64 or linux_amd64 or darwin_arm64
     src = fetchurl {
-        url = "https://github.com/MetaCubeX/mihomo/releases/download/v${version}/mihomo-${os}-${arch}-${version}.gz";
+        url = "https://github.com/MetaCubeX/mihomo/releases/download/${version}/mihomo-${os}-${arch}-${version}.gz";
         sha256 = sha256s."${os}_${arch}";
     };
     uiSrc = fetchurl {
