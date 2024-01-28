@@ -24,19 +24,19 @@ SS_CONFIG=$(
   "ipv6_first": true,
   "locals":[
     {
-      "local_address": "::"
+      "local_address": "::",
       "local_port":$SS_LOCAL_PORT
     },
     {
       "protocol": "http",
-      "local_address": "::"
+      "local_address": "::",
       "local_port": $SS_LOCAL_PORT_HTTP_PORT
     },
     {
       "protocol": "redir",
       "tcp_redir": "tproxy",
       "udp_redir": "tproxy",
-      "local_address": "::"
+      "local_address": "::",
       "local_port": $SS_LOCAL_REDIR_PORT
     }
   ]
