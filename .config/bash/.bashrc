@@ -136,6 +136,11 @@ proxy() {
 	export HTTPS_PROXY="http://127.0.0.1:8080"
 	export SOCKS_PROXY="socks://127.0.0.1:1080"
 	export ALL_PROXY="socks://127.0.0.1:1080"
+	# lowercase
+	export http_proxy="$HTTP_PROXY"
+	export https_proxy="$HTTPS_PROXY"
+	export socks_proxy="$SOCKS_PROXY"
+	export all_proxy="$ALL_PROXY"
 }
 
 noproxy() {
@@ -143,6 +148,10 @@ noproxy() {
 	unset HTTPS_PROXY
 	unset SOCKS_PROXY
 	unset ALL_PROXY
+	unset http_proxy
+	unset https_proxy
+	unset socks_proxy
+	unset all_proxy
 }
 
 # other config
