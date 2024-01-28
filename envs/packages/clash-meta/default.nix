@@ -1,10 +1,10 @@
 { makeWrapper,gzip, fetchgit, lib, stdenv, fetchurl, git}:
 
-let 
+let
   os = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
   arch = if stdenv.hostPlatform.isx86 then "amd64" else "arm64";
   sha256s = {
-    linux_amd64 = "";
+    linux_amd64 = "sha256-2OD6mdyhKITIY1uf7eWEzSzKH8BmP++nOoQmB5BiJY8=";
     darwin_amd64 = "";
   };
 in
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
           --add-flags "-ext-ui $out/ui"
     '';
 }
+
 
 
