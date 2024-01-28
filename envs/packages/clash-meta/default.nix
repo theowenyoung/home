@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     showPhaseHeader = true;
     name = "clash-meta";
     pname = "clash";
-    tag = "Prerelease-Alpha"
+    tag = "Prerelease-Alpha";
     version = "alpha-9bd70e1";
     # linux_amd64 or darwin_amd64 or linux_amd64 or darwin_arm64
     src = fetchurl {
