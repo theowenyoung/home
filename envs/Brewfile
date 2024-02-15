@@ -1,5 +1,4 @@
 tap "homebrew/bundle"
-tap "homebrew/cask"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
 tap "homebrew/services"
@@ -11,9 +10,13 @@ cask "loom"
 cask "iina"
 cask "arc"
 cask "transmission" # p2p
+cask "qbittorrent" # p2p
+cask "zed" # editor
 cask "iterm2"
 cask "NetNewsWire" # rss 阅读器
 cask "xquartz" # 用户x11 转发，这样远程服务器的内容就是复制到本地了
+cask "alex313031-thorium" # Thorium 浏览器，最快的 chromium 浏览器
+cask "eloston-chromium"
 cask "telegram"
 cask "the-unarchiver"
 cask "visual-studio-code"

@@ -2,19 +2,16 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "d44243fe191e962fce60cbf8e25b6f2e3c1248b3"
-      },
-      "homebrew/cask": {
-        "revision": "e1e3b95848535a463583201248b63a5bca90ecf8"
+        "revision": "2f22c21799744c6b027a0695b36a37185d66a6a6"
       },
       "homebrew/cask-fonts": {
-        "revision": "781c67a24149c2ad6d96695d0293a798d7bd963f"
+        "revision": "3c9d137956343e190e0feb319613de9ab50cd8c0"
       },
       "homebrew/cask-versions": {
-        "revision": "a54891e76df774182b17362cc41c79cdcdcab91b"
+        "revision": "286c6c7f269ed96c5fa6c1a98a18b96866335c29"
       },
       "homebrew/services": {
-        "revision": "d475ef7cce7fe49d1c7ee3fa310922dbf8fa6c4e"
+        "revision": "404a74488dd9f5e2799f495ba3736dfb604b025b"
       }
     },
     "cask": {
@@ -31,19 +28,19 @@
         }
       },
       "librewolf": {
-        "version": "121.0,1",
+        "version": "122.0.1,2",
         "options": {
           "full_name": "librewolf"
         }
       },
       "google-chrome": {
-        "version": "120.0.6099.234",
+        "version": "121.0.6167.184",
         "options": {
           "full_name": "google-chrome"
         }
       },
       "loom": {
-        "version": "0.196.1",
+        "version": "0.201.1",
         "options": {
           "full_name": "loom"
         }
@@ -55,7 +52,7 @@
         }
       },
       "arc": {
-        "version": "1.26.2,45413",
+        "version": "1.29.0,46113",
         "options": {
           "full_name": "arc"
         }
@@ -78,8 +75,14 @@
           "full_name": "NetNewsWire"
         }
       },
+      "xquartz": {
+        "version": "2.8.5",
+        "options": {
+          "full_name": "xquartz"
+        }
+      },
       "telegram": {
-        "version": "10.6,258516",
+        "version": "10.7.1,259074",
         "options": {
           "full_name": "telegram"
         }
@@ -91,7 +94,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.85.2",
+        "version": "1.86.1",
         "options": {
           "full_name": "visual-studio-code"
         }
@@ -103,7 +106,7 @@
         }
       },
       "tencent-meeting": {
-        "version": "3.22.1.446,c8874588d13a00f5b5544a832569b574",
+        "version": "3.24.3.401,6098097df3d0ff1ec23752a331c8784d",
         "options": {
           "full_name": "tencent-meeting"
         }
@@ -121,7 +124,7 @@
         }
       },
       "calibre": {
-        "version": "7.4.0",
+        "version": "7.5.1",
         "options": {
           "full_name": "Calibre"
         }
@@ -138,10 +141,28 @@
           "full_name": "sequel-ace"
         }
       },
-      "xquartz": {
-        "version": "2.8.5",
+      "alex313031-thorium": {
+        "version": "M120.0.6099.235",
         "options": {
-          "full_name": "xquartz"
+          "full_name": "alex313031-thorium"
+        }
+      },
+      "eloston-chromium": {
+        "version": "121.0.6167.160-1.1",
+        "options": {
+          "full_name": "eloston-chromium"
+        }
+      },
+      "qbittorrent": {
+        "version": "4.6.3",
+        "options": {
+          "full_name": "qbittorrent"
+        }
+      },
+      "zed": {
+        "version": "0.122.2",
+        "options": {
+          "full_name": "zed"
         }
       }
     },
@@ -152,34 +173,34 @@
       },
       "iPic": {
         "id": "1101244278",
-        "version": "1.7.8"
+        "version": "1.7.9"
       },
       "Microsoft Word": {
         "id": "462054704",
-        "version": "16.80"
+        "version": "16.81"
       },
       "S3": {
         "id": "6447647340",
-        "version": "2023.27"
+        "version": "2024.5"
       },
       "WeChat": {
         "id": "836500024",
-        "version": "3.8.5"
+        "version": "3.8.6"
       },
       "Xcode": {
         "id": "497799835",
-        "version": "15.1"
+        "version": "15.2"
       }
     }
   },
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.4",
+        "HOMEBREW_VERSION": "4.2.8",
         "HOMEBREW_PREFIX": "/usr/local",
         "Homebrew/homebrew-core": "api",
-        "CLT": "15.0.0.0.1.1694021235",
-        "Xcode": "15.1",
+        "CLT": "15.1.0.0.1.1700200546",
+        "Xcode": "15.2",
         "macOS": "14.0"
       }
     }

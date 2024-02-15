@@ -31,6 +31,9 @@
 !.config/clash/*.sh
 .config/caddy/autosave.json
 .config/.wrangler
+.config/qBittorrent
+.config/zed
+.config/stripe
 .config/hcp
 .config/configstore
 .config/fontconfig

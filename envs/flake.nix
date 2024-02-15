@@ -20,21 +20,20 @@
         nix-direnv
         git
         fzf
-        # yq
-        (pkgs.callPackage ./packages/yq/default.nix {})
         inetutils # telnet
         awscli2
+        stripe-cli
         jq
         miniserve # http serve
         nodejs_20
         # (pkgs.callPackage ./packages/nodejs/default.nix {})
         nodePackages.pnpm
         nodePackages.nodemon
-        nodePackages_latest.wrangler
+        # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
         shadowsocks-rust
         # clash-meta # clash
-        (pkgs.callPackage ./packages/clash-meta/default.nix {})
+        # (pkgs.callPackage ./packages/clash-meta/default.nix {})
         deno
         infisical
         wget
@@ -48,6 +47,8 @@
         # custom packages
         (pkgs.callPackage ./packages/whistle/default.nix {})
         (pkgs.callPackage ./packages/web-ext/default.nix {})
+        # yq
+        (pkgs.callPackage ./packages/yq/default.nix {})
         gnupg
         age
         sops
