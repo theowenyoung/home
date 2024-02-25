@@ -10,13 +10,15 @@ source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 
 # add path
-export PATH="$HOME/.config/bin:$PATH"
+export PATH="$HOME/.config/bin:/opt/homebrew/bin:$PATH"
 
 # x11 forward
 export DISPLAY=:0
 
 # alias
 
+# whistle
+export WHISTLE_PATH="$HOME/secret/.WhistleAppData"
 alias w2start="w2 start --socksPort 8889"
 alias di="dig @114.114.114.114"
 
@@ -39,7 +41,11 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ~='cd ~'
 
-alias ss='source ~/.bashrc'
+if [ -f ~/.bashrc ]; then
+	alias ss='source ~/.bashrc'
+else
+	alias ss='source ~/.bash_profile'
+fi
 alias bb='brew bundle --cleanup --file $HOME/envs/Brewfile'
 # git commit
 alias gpull="git pull"
@@ -193,6 +199,3 @@ export HOMEBREW_NO_ANALYTICS=1
 # flox
 # no analytics
 export FLOX_DISABLE_METRICS=true
-
-# whistle
-export WHISTLE_PATH="$HOME/secret/.WhistleAppData"

@@ -2,16 +2,16 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "2f22c21799744c6b027a0695b36a37185d66a6a6"
+        "revision": "9d77d7001e805498d4c6c3001c13124f605eed24"
       },
       "homebrew/cask-fonts": {
-        "revision": "3c9d137956343e190e0feb319613de9ab50cd8c0"
+        "revision": "ad27d786cde117b31c0d79aa260759703af1fa61"
       },
       "homebrew/cask-versions": {
-        "revision": "286c6c7f269ed96c5fa6c1a98a18b96866335c29"
+        "revision": "6be790e6ce792f288534c45ec362818a1325b544"
       },
       "homebrew/services": {
-        "revision": "404a74488dd9f5e2799f495ba3736dfb604b025b"
+        "revision": "3d11e26ac9f670b640a9e547dbca9bf1c16aa407"
       }
     },
     "cask": {
@@ -28,19 +28,19 @@
         }
       },
       "librewolf": {
-        "version": "122.0.1,2",
+        "version": "123.0,1",
         "options": {
           "full_name": "librewolf"
         }
       },
       "google-chrome": {
-        "version": "121.0.6167.184",
+        "version": "122.0.6261.69",
         "options": {
           "full_name": "google-chrome"
         }
       },
       "loom": {
-        "version": "0.201.1",
+        "version": "0.204.2",
         "options": {
           "full_name": "loom"
         }
@@ -52,7 +52,7 @@
         }
       },
       "arc": {
-        "version": "1.29.0,46113",
+        "version": "1.31.1,46755",
         "options": {
           "full_name": "arc"
         }
@@ -82,7 +82,7 @@
         }
       },
       "telegram": {
-        "version": "10.7.1,259074",
+        "version": "10.8,259860",
         "options": {
           "full_name": "telegram"
         }
@@ -94,7 +94,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.86.1",
+        "version": "1.86.2",
         "options": {
           "full_name": "visual-studio-code"
         }
@@ -106,7 +106,7 @@
         }
       },
       "tencent-meeting": {
-        "version": "3.24.3.401,6098097df3d0ff1ec23752a331c8784d",
+        "version": "3.24.3.401,7861cf367f7764fc531090effa381b3c",
         "options": {
           "full_name": "tencent-meeting"
         }
@@ -142,13 +142,13 @@
         }
       },
       "alex313031-thorium": {
-        "version": "M120.0.6099.235",
+        "version": "M121.0.6167.204",
         "options": {
           "full_name": "alex313031-thorium"
         }
       },
       "eloston-chromium": {
-        "version": "121.0.6167.160-1.1",
+        "version": "121.0.6167.184-1.1",
         "options": {
           "full_name": "eloston-chromium"
         }
@@ -160,9 +160,27 @@
         }
       },
       "zed": {
-        "version": "0.122.2",
+        "version": "0.123.6",
         "options": {
           "full_name": "zed"
+        }
+      },
+      "feishu": {
+        "version": "7.11.4,fa94911d",
+        "options": {
+          "full_name": "feishu"
+        }
+      },
+      "firefox": {
+        "version": "123.0",
+        "options": {
+          "full_name": "firefox"
+        }
+      },
+      "adrive": {
+        "version": "4.12.0",
+        "options": {
+          "full_name": "adrive"
         }
       }
     },
@@ -177,11 +195,11 @@
       },
       "Microsoft Word": {
         "id": "462054704",
-        "version": "16.81"
+        "version": "16.82"
       },
       "S3": {
         "id": "6447647340",
-        "version": "2024.5"
+        "version": "2024.7"
       },
       "WeChat": {
         "id": "836500024",
@@ -196,12 +214,12 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.8",
-        "HOMEBREW_PREFIX": "/usr/local",
+        "HOMEBREW_VERSION": "4.2.9",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",
         "Xcode": "15.2",
-        "macOS": "14.0"
+        "macOS": "14.1"
       }
     }
   }

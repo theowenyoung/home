@@ -1,16 +1,8 @@
 # Digital Home
 
-`~` config files repo.
-
-## Todo
-
-- encrypt env and password
-- bash show current branch
-- /etc/nix/nix.conf to add trusted user and features
-
 ## GUI 应用只使用 homebrew 安装
 
-`~/Brewfile`
+`~/envs/Brewfile`
 
 ```
 cask "firefox-developer-edition"
@@ -34,9 +26,10 @@ mas "Xcode", id: 497799835
 0.  手动设置
 
     1. 输入法设置为双拼
-    2. 启用三指拖动 Settings -> (Accessibility) -> Enable (Use trackpad for dragging) -> (Dragging Style -> Three Finger Drag)
-    3. 启用 tap to click: (Trackpad) -> Enable [Tap to click]
-    4. 自动隐藏 dock 栏 Settings -> Dock -> Automatically hide and show the Dock
+    2. 键盘速度调整：Settings -> Keyboard 按键速度和延迟都调到最低。
+    3. 启用三指拖动 Settings -> (Accessibility) -> Enable (Use trackpad for dragging) -> (Dragging Style -> Three Finger Drag)
+    4. 启用 tap to click: (Trackpad) -> Enable [Tap to click]
+    5. 自动隐藏 dock 栏 Settings -> Dock -> Automatically hide and show the Dock
 
 1.  install xcode tools
 
@@ -145,6 +138,8 @@ nix 安装的字体不会自动被安装到系统，需要手动打开 `font boo
 加载远程配置： <https://raw.githubusercontent.com/theowenyoung/home/main/.config/surfingkeys/default.js>
 
 9. alfred 工作流
+
+1. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
 
 1. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
 
