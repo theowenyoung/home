@@ -6,8 +6,59 @@
     devenv.url = "github:cachix/devenv/latest";
   };
   outputs = { self, nixpkgs,devenv }: {
-    # default profile for my x86_64-darwin machine
-    packages."x86_64-darwin".default = let
+    # profile for my arm -darwin machine
+    
+    packages."aarch64-darwin".default = let
+      system = "aarch64-darwin";
+      pkgs = (nixpkgs.legacyPackages.${system}.extend (import ./overlays.nix));
+    in pkgs.buildEnv {
+      name = "global-env";
+      paths = with pkgs; [
+        bashInteractive
+        cachix
+        direnv
+        devenv.packages."${system}".default
+        nix-direnv
+        git
+        fzf
+        inetutils # telnet
+        awscli2
+        stripe-cli
+        jq
+        miniserve # http serve
+        nodejs_20
+        # (pkgs.callPackage ./packages/nodejs/default.nix {})
+        nodePackages.pnpm
+        nodePackages.nodemon
+        # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
+        nodePackages.grunt-cli
+        shadowsocks-rust
+        # clash-meta # clash
+        # (pkgs.callPackage ./packages/clash-meta/default.nix {})
+        deno
+        infisical
+        wget
+        mas
+        tmux
+        neovim
+        ripgrep
+        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+        coreutils
+        ruby
+        # custom packages
+        (pkgs.callPackage ./packages/whistle/default.nix {})
+        (pkgs.callPackage ./packages/web-ext/default.nix {})
+        # yq
+        (pkgs.callPackage ./packages/yq/default.nix {})
+        gnupg
+        age
+        sops
+        asciidoctor
+      ];
+    };
+
+    # profile for my x86_64-darwin machine
+    packages."x86_64-darwin".x86 = let
         system = "x86_64-darwin";
         pkgs = (nixpkgs.legacyPackages.${system}.extend (import ./overlays.nix));
     in pkgs.buildEnv {
@@ -52,10 +103,11 @@
         gnupg
         age
         sops
-        (pkgs.callPackage ./packages/vlt/default.nix {})
         asciidoctor
       ];
     };
+
+
 
     # profile for my x86_64-darwin machine with less packages
     packages."x86_64-darwin".pure = let

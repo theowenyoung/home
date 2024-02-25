@@ -7,6 +7,7 @@ let
   sha256s = {
     linux_amd64 = "";
     darwin_amd64 = "sha256-XixQreFo2sAWwonumidZ81Lv+dls9LWf6J36PJ+Xhoo=";
+    darwin_arm64 = "sha256-DGguCmXnJUUX2a1qV5ZLVgv5zPQmLDWsytcYdS/TM/I=";
   };
 in
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     installPhase = ''
         ls -l 
-        install -D yq_darwin_amd64 $out/bin/yq
+        install -D yq_${os}_${arch} $out/bin/yq
 
     '';
 }
