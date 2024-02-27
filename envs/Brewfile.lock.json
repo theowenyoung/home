@@ -2,16 +2,16 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "9d77d7001e805498d4c6c3001c13124f605eed24"
+        "revision": "1467bb8a786568a56443994f5ab9d2be092b66d6"
       },
       "homebrew/cask-fonts": {
         "revision": "ad27d786cde117b31c0d79aa260759703af1fa61"
       },
       "homebrew/cask-versions": {
-        "revision": "6be790e6ce792f288534c45ec362818a1325b544"
+        "revision": "fe4ceebde77e1ed403256c4abbae9b0d032821a9"
       },
       "homebrew/services": {
-        "revision": "3d11e26ac9f670b640a9e547dbca9bf1c16aa407"
+        "revision": "c25f33517d85a5c03efa711065436f00f7f48fc1"
       }
     },
     "cask": {
@@ -40,7 +40,7 @@
         }
       },
       "loom": {
-        "version": "0.204.2",
+        "version": "0.205.1",
         "options": {
           "full_name": "loom"
         }
@@ -148,7 +148,7 @@
         }
       },
       "eloston-chromium": {
-        "version": "121.0.6167.184-1.1",
+        "version": "122.0.6261.69-1.1",
         "options": {
           "full_name": "eloston-chromium"
         }
@@ -182,6 +182,30 @@
         "options": {
           "full_name": "adrive"
         }
+      },
+      "xmind": {
+        "version": "24.01.13311-202401302331",
+        "options": {
+          "full_name": "xmind"
+        }
+      },
+      "microsoft-edge": {
+        "version": "121.0.2277.128,7d455fa7-376b-4ff4-a83c-e74664b24a02",
+        "options": {
+          "full_name": "microsoft-edge"
+        }
+      },
+      "postman": {
+        "version": "10.23.5",
+        "options": {
+          "full_name": "postman"
+        }
+      },
+      "authy": {
+        "version": "2.5.0",
+        "options": {
+          "full_name": "authy"
+        }
       }
     },
     "mas": {
@@ -208,13 +232,17 @@
       "Xcode": {
         "id": "497799835",
         "version": "15.2"
+      },
+      "MindNode": {
+        "id": "1289197285",
+        "version": "2023.3.2"
       }
     }
   },
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.9",
+        "HOMEBREW_VERSION": "4.2.10",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",

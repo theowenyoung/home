@@ -8,8 +8,11 @@ cask "anki"
 cask "feishu"
 cask "adrive" # 阿里云盘
 cask "librewolf"
+cask "xmind"
 cask "google-chrome"
+cask "microsoft-edge"
 cask "loom"
+cask "postman"
 cask "iina"
 cask "arc"
 cask "transmission" # p2p
@@ -32,7 +35,9 @@ cask "cleanshot"
 cask "sequel-ace"
 mas "Outline", id: 1356178125
 mas "iPic", id: 1101244278
+mas "MindNode", id: 1289197285
 mas "Microsoft Word", id: 462054704
 mas "S3", id: 6447647340
 mas "WeChat", id: 836500024
 mas "Xcode", id: 497799835
+
