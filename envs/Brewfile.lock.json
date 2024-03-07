@@ -2,16 +2,16 @@
   "entries": {
     "tap": {
       "homebrew/bundle": {
-        "revision": "1467bb8a786568a56443994f5ab9d2be092b66d6"
+        "revision": "fa8ca7dad5fe0c1e4bf0629a4aa08b45cfb12b2c"
       },
       "homebrew/cask-fonts": {
-        "revision": "ad27d786cde117b31c0d79aa260759703af1fa61"
+        "revision": "f1f6f638d84ab6a02fd747033e8c323920124b00"
       },
       "homebrew/cask-versions": {
-        "revision": "fe4ceebde77e1ed403256c4abbae9b0d032821a9"
+        "revision": "56179f1a58114ea4a725ec1cec6f59243cd7c7ff"
       },
       "homebrew/services": {
-        "revision": "c25f33517d85a5c03efa711065436f00f7f48fc1"
+        "revision": "a2f62d96d34997ebb5b5cb279cfdc19b2b019c43"
       }
     },
     "cask": {
@@ -34,13 +34,13 @@
         }
       },
       "google-chrome": {
-        "version": "122.0.6261.69",
+        "version": "122.0.6261.112",
         "options": {
           "full_name": "google-chrome"
         }
       },
       "loom": {
-        "version": "0.205.1",
+        "version": "0.207.0",
         "options": {
           "full_name": "loom"
         }
@@ -52,7 +52,7 @@
         }
       },
       "arc": {
-        "version": "1.31.1,46755",
+        "version": "1.32.0,46908",
         "options": {
           "full_name": "arc"
         }
@@ -82,7 +82,7 @@
         }
       },
       "telegram": {
-        "version": "10.8,259860",
+        "version": "10.9,260554",
         "options": {
           "full_name": "telegram"
         }
@@ -94,7 +94,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.86.2",
+        "version": "1.87.0",
         "options": {
           "full_name": "visual-studio-code"
         }
@@ -124,7 +124,7 @@
         }
       },
       "calibre": {
-        "version": "7.5.1",
+        "version": "7.6.0",
         "options": {
           "full_name": "Calibre"
         }
@@ -160,25 +160,25 @@
         }
       },
       "zed": {
-        "version": "0.123.6",
+        "version": "0.124.8",
         "options": {
           "full_name": "zed"
         }
       },
       "feishu": {
-        "version": "7.11.4,fa94911d",
+        "version": "7.12.7,c788d94d",
         "options": {
           "full_name": "feishu"
         }
       },
       "firefox": {
-        "version": "123.0",
+        "version": "123.0.1",
         "options": {
           "full_name": "firefox"
         }
       },
       "adrive": {
-        "version": "4.12.0",
+        "version": "4.13.0",
         "options": {
           "full_name": "adrive"
         }
@@ -190,13 +190,13 @@
         }
       },
       "microsoft-edge": {
-        "version": "121.0.2277.128,7d455fa7-376b-4ff4-a83c-e74664b24a02",
+        "version": "122.0.2365.63,73a07aa6-b8e8-4555-95b1-a709271ee36a",
         "options": {
           "full_name": "microsoft-edge"
         }
       },
       "postman": {
-        "version": "10.23.5",
+        "version": "10.23.9",
         "options": {
           "full_name": "postman"
         }
@@ -215,7 +215,7 @@
       },
       "iPic": {
         "id": "1101244278",
-        "version": "1.7.9"
+        "version": "1.8.0"
       },
       "Microsoft Word": {
         "id": "462054704",
@@ -235,14 +235,14 @@
       },
       "MindNode": {
         "id": "1289197285",
-        "version": "2023.3.2"
+        "version": "2023.3.3"
       }
     }
   },
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.2.10",
+        "HOMEBREW_VERSION": "4.2.11",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.1.0.0.1.1700200546",

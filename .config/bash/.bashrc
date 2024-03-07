@@ -9,6 +9,8 @@ fi
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 
+test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}/.config/bash/.iterm2_shell_integration.bash" || tru
+
 # add path
 export PATH="$HOME/.config/bin:/opt/homebrew/bin:$PATH"
 
