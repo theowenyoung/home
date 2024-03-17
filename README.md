@@ -342,24 +342,6 @@ everything is ok now.
 
 ## nixos 初始化
 
-1. 添加本地的 ssh key 到 root 用户
-
-记得手打，web控制台很烂
-
-```
-mkdir -p ~/.ssh && vi ~/.ssh/authorized_keys
-```
-
-```
-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAPcRy9wGjP47bHpv2RcNO3yw3udCcTlgWs22KLcpUW main@example.com
-```
-
-```
-sudo nixos-generate-config --no-filesystems --root /mnt
-```
-
-拷贝到本地
-
 制作 flake.lock 文件
 
 ```
