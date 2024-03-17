@@ -20,11 +20,11 @@ uninstallall:
 
 .PHONY: install
 install:
-	if git status --porcelain | grep '^??'; then echo 'Please git add your untracked files.'; exit 1; else nix flake update --flake ./envs/flake.nix && nix profile upgrade -L --refresh ".*"; fi
+	if git status --porcelain | grep '^??'; then echo 'Please git add your untracked files.'; exit 1; else nix flake update --flake ./envs/flake.nix && nix profile upgrade -L --refresh --all; fi
 
 .PHONY: update
 update:
-	nix flake update ./envs
+	nix flake update --flake ./envs
 
 
 

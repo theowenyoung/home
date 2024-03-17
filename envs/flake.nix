@@ -14,11 +14,12 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
+        nixVersions.nix_2_21
         bashInteractive
         cachix
-        direnv
+        # direnv
         devenv.packages."${system}".default
-        nix-direnv
+        # nix-direnv
         git
         fzf
         inetutils # telnet
@@ -54,6 +55,16 @@
         age
         sops
         asciidoctor
+      ];
+    };
+
+
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        # 这里导入之前我们使用的 configuration.nix，
+        # 这样旧的配置文件仍然能生效
+        /etc/nixos/configuration.nix
       ];
     };
 

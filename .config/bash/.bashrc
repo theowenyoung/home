@@ -190,9 +190,9 @@ alias vi="$EDITOR"
 
 # direnv init
 # if ~/.nix-profile/bin/direnv exists, load it.
-if [[ -x ~/.nix-profile/bin/direnv ]]; then
-	eval "$(~/.nix-profile/bin/direnv hook bash)"
-fi
+# if [[ -x ~/.nix-profile/bin/direnv ]]; then
+# 	eval "$(~/.nix-profile/bin/direnv hook bash)"
+# fi
 
 # homebrew
 # no analytics

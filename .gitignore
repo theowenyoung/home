@@ -29,6 +29,7 @@
 !.config/clash/config_template.yml
 !.config/clash/config_linux_add.yml
 !.config/clash/*.sh
+.config/clash.meta/**
 .config/caddy/autosave.json
 .config/.wrangler
 .config/qBittorrent
