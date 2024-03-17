@@ -9,6 +9,9 @@ initroot:
 init-pure:
 	nix profile install ./envs#pure
 
+.PHONY: initnix
+initnix:
+	sudo nixos-rebuild switch --flake ./envs#nixos
 
 .PHONY: init-proxy
 init-proxy:
