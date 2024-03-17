@@ -4,6 +4,8 @@
   inputs = {
 	  nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     devenv.url = "github:cachix/devenv/latest";
+    inputs.disko.url = "github:nix-community/disko";
+    inputs.disko.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = { self, nixpkgs,devenv }: {
     # profile for my arm -darwin machine
@@ -61,10 +63,15 @@
 
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      hostname = "nixos";
+      username = "nixos"; # FIXME: replace with your own username!
       modules = [
         # 这里导入之前我们使用的 configuration.nix，
         # 这样旧的配置文件仍然能生效
+        disko.nixosModules.disko
         ./configuration.nix
+       ./hetzner.nix
+        ./linux.nix
       ];
     };
 
