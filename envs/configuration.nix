@@ -1,20 +1,25 @@
-{ config, pkgs, ... }:
-
-{
-  imports = [ <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix> ];
- # 启用 Flakes 特性以及配套的船新 nix 命令行工具
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.systemPackages = with pkgs; [
-    # Flakes 通过 git 命令拉取其依赖项，所以必须先安装好 git
-    git
-    vim
-    wget
-    curl
-    gnumake
-
+{ modulesPath, config, lib, pkgs, ... }: {
+  imports = [
+    (modulesPath + "/installer/scan/not-detected.nix")
+    (modulesPath + "/profiles/qemu-guest.nix")
+    ./disk-config.nix
   ];
-  # 将默认编辑器设置为 vim
-  environment.variables.EDITOR = "vim";
+  boot.loader.grub = {
+    # no need to set devices, disko will add all devices that have a EF02 partition to the list already
+    # devices = [ ];
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+  };
+  services.openssh.enable = true;
 
+  environment.systemPackages = map lib.lowPrio [
+    pkgs.curl
+    pkgs.gitMinimal
+  ];
 
+  users.users.root.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINAPcRy9wGjP47bHpv2RcNO3yw3udCcTlgWs22KLcpUW main@example.com"
+  ];
+
+  system.stateVersion = "23.11";
 }
