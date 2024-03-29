@@ -34,7 +34,7 @@
         # (pkgs.callPackage ./packages/nodejs/default.nix {})
         nodePackages.pnpm
         nodePackages.nodemon
-        # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
+        nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
         shadowsocks-rust
         # clash-meta # clash

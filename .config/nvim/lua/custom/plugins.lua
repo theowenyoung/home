@@ -21,6 +21,13 @@ local plugins = {
       require "custom.configs.lspconfig"
     end, -- Override to setup mason-lspconfig
   },
+  {
+    "APZelos/blamer.nvim",
+    lazy = false,
+    config = function()
+      vim.g.blamer_enabled = true
+    end,
+  },
 
   -- override plugin configs
   {
