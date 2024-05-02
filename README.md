@@ -11,7 +11,7 @@
 
 我的原则是：
 
-GUI 应用只使用 Homebrew 安装，用单文件 `~/envs/Brewfile` 管理即可，比如：
+GUI 应用只使用 Homebrew 安装，用单文件 `~/Brewfile` 管理即可，比如：
 
 ```
 cask "firefox-developer-edition"
@@ -28,7 +28,7 @@ mas "WeChat", id: 836500024
 mas "Xcode", id: 497799835
 ```
 
-所有的命令行应用，只使用 Nix 安装，也是只用一个文件 `~/envs/flake.nix` 管理就行了，比如：
+所有的命令行应用，只使用 Nix 安装，也是只用一个文件 `~/flake.nix` 管理就行了，比如：
 
 ```nix
 {
@@ -128,7 +128,7 @@ git clone http://github.com/theowenyoung/home ~/inbox/home
 5. 安装gui软件
 
 ```
-cd ~/inbox/home/envs && brew bundle
+cd ~/inbox/home && brew bundle
 
 ```
 
@@ -138,7 +138,7 @@ cd ~/inbox/home/envs && brew bundle
 
 ```
 
-nix --extra-experimental-features "nix-command flakes" profile install --refresh ~/envs
+nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
 
 ```
 
@@ -278,7 +278,7 @@ sudo loginctl enable-linger $USER
 4. 安装对应的环境软件
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home?dir=envs#proxy"
+nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home#proxy"
 ```
 
 （可选）如果需要安装root only：
@@ -298,7 +298,7 @@ export all_proxy=socks5://127.0.0.1:1080
 安装 rootonly
 
 ```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home?dir=envs#rootonly"
+nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home#rootonly"
 ```
 
 5. 写入 密钥token
@@ -400,11 +400,11 @@ everything is ok now.
 制作 flake.lock 文件
 
 ```
-cd envs && nix flake lock
+nix flake lock
 ```
 
 ```
-nix run github:nix-community/nixos-anywhere -- --flake envs#nixos root@<ip address> --build-on-remote
+nix run github:nix-community/nixos-anywhere -- --flake .#nixos root@5.78.116.171 --build-on-remote
 ```
 
 更新：
@@ -412,7 +412,7 @@ nix run github:nix-community/nixos-anywhere -- --flake envs#nixos root@<ip addre
 ssh to server
 
 ```
- nixos-rebuild switch --flake github:theowenyoung/home#nixos
+nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 ```
 
 ## 参考
