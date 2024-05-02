@@ -16,7 +16,7 @@
 
   age = {
     secrets = {
-      meilisearch.file = config.age.secrets.meilisearch.file;
+      meilisearch.file = ./secrets/meilisearch.age
     };
     # identityPaths = [ "/root/.ssh/id_ed25519" ];
   };
