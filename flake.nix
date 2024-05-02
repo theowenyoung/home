@@ -68,9 +68,6 @@
         disko.nixosModules.disko
         ./nix/configuration.nix
       ];
-      services.meilisearch = {
-        enable = true;
-      };
     };
 
     # profile for my x86_64-darwin machine

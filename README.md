@@ -409,8 +409,10 @@ nix run github:nix-community/nixos-anywhere -- --flake envs#nixos root@<ip addre
 
 更新：
 
+ssh to server
+
 ```
-nixos-rebuild switch --flake  envs#nixos --target-host root@<ip address> --build-on-remote
+ nixos-rebuild switch --flake github:theowenyoung/home#nixos
 ```
 
 ## 参考
