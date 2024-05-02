@@ -10,6 +10,8 @@
     efiSupport = true;
     efiInstallAsRemovable = true;
   };
+
+  networking.firewall.enable = false;
   services.openssh.enable = true;
 
   services.meilisearch = {
@@ -20,7 +22,7 @@
     enable = true;
     virtualHosts."meilisearch.owenyoung.com" = {
       locations."/" = {
-        proxyPass = "http://127.0.0.1:7700";
+        proxyPass = "http://127.0.0.1:7700/";
         extraConfig = ''
           proxy_set_header Host $host;
           proxy_set_header X-Real-IP $remote_addr;
