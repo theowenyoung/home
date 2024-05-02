@@ -16,7 +16,7 @@
 
   age = {
     secrets = {
-      meilisearch.file = ./secrets/meilisearch.age
+      meilisearch.file = ./secrets/meilisearch.age;
     };
     # identityPaths = [ "/root/.ssh/id_ed25519" ];
   };
