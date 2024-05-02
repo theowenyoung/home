@@ -404,7 +404,13 @@ cd envs && nix flake lock
 ```
 
 ```
-nix run github:nix-community/nixos-anywhere -- --flake .#nixos root@<ip address> --build-on-remote
+nix run github:nix-community/nixos-anywhere -- --flake envs#nixos root@<ip address> --build-on-remote
+```
+
+更新：
+
+```
+nixos-rebuild switch --flake  envs#nixos --target-host root@<ip address> --build-on-remote
 ```
 
 ## 参考

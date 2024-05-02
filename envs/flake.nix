@@ -52,6 +52,7 @@
         # custom packages
         (pkgs.callPackage ./packages/whistle/default.nix {})
         (pkgs.callPackage ./packages/web-ext/default.nix {})
+        (pkgs.callPackage ./packages/diskernet/default.nix {})
         # yq
         (pkgs.callPackage ./packages/yq/default.nix {})
         gnupg
@@ -68,6 +69,9 @@
         disko.nixosModules.disko
         ./configuration.nix
       ];
+      services.meilisearch = {
+        enable = true;
+      };
     };
 
     # profile for my x86_64-darwin machine

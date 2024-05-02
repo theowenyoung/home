@@ -5,3 +5,5 @@
 ```
 nix-build ~/envs/debug.nix
 ```
+
+## Linux machine
