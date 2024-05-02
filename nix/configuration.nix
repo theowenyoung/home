@@ -14,7 +14,13 @@
   networking.firewall.enable = false;
   services.openssh.enable = true;
 
-  age.secrets.meilisearch.file = ./secrets/meilisearch.age;
+  age = {
+    secrets = {
+      meilisearch.file = config.age.secrets.meilisearch.file;
+      identityPaths = [ "/root/.ssh/id_ed25519" ];
+    }
+  };
+
   services.meilisearch = {
     enable = true;
     environment = "production";
