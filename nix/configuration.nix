@@ -19,7 +19,7 @@
     enable = true;
     environment = "production";
     listenPort = 7700;
-    masterKeyEnvironmentFile = "/run/agenix/meilisearch";
+    masterKeyEnvironmentFile = config.age.secrets.passwordfile-meilisearch.path;
   };
 
   services.nginx = {
