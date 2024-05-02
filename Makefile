@@ -1,21 +1,21 @@
 .PHONY: init
 init:
-	nix profile install --refresh ./envs
+	nix profile install --refresh .
 
 .PHONY: initroot
 initroot:
-	nix profile install --refresh ./envs#rootonly
+	nix profile install --refresh .#rootonly
 .PHONY: init-pure
 init-pure:
-	nix profile install ./envs#pure
+	nix profile install .#pure
 
 .PHONY: initnix
 initnix:
-	sudo nixos-rebuild switch --flake ./envs#nixos
+	sudo nixos-rebuild switch --flake .#nixos
 
 .PHONY: init-proxy
 init-proxy:
-	nix profile install ./envs#proxy
+	nix profile install .#proxy
 
 .PHONY: uninstallall
 uninstallall:
@@ -27,7 +27,7 @@ install:
 
 .PHONY: update
 update:
-	nix flake update --flake ./envs
+	nix flake update --flake .
 
 
 
@@ -37,7 +37,7 @@ i:
 
 .PHONY: debug
 debug:
-	nix-build ./envs/debug.nix
+	nix-build ./nix/debug.nix
 
 #	 nix run home-manager -- switch --flake ~/.config/home-manager#x86_64-darwin
 
@@ -50,4 +50,4 @@ devworker:
 
 .PHONY: upgrade
 upgrade:
-	./envs/upgrade.sh
+	./upgrade.sh

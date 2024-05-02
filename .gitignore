@@ -7,6 +7,8 @@
 !README.md
 !envs/
 !envs/**
+!nix/
+!nix/**
 !.sops.yaml
 !Makefile
 !.meta
@@ -24,6 +26,8 @@
 
 # and then ignore things we don't want
 .DS_Store
+!flake.nix
+!flake.lock
 .config/raycast
 .config/clash/**
 !.config/clash/config_template.yml
