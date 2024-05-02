@@ -6,9 +6,10 @@
     devenv.url = "github:cachix/devenv/latest";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.url = "github:ryantm/agenix";
 
   };
-  outputs = { self, nixpkgs,devenv,disko }: {
+  outputs = { self, nixpkgs,devenv,disko,agenix }: {
     # profile for my arm -darwin machine
     
     packages."aarch64-darwin".default = let
@@ -58,6 +59,9 @@
         age
         sops
         asciidoctor
+        (pkgs.callPackage ./nix/packages/yq/default.nix {})
+        niv # nix version manager
+        (pkgs.callPackage "${(import ./nix/sources.nix).agenix}/pkgs/agenix.nix" {})
       ];
     };
 
@@ -67,6 +71,7 @@
       modules = [
         disko.nixosModules.disko
         ./nix/configuration.nix
+        agenix.nixosModules.default
       ];
     };
 
