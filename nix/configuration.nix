@@ -14,7 +14,7 @@
   networking.firewall.enable = false;
   services.openssh.enable = true;
 
-  age.secrets.meilisearch.file = "./secrets/meilisearch.age"
+  age.secrets.meilisearch.file = "./secrets/meilisearch.age";
   services.meilisearch = {
     enable = true;
     environment = "production";
