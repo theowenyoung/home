@@ -11,6 +11,18 @@
         "url": "https://github.com/ryantm/agenix/archive/24a7ea390564ccd5b39b7884f597cfc8d7f6f44e.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "flox": {
+        "branch": "main",
+        "description": "Developer environments you can take with you",
+        "homepage": "https://flox.dev",
+        "owner": "flox",
+        "repo": "flox",
+        "rev": "ec35d52bb30200b5b810ec1d908d08a45cf17612",
+        "sha256": "1k1g6spd4q8f14m3w3mxfsb9cip98bzbzr2dhjh037qcc12x4ksi",
+        "type": "tarball",
+        "url": "https://github.com/flox/flox/archive/ec35d52bb30200b5b810ec1d908d08a45cf17612.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "nixpkgs": {
         "branch": "nixos-unstable",
         "description": "Nix Packages collection",

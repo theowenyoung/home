@@ -7,9 +7,8 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
-
   };
-  outputs = { self, nixpkgs,devenv,disko,agenix }: {
+  outputs = { self, nixpkgs,devenv,disko,agenix}: {
     # profile for my arm -darwin machine
     
     packages."aarch64-darwin".default = let
@@ -62,6 +61,9 @@
         (pkgs.callPackage ./nix/packages/yq/default.nix {})
         niv # nix version manager
         (pkgs.callPackage "${(import ./nix/sources.nix).agenix}/pkgs/agenix.nix" {})
+        # (pkgs.callPackage "${(import ./nix/sources.nix).flox}/flake.nix" {})
+        nodePackages.node2nix
+        mise
       ];
     };
 
