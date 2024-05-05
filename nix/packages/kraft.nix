@@ -8,7 +8,7 @@ let
   sha256s = {
     linux_amd64 = "";
     darwin_amd64 = "sha256-XixQreFo2sAWwonumidZ81Lv+dls9LWf6J36PJ+Xhoo=";
-    darwin_arm64 = "";
+    darwin_arm64 = "sha256-VfuZ+raapB10ZzYk5dhkPujj2ikYtYrlsEPzQbdWzYQ=";
   };
 in
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     installPhase = ''
         ls -l 
-        install -D kraft_${os}_${arch} $out/bin/kraft
+        install -D kraft $out/bin/kraft
 
     '';
 }

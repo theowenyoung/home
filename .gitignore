@@ -5,10 +5,10 @@
 !.gitignore
 !.prettierrc
 !README.md
-!envs/
-!envs/**
 !nix/
 !nix/**
+!deploy/
+!deploy/**
 !.sops.yaml
 !Makefile
 !.meta
@@ -29,6 +29,7 @@
 !flake.nix
 !flake.lock
 .config/raycast
+.config/kraftkit/**
 .config/clash/**
 !.config/clash/config_template.yml
 !.config/clash/config_linux_add.yml

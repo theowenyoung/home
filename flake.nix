@@ -59,6 +59,7 @@
         sops
         asciidoctor
         (pkgs.callPackage ./nix/packages/yq/default.nix {})
+        (pkgs.callPackage ./nix/packages/kraft.nix {})
         niv # nix version manager
         (pkgs.callPackage "${(import ./nix/sources.nix).agenix}/pkgs/agenix.nix" {})
         # (pkgs.callPackage "${(import ./nix/sources.nix).flox}/flake.nix" {})
