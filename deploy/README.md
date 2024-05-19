@@ -18,9 +18,17 @@ sops deploy/secrets/ssh.yml
 
 分别是 `public_key`, `private_key`
 
-````yaml
+3. 在服务器上安装 k3s
 
-3.
+```
+curl -sfL https://get.k3s.io | sh -
+```
+
+4. 把服务器上的 `/etc/rancher/k3s/k3s.yaml` 文件内容，修改 ip 为服务器，然后保存到 `deploy/secrets/k3s.yml` 中
+
+```bash
+sops deploy/secrets/k3s.yaml
+```
 
 ## 服务器初始化
 
@@ -48,7 +56,7 @@ docker swarm init
 
 docker network create --driver overlay traefik-public
 
-````
+```
 
 base 项目提供：
 

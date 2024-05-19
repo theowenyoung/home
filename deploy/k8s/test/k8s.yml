@@ -16,7 +16,6 @@ spec:
       labels:
         app: test
     spec:
-      # 删除 hostNetwork: true 和 dnsPolicy: ClusterFirstWithHostNet
       containers:
         - name: webserver
           image: python:3.9
@@ -37,21 +36,24 @@ spec:
   ports:
     - protocol: TCP
       port: 8083
-      targetPort: 8083 # 确保 targetPort 指向容器端口
+      targetPort: 8083
       name: http
   type: ClusterIP
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: test-ingress
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
+  name: ingress-traefik
 spec:
+  ingressClassName: traefik
   rules:
-    - http:
+    - host: test.k3s.owenyoung.com
+      http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: test
-              servicePort: http
+              service:
+                name: test
+                port:
+                  number: 8083 # 确保这里的端口号匹配 Service 中定义的端口

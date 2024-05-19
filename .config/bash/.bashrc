@@ -28,6 +28,8 @@ alias t='tmux attach || tmux new-session'
 
 alias m="make"
 
+alias kc="kubectl"
+
 alias status="sudo systemctl status"
 alias start="sudo systemctl start"
 alias stop="sudo systemctl stop"

@@ -67,6 +67,7 @@
         mise
         kubectl
         nmap
+        helm
       ];
     };
 
