@@ -66,6 +66,7 @@
         nodePackages.node2nix
         mise
         kubectl
+        nmap
       ];
     };
 
