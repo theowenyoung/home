@@ -1,3 +1,11 @@
+# 导出 .env 文件中的变量
+ifneq (,$(wildcard .env))
+    include .env
+    export $(shell sed 's/=.*//' .env)
+endif
+
+HOST='root@${K3S_HOST}'
+
 .PHONY: init
 init:
 	nix profile install --refresh .
@@ -51,3 +59,29 @@ devworker:
 .PHONY: upgrade
 upgrade:
 	./upgrade.sh
+
+.PHONY: initsshdeploy
+
+initsshdeploy:
+	# sops -d --extract '["public_key"]' --output ~/.ssh/id_ed25519_deploy.pub deploy/secrets/ssh.yml
+	# sops -d --extract '["private_key"]' --output ~/.ssh/id_ed25519_deploy deploy/secrets/ssh.yml
+	# chmod 600 ~/.ssh/id_ed25519_deploy.*
+	# grep -q erebe.eu ~/.ssh/config > /dev/null 2>&1 || cat config/ssh_client_config >> ~/.ssh/config
+	mkdir ~/.kube || exit 0
+	sops -d --output ~/.kube/config deploy/secrets/kubernetes-config.yml
+
+
+.PHONY: test
+test:
+	ssh ${HOST} 'apt-get update'
+
+.PHONY: initremote
+initremote:
+	ssh ${HOST} 'apt-get update && apt-get install -y curl htop mtr tcpdump ncdu vim dnsutils strace linux-perf iftop'
+	ssh ${HOST} 'echo "unattended-upgrades unattended-upgrades/enable_auto_updates boolean true" | debconf-set-selections && apt-get install unattended-upgrades -y'
+
+
+.PHONY: kubernetes_install
+kubernetes_install:
+	ssh ${HOST} 'export INSTALL_K3S_EXEC=" --disable servicelb --disable traefik --disable local-storage"; \
+					curl -sfL https://get.k3s.io | sh -'

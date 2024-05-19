@@ -1,5 +1,27 @@
 # 个人服务部署
 
+## 初始化项目
+
+1. 生成一个部署专用的 ssh key:
+
+```bash
+ssh-keygen -t ed25519 -C "main@example.com"
+```
+
+记得选择一个不同的位置，比如 `~/.ssh/id_ed25519_deploy`, 并且设置密码
+
+2. 将 ssh 保存在 `deploy/secrets/ssh.yml` 中
+
+```bash
+sops deploy/secrets/ssh.yml
+```
+
+分别是 `public_key`, `private_key`
+
+````yaml
+
+3.
+
 ## 服务器初始化
 
 > 安装 Docker
@@ -26,7 +48,7 @@ docker swarm init
 
 docker network create --driver overlay traefik-public
 
-```
+````
 
 base 项目提供：
 

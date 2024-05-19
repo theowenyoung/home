@@ -65,6 +65,7 @@
         # (pkgs.callPackage "${(import ./nix/sources.nix).flox}/flake.nix" {})
         nodePackages.node2nix
         mise
+        kubectl
       ];
     };
 
