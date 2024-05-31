@@ -40,12 +40,15 @@ spec:
       name: http
   type: ClusterIP
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: traefik.containo.us/v1beta
+kind: IngressRoute
 metadata:
-  name: ingress-traefik
+  name: traefik
+  namespace: kube-system
 spec:
   ingressClassName: traefik
+  tls:
+    certResolver: le
   rules:
     - host: test.k3s.owenyoung.com
       http:

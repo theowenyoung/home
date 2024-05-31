@@ -37,6 +37,8 @@
         nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
         shadowsocks-rust
+        python3
+        python3Packages.virtualenv
         # clash-meta # clash
         # (pkgs.callPackage ./nix/packages/clash-meta/default.nix {})
         deno
@@ -67,7 +69,7 @@
         mise
         kubectl
         nmap
-        helm
+        kubernetes-helm
       ];
     };
 
