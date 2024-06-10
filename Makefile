@@ -1,8 +1,6 @@
-# 导出 .env 文件中的变量
-ifneq (,$(wildcard .env))
-    include .env
-    export $(shell sed 's/=.*//' .env)
-endif
+# source env below
+# source ~/.secrets
+
 
 HOST='root@${K3S_HOST}'
 
@@ -60,27 +58,72 @@ devworker:
 upgrade:
 	./upgrade.sh
 
-.PHONY: initlocalwithk3s
 
-initlocalwithk3s:
-	# sops -d --extract '["public_key"]' --output ~/.ssh/id_ed25519_deploy.pub deploy/secrets/ssh.yml
-	# sops -d --extract '["private_key"]' --output ~/.ssh/id_ed25519_deploy deploy/secrets/ssh.yml
-	# chmod 600 ~/.ssh/id_ed25519_deploy.*
-	# grep -q erebe.eu ~/.ssh/config > /dev/null 2>&1 || cat config/ssh_client_config >> ~/.ssh/config
-	mkdir ~/.kube || exit 0
-	sops -d --output ~/.kube/config deploy/secrets/k3s.yml
-
-
-.PHONY: test
-test:
+.PHONY: testremote
+testremote:
 	ssh ${HOST} 'apt-get update'
+
+
+.PHONY: kubernetes_install
+kubernetes_install:
+	ssh ${HOST} 'export INSTALL_K3S_EXEC="--disable traefik"; curl -sfL https://get.k3s.io | sh -'
 
 .PHONY: initremote
 initremote:
 	ssh ${HOST} 'apt-get update && apt-get install -y curl htop mtr tcpdump ncdu vim dnsutils strace linux-perf iftop'
 	ssh ${HOST} 'echo "unattended-upgrades unattended-upgrades/enable_auto_updates boolean true" | debconf-set-selections && apt-get install unattended-upgrades -y'
+	make kubernetes_install
 
 
-.PHONY: kubernetes_install
-kubernetes_install:
-	ssh ${HOST} 'curl -sfL https://get.k3s.io | sh -'
+
+.PHONY: initlocalk3s
+
+initlocalk3s:
+	# sops -d --extract '["public_key"]' --output ~/.ssh/id_ed25519_deploy.pub deploy/secrets/ssh.yml
+	# sops -d --extract '["private_key"]' --output ~/.ssh/id_ed25519_deploy deploy/secrets/ssh.yml
+	# chmod 600 ~/.ssh/id_ed25519_deploy.*
+	# grep -q erebe.eu ~/.ssh/config > /dev/null 2>&1 || cat config/ssh_client_config >> ~/.ssh/config
+	mkdir -p ~/.kube || exit 0
+	sops -d --output ~/.kube/config deploy/secrets/k3s.yml
+	chmod 600 ~/.kube/config
+
+.PHONY: inittraefik
+inittraefik:
+	helm repo add traefik https://helm.traefik.io/traefik
+	helm repo update
+
+.PHONY: installtraefik
+installtraefik:
+	helm install traefik ~/deploy/traefik --values ~/deploy/traefik/values.yml --debug
+.PHONY: uninstallmeili
+uninstallmeili:
+	helm uninstall meili
+
+.PHONY: uninstalltraefik
+uninstalltraefik:
+	helm uninstall traefik
+.PHONY: upgradetraefik
+upgradetraefik:
+	helm upgrade traefik ~/deploy/traefik --values ~/deploy/traefik/values.yml --debug
+
+.PHONY: initmeili
+initmeili:
+	helm repo add meilisearch https://meilisearch.github.io/meilisearch-kubernetes
+	helm repo update
+	helm dependency build deploy/meilisearch
+
+
+.PHONY: installmeili
+installmeili:
+	sops exec-env deploy/meilisearch/sops_secrets.yml 'helm install meili ~/deploy/meilisearch --set meilisearch.environment.MEILI_MASTER_KEY="$${MEILI_MASTER_KEY}" -f ~/deploy/meilisearch/values.yml --debug'
+
+.PHONY: upgrademeili
+upgrademeili:
+	sops exec-env deploy/meilisearch/sops_secrets.yml 'helm upgrade meili ~/deploy/meilisearch --set meilisearch.environment.MEILI_MASTER_KEY="$${MEILI_MASTER_KEY}" -f ~/deploy/meilisearch/values.yml --debug'
+
+.PHONY: logstraefik
+logstraefik:
+	kubectl logs -f -l app=traefik
+.PHONY: logsmeili
+logsmeili:
+	kubectl logs -f -l app=meilisearch

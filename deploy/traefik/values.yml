@@ -1,0 +1,56 @@
+traefik:
+  commonLabels:
+    app: traefik
+  # logs:
+  #   general:
+  #     level: DEBUG
+  certResolvers:
+    letsencryptresolver:
+      email: owen@owenyoung.com
+      httpChallenge:
+        entryPoint: web
+      storage: "/data/acme.json"
+  persistence:
+    # -- Enable persistence using Persistent Volume Claims
+    # ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
+    # It can be used to store TLS certificates, see `storage` in certResolvers
+    enabled: true
+  ports:
+    web:
+      redirectTo:
+        port: websecure
+        priority: 10
+  deployment:
+    podAnnotations:
+      prometheus.io/port: "8082"
+      prometheus.io/scrape: "true"
+    # This is a permission fix.
+    # Issue : https://github.com/traefik/traefik-helm-chart/issues/164#issuecomment-1176866543
+    initContainers:
+      - name: volume-permissions
+        image: busybox:1.36
+        command:
+          [
+            "sh",
+            "-c",
+            "touch /data/acme.json && chmod -Rv 600 /data/* && chown 65532:65532 /data/acme.json",
+          ]
+        volumeMounts:
+          - name: data
+            mountPath: /data
+  priorityClassName: "system-cluster-critical"
+  providers:
+    kubernetesIngress:
+      publishedService:
+        enabled: true
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Exists"
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  service:
+    ipFamilyPolicy: "PreferDualStack"

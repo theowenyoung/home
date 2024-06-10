@@ -1,0 +1,21 @@
+meilisearch:
+  environment:
+    MEILI_NO_ANALYTICS: true
+    MEILI_NO_USAGE_STATS: true
+    MEILI_NO_CRASH_REPORTS: true
+    MEILI_ENV: production
+  persistence:
+    enabled: true
+    storageClass: local-path
+  ingress:
+    enabled: true
+    className: traefik
+    path: "/"
+    hosts:
+      - meilisearch.k3s.owenyoung.com
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+      traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
+  customLabels:
+    app: meilisearch
