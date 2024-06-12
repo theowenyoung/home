@@ -53,7 +53,7 @@ if [ -f ~/.bashrc ]; then
 else
 	alias ss='source ~/.bash_profile'
 fi
-alias bb='brew bundle --cleanup --file $HOME/envs/Brewfile'
+alias bb='brew bundle --cleanup --file $HOME/Brewfile'
 # git commit
 alias gpull="git pull"
 alias gpush="git push"

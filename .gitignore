@@ -35,6 +35,8 @@
 !.config/clash/config_linux_add.yml
 !.config/clash/*.sh
 .config/siyuan/**
+.config/flameshot/**
+.config/rio/**
 .config/joplin-desktop/**
 .config/clash.meta/**
 .config/caddy/autosave.json

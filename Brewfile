@@ -32,6 +32,7 @@ cask "keepassxc"
 cask "Calibre"
 cask "cleanshot"
 cask "sequel-ace"
+cask "devtoys"
 mas "Outline", id: 1356178125
 mas "iPic", id: 1101244278
 mas "MindNode", id: 1289197285
