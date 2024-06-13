@@ -39,7 +39,7 @@ alias stop="sudo systemctl stop"
 alias restart="sudo systemctl restart"
 alias reload="sudo systemctl daemon-reload"
 
-alias gbr="git for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:format:%Y-%m-%d %H:%M) %(authorname) %(refname:short)' | head -n 10"
+alias gb="git for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:format:%Y-%m-%d %H:%M) %(authorname) %(refname:short)' | head -n 10"
 
 alias pg="ps aux | grep"
 
