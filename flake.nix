@@ -70,6 +70,8 @@
         kubectl
         nmap
         kubernetes-helm
+        kompose
+        envsubst
       ];
     };
 

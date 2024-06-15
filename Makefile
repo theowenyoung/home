@@ -127,3 +127,15 @@ logstraefik:
 .PHONY: logsmeili
 logsmeili:
 	kubectl logs -f -l app=meilisearch
+
+.PHONY: installdirectus
+installdirectus:
+	sops exec-env deploy/directus/sops_secrets.yml 'cat ./deploy/directus/manifest.yaml | envsubst | kubectl apply -f -'
+
+.PHONY: installredis
+installredis:
+	kubectl apply -f deploy/redis/manifest.yaml
+
+.PHONY: logsdirectus
+logsdirectus:
+	kubectl logs -f -l app=directus
