@@ -30,6 +30,12 @@ configs:
 
 ```
 
+## 获取服务器 k3s token
+
+```
+cat /var/lib/rancher/k3s/server/node-token
+```
+
 ## 参考
 
 - [Persion Server](https://github.com/erebe/personal-server)
