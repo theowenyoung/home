@@ -13,6 +13,9 @@ stringData:
   STORAGE_S3_BUCKET: ${STORAGE_S3_BUCKET}
   STORAGE_S3_REGION: ${STORAGE_S3_REGION}
   STORAGE_S3_ENDPOINT: ${STORAGE_S3_ENDPOINT}
+  EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID: ${EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID}
+  EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY: ${EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY}
+  EMAIL_SENDGRID_API_KEY: ${EMAIL_SENDGRID_API_KEY}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,6 +49,27 @@ spec:
     spec:
       containers:
         - env:
+            - name: EMAIL_FROM
+              value: no-reply@nativeread.com
+            - name: EMAIL_TRANSPORT
+              value: sendgrid
+            - name: EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID
+            - name: EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY
+            - name: EMAIL_SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: EMAIL_SENDGRID_API_KEY
+            - name: EMAIL_SES_REGION
+              value: us-west-2
             - name: STORAGE_LOCATIONS
               value: s3
             - name: STORAGE_LOCALK_DRIVER
@@ -104,20 +128,22 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: STORAGE_S3_ENDPOINT
+            - name: STORAGE_S3_HEALTHCHECK_THRESHOLD
+              value: "10000"
           image: directus/directus:10.12.1
           name: directus
           ports:
             - containerPort: 8055
               hostPort: 8055
               protocol: TCP
-          # readinessProbe:
-          #   httpGet:
-          #     path: /server/health
-          #     port: 8055
-          #   initialDelaySeconds: 60
-          #   timeoutSeconds: 5
-          #   periodSeconds: 10
-          #   failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /server/health
+              port: 8055
+            initialDelaySeconds: 60
+            timeoutSeconds: 3600
+            periodSeconds: 10
+            failureThreshold: 6
           volumeMounts:
             - mountPath: /directus/database
               name: directus-claim

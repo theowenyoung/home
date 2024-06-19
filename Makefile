@@ -139,3 +139,27 @@ installredis:
 .PHONY: logsdirectus
 logsdirectus:
 	kubectl logs -f -l app=directus
+
+.PHONY: installmariadb
+installmariadb:
+	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/mariadb/manifest.yaml | envsubst | kubectl apply -f -'
+.PHONY: logsmariadb
+logsmariadb:
+	kubectl logs -f -l app=mariadb
+
+.PHONY: job
+job:
+	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/jobs/2024-06-19-modify-db.yaml | envsubst | kubectl apply -f -'
+.PHONY: logsjob
+logsjob:
+	kubectl logs -f -l app=job
+
+.PHONY: installread
+installread:
+	sops exec-env deploy/read/sops_secrets.yml 'cat ./deploy/read/manifest.yaml | envsubst | kubectl apply -f -'
+.PHONY: logsread
+logsread:
+	kubectl logs -f -l app=read
+.PHONY: forcerestart
+forcerestart:
+	kubectl rollout restart deployment/read-deployment

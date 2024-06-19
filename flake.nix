@@ -36,6 +36,7 @@
         nodePackages.nodemon
         nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
+        yarn
         shadowsocks-rust
         python3
         python3Packages.virtualenv
@@ -72,6 +73,7 @@
         kubernetes-helm
         kompose
         envsubst
+        devbox
       ];
     };
 

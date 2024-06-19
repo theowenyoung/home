@@ -26,6 +26,7 @@ export DISPLAY=:0
 export WHISTLE_PATH="$HOME/secret/.WhistleAppData"
 alias w2start="w2 start --socksPort 8889"
 alias di="dig @114.114.114.114"
+alias dd="devbox shell"
 
 alias t='tmux attach || tmux new-session'
 
@@ -39,7 +40,7 @@ alias stop="sudo systemctl stop"
 alias restart="sudo systemctl restart"
 alias reload="sudo systemctl daemon-reload"
 
-alias gb="git for-each-ref --sort=-committerdate refs/heads/ --format='%(committerdate:format:%Y-%m-%d %H:%M) %(authorname) %(refname:short)' | head -n 10"
+alias gb="git for-each-ref --sort=-committerdate refs/ --format='%(committerdate:format:%Y-%m-%d %H:%M) %(authorname) %(refname:short)' | head -n 10"
 
 alias pg="ps aux | grep"
 
