@@ -91,6 +91,7 @@ echo "$SS_SERVER_URL"
 qrencode -o - -t UTF8 "$SS_SERVER_URL"
 
 echo "$SS_SERVER_URL_V4"
+echo "!!! Please remember to open ports at console"
 
 # print one key command
 #
