@@ -14,13 +14,13 @@ export SS_PASSWORD=$SS_PASSWORD
 # get public ip first
 # PUBLIC_IP=$(curl -s https://api.ipify.org)
 PUBLIC_IP="[$(curl -6 -s https://api64.ipify.org)]"
-# get country
-COUNTRY=$(curl -s "https://ipapi.co/$PUBLIC_IP/country_name")
+# COUNTRY=$(curl -s "https://ipapi.co/$PUBLIC_IP/country_name")
 # replace space with -
-COUNTRY=${COUNTRY// /-}
+# COUNTRY=${COUNTRY// /-}
 
+THE_DATE=$(date "+%Y%m%d")
 # get ss uri
-SS_SERVER_URL="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC_IP:$SS_PORT#$COUNTRY"
+SS_SERVER_URL="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC_IP:$SS_PORT#ss$THE_DATE"
 
 sudo apt-get -y update
 sudo apt -y install qrencode
