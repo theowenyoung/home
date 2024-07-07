@@ -149,7 +149,7 @@ logsmariadb:
 
 .PHONY: job
 job:
-	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/jobs/2024-06-19-modify-db.yaml | envsubst | kubectl apply -f -'
+	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/jobs/2024-07-08-create-db.yaml | envsubst | kubectl apply -f -'
 .PHONY: logsjob
 logsjob:
 	kubectl logs -f -l app=job
