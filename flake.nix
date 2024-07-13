@@ -74,6 +74,7 @@
         kompose
         envsubst
         devbox
+        caddy
       ];
     };
 

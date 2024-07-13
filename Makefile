@@ -163,3 +163,11 @@ logsread:
 .PHONY: forcerestart
 forcerestart:
 	kubectl rollout restart deployment/read-deployment
+
+
+.PHONY: installcaddy
+installcaddy:
+	kubectl apply -f deploy/caddy/manifest.yaml
+.PHONY: upgradecaddy
+upgradecaddy:
+	kubectl rollout restart deployment --selector app=caddy
