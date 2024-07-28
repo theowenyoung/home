@@ -21,3 +21,25 @@ http://q.test {
 http://o.test {
 	reverse_proxy 127.0.0.1:10004
 }
+
+test2.localhost:80 {
+  respond "Hello"
+}
+
+test.localhost:80 {
+
+    reverse_proxy /ws/ v2ray-service:80 {
+        header_up X-Forwarded-For {remote_host}
+    }
+    # 对根路径返回 "Hello World"
+    @notWs {
+        not path /ws/*
+    }
+    respond @notWs "Hello World2, Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2Hello World2" 200
+    log {
+        output stdout
+        format console
+    }
+
+}
+

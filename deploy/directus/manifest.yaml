@@ -185,10 +185,10 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: directus-ingress
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
+  # annotations:
+  #   traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  #   traefik.ingress.kubernetes.io/router.tls: "true"
+  #   traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
 spec:
   ingressClassName: traefik
   rules:

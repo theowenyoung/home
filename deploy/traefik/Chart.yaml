@@ -5,5 +5,5 @@ type: application
 version: 2024.6.10
 dependencies:
   - name: traefik
-    version: "28.2.0"
+    version: "30.0.0"
     repository: "@traefik"

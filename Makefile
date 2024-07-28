@@ -70,7 +70,7 @@ kubernetes_install:
 
 .PHONY: initremote
 initremote:
-	ssh ${HOST} 'apt-get update && apt-get install -y curl htop mtr tcpdump ncdu vim dnsutils strace linux-perf iftop'
+	ssh ${HOST} 'apt-get update && apt-get install -y curl htop mtr tcpdump ncdu vim dnsutils strace iftop'
 	ssh ${HOST} 'echo "unattended-upgrades unattended-upgrades/enable_auto_updates boolean true" | debconf-set-selections && apt-get install unattended-upgrades -y'
 	make kubernetes_install
 
@@ -124,6 +124,9 @@ upgrademeili:
 .PHONY: logstraefik
 logstraefik:
 	kubectl logs -f -l app=traefik
+.PHONY: logscaddy
+logscaddy:
+	kubectl logs -f -l app=caddy
 .PHONY: logsmeili
 logsmeili:
 	kubectl logs -f -l app=meilisearch
@@ -149,7 +152,7 @@ logsmariadb:
 
 .PHONY: job
 job:
-	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/jobs/2024-07-08-create-db.yaml | envsubst | kubectl apply -f -'
+	sops exec-env deploy/mariadb/sops_secrets.yml 'cat ./deploy/jobs/2024-06-18-create-db.yaml | envsubst | kubectl apply -f -'
 .PHONY: logsjob
 logsjob:
 	kubectl logs -f -l app=job
@@ -171,3 +174,11 @@ installcaddy:
 .PHONY: upgradecaddy
 upgradecaddy:
 	kubectl rollout restart deployment --selector app=caddy
+
+.PHONY: installv2ray
+installv2ray:
+	sops exec-env deploy/v2ray/sops_secrets.yml 'cat ./deploy/v2ray/manifest.yaml | envsubst | kubectl apply -f -'
+
+.PHONY: upgradev2ray
+upgradev2ray:
+	kubectl rollout restart deployment --selector app=v2ray

@@ -10,6 +10,7 @@ source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 # test if kubectl is installed
 if command -v kubectl >/dev/null 2>&1; then
+	echo "kubectl is installed"
 	source <(kubectl completion bash)
 fi
 test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}/.config/bash/.iterm2_shell_integration.bash" || tru

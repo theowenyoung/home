@@ -12,10 +12,10 @@ meilisearch:
     className: traefik
     path: "/"
     hosts:
-      - meilisearch.k3s.owenyoung.com
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-      traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
+      - meilisearch.owenyoung.com
+    # annotations:
+    #   traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    #   traefik.ingress.kubernetes.io/router.tls: "true"
+    #   traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
   customLabels:
     app: meilisearch

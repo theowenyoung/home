@@ -1,9 +1,17 @@
 traefik:
   commonLabels:
     app: traefik
-  # logs:
-  #   general:
-  #     level: DEBUG
+  logs:
+    general:
+      level: DEBUG
+    access:
+      enabled: true
+      fields:
+        general:
+          defaultmode: keep
+        headers:
+          defaultmode: keep
+
   certResolvers:
     letsencryptresolver:
       email: owen@owenyoung.com

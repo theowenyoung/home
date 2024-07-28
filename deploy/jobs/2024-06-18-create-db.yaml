@@ -5,10 +5,10 @@ metadata:
   name: mariadb-init-script
 data:
   setup_db.sql: |
+    GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
     CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-    USE ${MYSQL_DATABASE};
-    CREATE USER '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
-    GRANT ALL PRIVILEGES ON *.* TO '${MYSQL_USER}'@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}';
+    CREATE DATABASE IF NOT EXISTS ${MYSQL_07_08_DATABASE} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ---
 apiVersion: batch/v1
 kind: Job

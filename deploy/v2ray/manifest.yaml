@@ -1,0 +1,102 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: v2ray-configmap
+data:
+  config.json: |
+    {
+        "log": {
+            "loglevel": "debug"
+        },
+        "inbounds": [
+            {
+                "port": 10000,
+                "listen": "0.0.0.0",
+                "protocol": "vmess",
+                "settings": {
+                    "clients": [
+                        {
+                          "id": "{{UUID}}",
+                           "alterId": 64
+                        }
+                    ]
+                },
+                "streamSettings": {
+                    "network": "ws",
+                    "wsSettings": {
+                        "path": "/ws/"
+                    }
+                }
+            }
+        ],
+        "outbounds": [
+            {
+                "protocol": "freedom",
+                "settings": {}
+            }
+        ]
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: v2ray-secrets
+type: Opaque
+stringData:
+  UUID: "${UUID}"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v2ray-deployment
+  labels:
+    app: v2ray
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: v2ray
+  template:
+    metadata:
+      labels:
+        app: v2ray
+    spec:
+      containers:
+        - name: v2ray
+          image: v2fly/v2fly-core:v5.16.1
+          ports:
+            - containerPort: 10000
+          command: ["/bin/sh"]
+          args:
+            [
+              "-c",
+              'sed "s/{{UUID}}/$UUID/g" /etc/v2ray/config.json > /tmp/config.json && /usr/bin/v2ray run -c /tmp/config.json',
+            ]
+          volumeMounts:
+            - mountPath: /etc/v2ray/config.json
+              name: v2ray-config
+              subPath: config.json
+          env:
+            - name: UUID
+              valueFrom:
+                secretKeyRef:
+                  name: v2ray-secrets
+                  key: UUID
+
+      volumes:
+        - name: v2ray-config
+          configMap:
+            name: v2ray-configmap
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: v2ray-service
+spec:
+  selector:
+    app: v2ray
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 10000

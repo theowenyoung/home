@@ -17,6 +17,23 @@ data:
         header_up Host webhook.site
       }
     }
+    vv.owenyoung.com:80 {
+
+        log {
+            output stdout
+            format console
+        }
+        @v2ray_websocket {
+            path /ws/
+            header Connection Upgrade
+            header Upgrade websocket
+        }
+        reverse_proxy @v2ray_websocket v2ray-service:80 
+        @notWs {
+            not path /ws/*
+        }
+        respond @notWs "Hello World"
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -93,6 +110,30 @@ spec:
                 port:
                   number: 80
     - host: webhook.k3s.owenyoung.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: caddy-service
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: caddy-ingress-https
+
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencryptresolver
+spec:
+  ingressClassName: traefik
+
+  rules:
+    - host: vv.owenyoung.com
       http:
         paths:
           - path: /
