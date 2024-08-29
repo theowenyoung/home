@@ -18,21 +18,16 @@ data:
       }
     }
     vv.owenyoung.com:80 {
-
         log {
             output stdout
             format console
         }
         @v2ray_websocket {
             path /ws/
-            header Connection Upgrade
+            header Connection *Upgrade*
             header Upgrade websocket
         }
         reverse_proxy @v2ray_websocket v2ray-service:80 
-        @notWs {
-            not path /ws/*
-        }
-        respond @notWs "Hello World"
     }
 ---
 apiVersion: apps/v1

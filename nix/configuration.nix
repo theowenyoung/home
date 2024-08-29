@@ -20,7 +20,7 @@
     };
     identityPaths = [ "/root/.ssh/id_ed25519" ];
   };
-
+  nixpkgs.config.allowUnfree = true; 
   services.meilisearch = {
     enable = true;
     environment = "production";
@@ -56,4 +56,5 @@
   ];
 
   system.stateVersion = "23.11";
+  allowUnfree = true;
 }

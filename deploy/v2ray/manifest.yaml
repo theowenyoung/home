@@ -25,7 +25,10 @@ data:
                 "streamSettings": {
                     "network": "ws",
                     "wsSettings": {
-                        "path": "/ws/"
+                          "path": "/ws/",
+                          "headers": {
+                            "Host": "vv.owenyoung.com"
+                        }
                     }
                 }
             }

@@ -58,7 +58,7 @@ M.general = {
     ["c"] = { [["_c]], "change not cut" },
     ["D"] = { [["_D]], "delete not cut" },
     -- close buffer + hide terminal buffer
-    ["<leader><BS>"] = {
+    ["<Leader><BS>"] = {
       function()
         require("nvchad.tabufline").close_buffer()
       end,

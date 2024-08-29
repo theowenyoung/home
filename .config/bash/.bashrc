@@ -1,5 +1,6 @@
 #! /bin/bash
-
+# nix allow unfree
+NIXPKGS_ALLOW_UNFREE=1
 # check is git exist
 
 if [[ -x ~/.nix-profile/bin/git ]]; then
