@@ -3,7 +3,7 @@
 ## Debug new package
 
 ```
-nix-build ~/envs/debug.nix
+nix-build ~/nix/debug.nix
 ```
 
 ## Linux machine

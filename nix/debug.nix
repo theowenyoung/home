@@ -1,2 +1,2 @@
 let pkgs = import <nixpkgs> {}; in
-pkgs.callPackage ./packages/clash-meta/default.nix {}
+pkgs.callPackage ./packages/mongodb-ce.nix {}

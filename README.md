@@ -415,6 +415,16 @@ ssh to server
 nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 ```
 
+## 如何卸载 nix （当升级的时候）
+
+1. 先把默认的bash 恢复
+
+```
+chsh -s /bin/bash
+```
+
+1. 参考[这里](https://nix.dev/manual/nix/2.22/installation/uninstall)
+
 ## 参考
 
 - [andreykaipov home](https://github.com/andreykaipov/home)

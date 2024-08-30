@@ -17,7 +17,6 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-        nixVersions.nix_2_21
         bashInteractive
         cachix
         # direnv
@@ -31,10 +30,12 @@
         jq
         miniserve # http serve
         nodejs_20
+        # mongodb
+        mongodb-ce
         # (pkgs.callPackage ./nix/packages/nodejs/default.nix {})
         nodePackages.pnpm
         nodePackages.nodemon
-        nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
+        # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
         yarn
         shadowsocks-rust
