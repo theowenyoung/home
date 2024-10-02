@@ -39,6 +39,7 @@
 .config/rio/**
 .config/joplin-desktop/**
 .config/clash.meta/**
+.config/rclone/**
 .config/caddy/autosave.json
 .config/.wrangler
 .config/qBittorrent

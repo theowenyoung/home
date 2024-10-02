@@ -7,7 +7,6 @@ cask "firefox-developer-edition"
 cask "anki"
 cask "feishu"
 cask "adrive" # 阿里云盘
-cask "librewolf"
 cask "xmind"
 cask "google-chrome"
 cask "microsoft-edge"
@@ -33,6 +32,7 @@ cask "Calibre"
 cask "cleanshot"
 cask "sequel-ace"
 cask "devtoys"
+cask "jordanbaird-ice"
 mas "Outline", id: 1356178125
 mas "iPic", id: 1101244278
 mas "MindNode", id: 1289197285

@@ -18,7 +18,7 @@ profile:
 
 dns:
   enable: true
-  listen: :8053
+  listen: :53
   ipv6: true # when the false, response to AAAA questions will be empty
   default-nameserver:
     - 192.168.31.1

@@ -7,16 +7,23 @@
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
     agenix.url = "github:ryantm/agenix";
+        # 添加特定版本的 Deno 输入
+    deno-old.url = "github:NixOS/nixpkgs/351e470e61610ab5cc1625891d6b540ff638796f";
+    deno-old.flake = false;
   };
   outputs = { self, nixpkgs,devenv,disko,agenix}: {
     # profile for my arm -darwin machine
     
     packages."aarch64-darwin".default = let
       system = "aarch64-darwin";
-      pkgs = (nixpkgs.legacyPackages.${system}.extend (import ./nix/overlays.nix));
+      pkgs = (nixpkgs.legacyPackages.${system}.extend (final: prev: {
+        deno = (import deno-old { inherit system; }).deno;
+      }));
+      customOverlays = import ./nix/overlays.nix;
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
+        deno
         bashInteractive
         cachix
         # direnv
@@ -43,7 +50,6 @@
         python3Packages.virtualenv
         # clash-meta # clash
         # (pkgs.callPackage ./nix/packages/clash-meta/default.nix {})
-        deno
         infisical
         wget
         mas
