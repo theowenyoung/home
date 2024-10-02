@@ -4,7 +4,7 @@ let
   os = if stdenv.hostPlatform.isLinux then "linux" else "darwin";
   arch = if stdenv.hostPlatform.isx86 then "amd64" else "arm64";
   sha256s = {
-    linux_amd64 = "sha256-2OD6mdyhKITIY1uf7eWEzSzKH8BmP++nOoQmB5BiJY8=";
+    linux_amd64 = "sha256-O4vb38NOeQZUEmzL5BmZcojRJOHO9cfRjjtGVkhDt3U=";
     darwin_amd64 = "";
   };
 in
@@ -13,15 +13,15 @@ stdenv.mkDerivation rec {
     showPhaseHeader = true;
     name = "clash-meta";
     pname = "clash";
-    tag = "Prerelease-Alpha";
-    version = "alpha-9bd70e1";
+    tag = "v1.18.8";
+    version = "v1.18.8";
     # linux_amd64 or darwin_amd64 or linux_amd64 or darwin_arm64
     src = fetchurl {
         url = "https://github.com/MetaCubeX/mihomo/releases/download/${tag}/mihomo-${os}-${arch}-${version}.gz";
         sha256 = sha256s."${os}_${arch}";
     };
     uiSrc = fetchurl {
-      url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.134.0/compressed-dist.tgz";
+      url = "https://github.com/MetaCubeX/metacubexd/releases/download/v1.150.0/compressed-dist.tgz";
       sha256 = "sha256-Xx2UReUAxHg4CrKqGs9vGmWRsosJE1OqnYSmp2wOC9M=";  # 此处填写 fetchgit 计算出的哈希值
     };
     buildInputs = [ gzip makeWrapper ];
