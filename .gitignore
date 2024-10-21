@@ -29,6 +29,7 @@
 !flake.nix
 !flake.lock
 .config/raycast
+.config/bin/**
 .config/kraftkit/**
 .config/clash/**
 .config/mihomo/**

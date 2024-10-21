@@ -109,6 +109,23 @@
         "type": "github"
       }
     },
+    "deno-old": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1710559979,
+        "narHash": "sha256-VMo+7/L/pZct8+DUpeToXDWoredn6LIfQ86bG7ctvYE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "351e470e61610ab5cc1625891d6b540ff638796f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "351e470e61610ab5cc1625891d6b540ff638796f",
+        "type": "github"
+      }
+    },
     "devenv": {
       "inputs": {
         "cachix": "cachix",
@@ -733,6 +750,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "deno-old": "deno-old",
         "devenv": "devenv",
         "disko": "disko",
         "nixpkgs": "nixpkgs_5"

@@ -34,38 +34,40 @@ async function main() {
   if (/^[a-zA-Z]+$/.test(sourceText)) {
     const icibaResult = await getIcibaWord(sourceText);
     const items = parseIcibaWordResult(icibaResult);
+    // check is items empty
+    if (items.length > 0) {
+      const soundUrl = getSoundUrl(icibaResult);
+      if (!soundUrl) {
+        return;
+      }
+      const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+      const nodePath = getNodeExecPath();
+      if (!nodePath) {
+        return;
+      }
 
-    const soundUrl = getSoundUrl(icibaResult);
-    if (!soundUrl) {
-      return;
-    }
-    const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-    const nodePath = getNodeExecPath();
-    if (!nodePath) {
-      return;
-    }
-
-    // 在子进程异步播放
-    const child = spawn(
-      nodePath,
-      [path.join(__dirname, "./play.mjs"), soundUrl],
-      {
-        detached: true,
-        stdio: "ignore",
-      },
-    );
-    child.unref(); // 允许主进程退出而不等待子进程
-
-    console.log(
-      JSON.stringify({
-        items,
-        variables: {
-          url: items[0].action.url,
-          type: "word",
+      // 在子进程异步播放
+      const child = spawn(
+        nodePath,
+        [path.join(__dirname, "./play.mjs"), soundUrl],
+        {
+          detached: true,
+          stdio: "ignore",
         },
-      }),
-    );
-    return;
+      );
+      child.unref(); // 允许主进程退出而不等待子进程
+
+      console.log(
+        JSON.stringify({
+          items,
+          variables: {
+            url: items[0].action.url,
+            type: "word",
+          },
+        }),
+      );
+      return;
+    }
   }
   let items = [];
 
@@ -93,31 +95,31 @@ async function main() {
       quicklookurl: deeplSiteUrl,
     },
   ];
-  const result = await translate({
-    from: "auto",
-    to: targetLanguage,
-    text: sourceText,
-  });
-
-  const translationText = result.text;
-
-  const siteUrl = `https://translate.google.com/?sl=${
-    result.remoteFrom
-  }&tl=${targetLanguage}&text=${encodeURIComponent(sourceText)}&op=translate`;
-
-  items = [
-    ...items,
-    {
-      title: translationText,
-      subtitle:
-        "By Google, Enter 复制, cmd+L 放大显示并复制,  右方向键 -> 更多操作",
-      arg: translationText,
-      action: {
-        url: siteUrl,
-      },
-      quicklookurl: siteUrl,
-    },
-  ];
+  // const result = await translate({
+  //   from: "auto",
+  //   to: targetLanguage,
+  //   text: sourceText,
+  // });
+  //
+  // const translationText = result.text;
+  //
+  // const siteUrl = `https://translate.google.com/?sl=${
+  //   result.remoteFrom
+  // }&tl=${targetLanguage}&text=${encodeURIComponent(sourceText)}&op=translate`;
+  //
+  // items = [
+  //   ...items,
+  //   {
+  //     title: translationText,
+  //     subtitle:
+  //       "By Google, Enter 复制, cmd+L 放大显示并复制,  右方向键 -> 更多操作",
+  //     arg: translationText,
+  //     action: {
+  //       url: siteUrl,
+  //     },
+  //     quicklookurl: siteUrl,
+  //   },
+  // ];
 
   console.log(
     JSON.stringify({
@@ -289,8 +291,8 @@ export function getSoundUrl(icibaResult) {
   const phoneticUrl = symbol.ph_am_mp3.length
     ? symbol.ph_am_mp3
     : symbol.ph_tts_mp3.length
-    ? symbol.ph_tts_mp3
-    : symbol.ph_en_mp3;
+      ? symbol.ph_tts_mp3
+      : symbol.ph_en_mp3;
   if (phoneticUrl.length) {
     return phoneticUrl;
   }

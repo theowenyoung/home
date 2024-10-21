@@ -11,7 +11,7 @@
     deno-old.url = "github:NixOS/nixpkgs/351e470e61610ab5cc1625891d6b540ff638796f";
     deno-old.flake = false;
   };
-  outputs = { self, nixpkgs,devenv,disko,agenix}: {
+  outputs = { self, nixpkgs,devenv,disko,agenix,deno-old}: {
     # profile for my arm -darwin machine
     
     packages."aarch64-darwin".default = let
@@ -26,6 +26,7 @@
         deno
         bashInteractive
         cachix
+        fastlane
         # direnv
         devenv.packages."${system}".default
         # nix-direnv
