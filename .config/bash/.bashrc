@@ -19,6 +19,11 @@ test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}
 # add path
 export PATH="$HOME/.config/bin:/opt/homebrew/bin:$PATH"
 
+# ruby
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+
 # x11 forward
 export DISPLAY=:0
 

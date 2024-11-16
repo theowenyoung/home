@@ -26,7 +26,7 @@
         deno
         bashInteractive
         cachix
-        fastlane
+        # fastlane
         # direnv
         devenv.packages."${system}".default
         # nix-direnv
@@ -133,7 +133,8 @@
         ripgrep
         (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
         coreutils
-        ruby
+        # ruby
+        # rubyPackages.rails
         # custom packages
         (pkgs.callPackage ./nix/packages/whistle/default.nix {})
         (pkgs.callPackage ./nix/packages/web-ext/default.nix {})
