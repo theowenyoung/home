@@ -37,6 +37,7 @@
         stripe-cli
         jq
         miniserve # http serve
+        mkcert # ssl, localhost
         nodejs_20
         # mongodb
         mongodb-ce
