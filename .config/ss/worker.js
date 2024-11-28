@@ -5,7 +5,7 @@ export default {
 
     const browserHtml = `
     
-curl -sSL ss.owenyoung.com | sudo bash -c 'P="xxx" bash'
+curl -sSL ss.owenyoung.com | sudo bash -c 'P="Ss123456" bash'
 
 
   - name: "ss-us0"
@@ -13,7 +13,7 @@ curl -sSL ss.owenyoung.com | sudo bash -c 'P="xxx" bash'
     server: xxx
     port: 36000
     cipher: chacha20-ietf-poly1305
-    password: "xxx"
+    password: "Ss123456"
     udp: false
 
 
