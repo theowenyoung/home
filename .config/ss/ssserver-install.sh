@@ -2,10 +2,23 @@
 
 set -e
 
-echo "net.core.default_qdisc=fq" >>/etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control=bbr" >>/etc/sysctl.conf
-sudo sysctl -p
-sudo sysctl net.ipv4.tcp_available_congestion_control
+update_sysctl_conf() {
+	local config_file="/etc/sysctl.conf"
+	local configs=(
+		"net.core.default_qdisc=fq"
+		"net.ipv4.tcp_congestion_control=bbr"
+	)
+
+	for config in "${configs[@]}"; do
+		if ! grep -q "^$config" "$config_file"; then
+			echo "$config" >>"$config_file"
+		fi
+	done
+
+	sysctl -p
+	sysctl net.ipv4.tcp_available_congestion_control
+}
+update_sysctl_conf
 
 SS_PORT=36000
 # set method
