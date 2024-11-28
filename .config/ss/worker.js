@@ -5,7 +5,7 @@ export default {
 
     const browserHtml = `
     
-curl -sSL ss.owenyoung.com | sudo bash
+curl -sSL ss.owenyoung.com | sudo bash -c 'P="xxx" bash'
 
     `;
 

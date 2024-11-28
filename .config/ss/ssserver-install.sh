@@ -6,7 +6,9 @@ SS_PORT=36000
 # set method
 SS_METHOD="chacha20-ietf-poly1305"
 # SS_PASSWORD="$(openssl rand -base64 12)"
-SS_PASSWORD="Ss#12345678"
+# SS_PASSWORD="Ss#12345678"
+# read env PASS=SS_PASSWORD
+SS_PASSWORD=${P:="Ss#12345678"}
 
 # export env
 export SS_PASSWORD=$SS_PASSWORD
