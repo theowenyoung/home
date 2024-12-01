@@ -44,8 +44,10 @@ SS_SERVER_URL_V4="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC
 
 sudo apt-get -y update
 sudo apt -y install qrencode
+sudo apt -y install xz-utils
 sudo apt -y install sudo
 sudo apt -y install sudo perl
+
 get_latest_release() {
 	api_url="https://api.github.com/repos/$1/releases/latest"
 	curl --silent "$api_url" | json_pp | grep '"tag_name" :' | sed -E 's/.*"v([^"]+)".*/\1/'
