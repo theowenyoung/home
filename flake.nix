@@ -39,7 +39,7 @@
         miniserve # http serve
         nss
         mkcert # ssl, localhost
-        nodejs_20
+        nodejs_22
         # mongodb
         mongodb-ce
         # (pkgs.callPackage ./nix/packages/nodejs/default.nix {})
@@ -47,7 +47,7 @@
         nodePackages.nodemon
         # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
-        yarn
+        # yarn
         shadowsocks-rust
         python3
         python3Packages.virtualenv
@@ -59,7 +59,7 @@
         tmux
         neovim
         ripgrep
-        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+        nerd-fonts.fira-code
         coreutils
         ruby
         # custom packages
@@ -133,8 +133,8 @@
         tmux
         neovim
         ripgrep
-        (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
         coreutils
+        nerd-fonts.fira-code
         # ruby
         # rubyPackages.rails
         # custom packages
@@ -163,7 +163,7 @@
       fzf
       neovim
       ripgrep
-      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+      nerd-fonts.fira-code
       ];
     };
 
