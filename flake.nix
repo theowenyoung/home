@@ -34,10 +34,13 @@
         fzf
         inetutils # telnet
         awscli2
+        mdbook
+        hurl
         stripe-cli
         jq
         miniserve # http serve
         nss
+        cargo
         mkcert # ssl, localhost
         nodejs_23
         # mongodb
@@ -47,7 +50,7 @@
         nodePackages.nodemon
         # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
-        # yarn
+        yarn
         shadowsocks-rust
         python3
         python3Packages.virtualenv

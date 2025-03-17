@@ -61,6 +61,7 @@ M.nvimtree = {
   },
   view = {
     width = 40,
+    preserve_window_proportions = true,
   },
 }
 

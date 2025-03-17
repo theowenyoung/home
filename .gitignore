@@ -32,6 +32,7 @@
 .config/uv
 .config/bin/**
 .config/kraftkit/**
+.config/simple-update-notifier/**
 .config/clash/**
 .config/mihomo/**
 !.config/clash/config_template.yml
