@@ -54,20 +54,20 @@ local plugins = {
   --   end,
   -- },
 
-  {
-    "github/copilot.vim",
-    lazy = false,
-    config = function()
-      -- copliot options
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-      -- vim.g.copilot_filetypes = {
-      --   yaml = true,
-      -- }
-
-      vim.api.nvim_set_keymap("i", "<A-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    end,
-  },
+  -- {
+  --   "github/copilot.vim",
+  --   lazy = false,
+  --   config = function()
+  --     -- copliot options
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_assume_mapped = true
+  --     -- vim.g.copilot_filetypes = {
+  --     --   yaml = true,
+  --     -- }
+  --
+  --     vim.api.nvim_set_keymap("i", "<A-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+  --   end,
+  -- },
   {
     "alexghergh/nvim-tmux-navigation",
     lazy = false,

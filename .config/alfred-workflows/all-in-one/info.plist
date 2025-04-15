@@ -8,6 +8,19 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
+		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<array>
 			<dict>
@@ -325,21 +338,6 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>text</key>
-				<string></string>
-				<key>usevoiceover</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.speak</string>
-			<key>uid</key>
-			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>autopaste</key>
 				<false/>
 				<key>clipboardtext</key>
@@ -430,6 +428,111 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>text</key>
+				<string></string>
+				<key>usevoiceover</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.speak</string>
+			<key>uid</key>
+			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>j</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>parsing...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="string2json.mjs" # Change this to your script's path
+
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+	"$HOME/.nix-profile/bin/node"
+	"/usr/local/bin/node"
+	"/usr/bin/node"
+	"/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+	if [ -f "$node" ]; then
+		"$node" $SCRIPT_PATH "$@"
+		exit
+	fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>string to json string</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>conditions</key>
 				<array>
 					<dict>
@@ -471,12 +574,19 @@ exit 1
 			<key>ypos</key>
 			<real>255</real>
 		</dict>
+		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
+		<dict>
+			<key>xpos</key>
+			<real>55</real>
+			<key>ypos</key>
+			<real>415</real>
+		</dict>
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<dict>
 			<key>xpos</key>
-			<real>70</real>
+			<real>45</real>
 			<key>ypos</key>
-			<real>415</real>
+			<real>265</real>
 		</dict>
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<dict>
@@ -505,6 +615,13 @@ exit 1
 			<real>845</real>
 			<key>ypos</key>
 			<real>15</real>
+		</dict>
+		<key>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</key>
+		<dict>
+			<key>xpos</key>
+			<real>345</real>
+			<key>ypos</key>
+			<real>420</real>
 		</dict>
 		<key>AAA51207-26C9-41F4-89CB-0C0954772F29</key>
 		<dict>
@@ -537,9 +654,9 @@ exit 1
 		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
 		<dict>
 			<key>xpos</key>
-			<real>420</real>
+			<real>340</real>
 			<key>ypos</key>
-			<real>355</real>
+			<real>255</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>

@@ -6,6 +6,8 @@
 workflow-install -s ~/.config/alfred-workflows/all-in-one
 ```
 
+> workflow-install 脚本位于 ~/.config/bin/workflow-install
+
 然后设置一些动作显示在 Fallback 结果中：
 
 [设置]-> [Features] -> [Default Results] -> [Fallbacks] -> [Setup fallback results] -> [Add default workflow trigger] -> [添加你需要的默认trigger]
