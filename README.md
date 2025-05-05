@@ -134,6 +134,21 @@ cd ~/inbox/home && brew bundle
 
 6. 在浏览器打开 Github 上存放 keepassxc 加密文件的repo，下载密钥文件 `main.kdbx`, 用 keepassxc 打开，找到我保存的 ssh 条目，保存该条目下的所有附件到 `~/.ssh/`, （finder 无法直接选中 `~/.ssh`文件夹，需要`cmd+shift+g` 手动输入该文件夹，选择后，keepassxc软件就会帮我把我的主ssh 下载到本机电脑，这样就可以恢复我的 ssh 文件，随后用于 github repo下载，加密解密密钥等。
 
+6.1 将 home repo 下载到当前用户：
+
+```bash
+cd "$HOME"
+rm -rf .git
+git init -b main
+git remote add origin https://github.com/theowenyoung/home.git
+git fetch origin main
+git reset --hard origin/main
+git branch --set-upstream-to origin/main main
+git remote set-url --push origin git@github.com:theowenyoung/home.git
+git remote -v
+```
+
+
 7. 用 nix 安装所有的命令行工具
 
 ```
