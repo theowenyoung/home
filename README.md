@@ -180,7 +180,7 @@ source ~/.bashrc
 NIXPKGS_ALLOW_UNFREE=1 nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
 ```
 
-8. 使用 nix 的最新版 bash 版本：
+8. 使用 homebrew 的最新版 bash 版本：
 
 ```bash
 sudo vi /etc/shells
@@ -220,7 +220,7 @@ source it
 
 10. 安装字体
 
-nix 安装的字体不会自动被安装到系统，需要手动打开 `font book`, 选择 `file` `add fonts to current user`, 选择 `~/nix-profile/share/fonts/truetype/nerdfonts`
+nix 安装的字体不会自动被安装到系统，需要手动打开 `font book`, 选择 `file` `add fonts to current user`, 选择 `~/.nix-profile/share/fonts/truetype/nerdfonts`
 
 11. 打开 iterm2:
 
@@ -231,7 +231,7 @@ nix 安装的字体不会自动被安装到系统，需要手动打开 `font boo
     1. General -> Selections -> Applications in terminal may access clipboard.
     1. General -> Selections -> double click performs smart selections
 
-12. alfred 工作流配置
+12. alfred 工作流配置, 参考[这里](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
 13. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
 14. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
@@ -251,6 +251,13 @@ map gg scrollToTop
 map G scrollToBottom
 map h scrollLeft
 map l scrollRight
+```
+
+16. 导入 gpg 私钥，在 keepassxc 里先下载私钥，然后：
+
+```
+gpg --import gpg-private.asc
+gpg --import gpn2.as
 ```
 
 ## Linux Proxy init
