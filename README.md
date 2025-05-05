@@ -231,7 +231,7 @@ nix 安装的字体不会自动被安装到系统，需要手动打开 `font boo
     1. General -> Selections -> Applications in terminal may access clipboard.
     1. General -> Selections -> double click performs smart selections
 
-12. alfred 工作流配置
+12. alfred 工作流配置, 参考[这里](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
 13. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
 14. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
