@@ -170,9 +170,7 @@ source ~/.bashrc
 7. 用 nix 安装所有的命令行工具
 
 ```
-
-nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
-
+NIXPKGS_ALLOW_UNFREE=1 nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
 ```
 
 8. 使用 nix 的最新版 bash 版本：
