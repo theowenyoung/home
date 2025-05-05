@@ -148,6 +148,24 @@ git remote set-url --push origin git@github.com:theowenyoung/home.git
 git remote -v
 ```
 
+6.2 把 我的bashrc 引入到系统：
+
+加入到 `~/.bashrc`
+
+```
+if [ -f ~/.config/bash/.bashrc ]; then
+    source ~/.config/bash/.bashrc
+fi
+```
+
+6.3 临时切换zsh到 bash
+
+```
+/bin/bash
+source /etc/bashrc
+source ~/.bashrc
+```
+
 
 7. 用 nix 安装所有的命令行工具
 
