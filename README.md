@@ -117,6 +117,13 @@ sh <(curl -L https://nixos.org/nix/install)
 
 ```
 
+3.1 用 brew 安装最新版的 bash （这是使用 brew 安装命令行的一个例外，因为 bash 太低层了，如果都用 nix 来管理的话，可能在重装的时候会出现一些边缘问题)
+
+
+```
+brew install bash
+```
+
 4. 下载我的配置 Repo 到 临时目录
 
 ```
