@@ -16,9 +16,15 @@
     
     packages."aarch64-darwin".default = let
       system = "aarch64-darwin";
-      pkgs = (nixpkgs.legacyPackages.${system}.extend (final: prev: {
-        deno = (import deno-old { inherit system; }).deno;
-      }));
+      pkgs = import nixpkgs {
+        inherit system;
+        config = { allowUnfree = true; };
+        overlays = [
+          (final: prev: {
+            deno = (import deno-old { inherit system; }).deno;
+          })
+        ];
+      };
       customOverlays = import ./nix/overlays.nix;
     in pkgs.buildEnv {
       name = "global-env";
