@@ -180,7 +180,7 @@ source ~/.bashrc
 NIXPKGS_ALLOW_UNFREE=1 nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
 ```
 
-8. 使用 nix 的最新版 bash 版本：
+8. 使用 homebrew 的最新版 bash 版本：
 
 ```bash
 sudo vi /etc/shells
@@ -251,6 +251,13 @@ map gg scrollToTop
 map G scrollToBottom
 map h scrollLeft
 map l scrollRight
+```
+
+16. 导入 gpg 私钥，在 keepassxc 里先下载私钥，然后：
+
+```
+gpg --import gpg-private.asc
+gpg --import gpn2.as
 ```
 
 ## Linux Proxy init
