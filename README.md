@@ -189,11 +189,11 @@ sudo vi /etc/shells
 添加下面的内容到最后一行：
 
 ```
-/Users/green/.nix-profile/bin/bash
+/opt/homebrew/bin/bash
 ```
 
 ```
-chsh -s ~/.nix-profile/bin/bash
+chsh -s /opt/homebrew/bin/bash
 ```
 
 9. 使用我的bashrc
