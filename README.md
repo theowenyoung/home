@@ -220,7 +220,7 @@ source it
 
 10. 安装字体
 
-nix 安装的字体不会自动被安装到系统，需要手动打开 `font book`, 选择 `file` `add fonts to current user`, 选择 `~/nix-profile/share/fonts/truetype/nerdfonts`
+nix 安装的字体不会自动被安装到系统，需要手动打开 `font book`, 选择 `file` `add fonts to current user`, 选择 `~/.nix-profile/share/fonts/truetype/nerdfonts`
 
 11. 打开 iterm2:
 
