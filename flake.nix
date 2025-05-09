@@ -24,7 +24,6 @@
       name = "global-env";
       paths = with pkgs; [
         deno
-        bashInteractive
         cachix
         # fastlane
         # direnv
@@ -108,7 +107,6 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-        bashInteractive
         cachix
         direnv
         devenv.packages."${system}".default
@@ -160,7 +158,6 @@
     in pkgs.buildEnv {
       name = "pure-env";
       paths = with pkgs; [
-      bashInteractive
       git
       tmux
       fzf
@@ -179,7 +176,6 @@
         git
         gnumake
         gcc
-        bashInteractive
         iptables
         tmux
         deno
@@ -220,7 +216,6 @@
         git
         gnumake
         gcc
-        bashInteractive
         iptables
         tmux
         deno
@@ -247,7 +242,6 @@
         caddy
         gcc
         adguardhome
-        bashInteractive
         iptables
         # infisical
         # sops
