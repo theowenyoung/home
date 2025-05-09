@@ -119,7 +119,6 @@ sh <(curl -L https://nixos.org/nix/install)
 
 3.1 用 brew 安装最新版的 bash （这是使用 brew 安装命令行的一个例外，因为 bash 太低层了，如果都用 nix 来管理的话，可能在重装的时候会出现一些边缘问题)
 
-
 ```
 brew install bash
 ```
@@ -172,7 +171,6 @@ fi
 source /etc/bashrc
 source ~/.bashrc
 ```
-
 
 7. 用 nix 安装所有的命令行工具
 
@@ -460,13 +458,11 @@ ssh to server
 nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 ```
 
+## 如何升级现有的软件？
+
+删除 flake.lock 文件, 然后 make update, 然后 make install
+
 ## 如何卸载 nix （当升级的时候）
-
-1. 先把默认的bash 恢复
-
-```
-chsh -s /bin/bash
-```
 
 1. 参考[这里](https://nix.dev/manual/nix/2.22/installation/uninstall)
 

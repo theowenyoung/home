@@ -47,7 +47,7 @@
         nss
         cargo
         mkcert # ssl, localhost
-        nodejs_23
+        nodejs
         # mongodb
         mongodb-ce
         pnpm
