@@ -3,10 +3,12 @@
 ## 如何安装 all-in-one 工作流
 
 ```bash
-workflow-install -s ~/.config/alfred-workflows/all-in-one
+cd ~/.config/alfred-workflows/all-in-one
+./install.sh
 ```
 
-> workflow-install 脚本位于 ~/.config/bin/workflow-install
+安装之后，需要在 workflow 中配置 deepl key
+
 
 然后设置一些动作显示在 Fallback 结果中：
 
