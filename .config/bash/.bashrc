@@ -4,15 +4,15 @@ NIXPKGS_ALLOW_UNFREE=1
 # check is git exist
 
 if [[ -x ~/.nix-profile/bin/git ]]; then
-	source "$HOME/.config/bash/git-completion.bash"
+  source "$HOME/.config/bash/git-completion.bash"
 fi
 
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 # test if kubectl is installed
 if command -v kubectl >/dev/null 2>&1; then
-	echo "kubectl is installed"
-	source <(kubectl completion bash)
+  echo "kubectl is installed"
+  source <(kubectl completion bash)
 fi
 test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}/.config/bash/.iterm2_shell_integration.bash" || tru
 
@@ -27,6 +27,9 @@ export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
 # cargo
 #
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# curl
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
 # x11 forward
 export DISPLAY=:0
@@ -63,9 +66,9 @@ alias ...='cd ../..'
 alias ~='cd ~'
 
 if [ -f ~/.bashrc ]; then
-	alias ss='source ~/.bashrc'
+  alias ss='source ~/.bashrc'
 else
-	alias ss='source ~/.bash_profile'
+  alias ss='source ~/.bash_profile'
 fi
 alias bb='brew bundle --cleanup --file $HOME/Brewfile'
 # git commit
@@ -76,109 +79,109 @@ alias gs="git status 2>/dev/null"
 alias gv="git remote -v"
 
 function gc() {
-	# check is starts with git@ or https:
-	if [[ "$*" =~ ^git@ || "$*" =~ ^https: ]]; then
-		git clone "$1"
-	else
-		git clone ssh://git@github.com/"$*"
-	fi
+  # check is starts with git@ or https:
+  if [[ "$*" =~ ^git@ || "$*" =~ ^https: ]]; then
+    git clone "$1"
+  else
+    git clone ssh://git@github.com/"$*"
+  fi
 }
 function gg() {
-	git commit -m "$*" -a
+  git commit -m "$*" -a
 }
 function gp() {
-	git commit -a -m "$*" && git push
+  git commit -a -m "$*" && git push
 }
 function gt() {
-	git tag -a "$1" -m "$1" && git push
+  git tag -a "$1" -m "$1" && git push
 }
 function ga() {
-	git add .
+  git add .
 }
 function gskip() {
-	git commit -a -m "[skip ci] $*" && git push
+  git commit -a -m "[skip ci] $*" && git push
 }
 
 # show git brach on bash
 
 parse_git_branch() {
-	git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+  git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 export PS1="\u@\h \[\e[32m\]\w \[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
 
 install_service() {
-	local UNIT="$1"
+  local UNIT="$1"
 
-	if [[ -z "$UNIT" ]]; then
-		echo "Please provide a unit name."
-		return 1
-	fi
+  if [[ -z "$UNIT" ]]; then
+    echo "Please provide a unit name."
+    return 1
+  fi
 
-	systemctl --user enable "$UNIT"
-	systemctl --user daemon-reload
-	systemctl --user restart "$UNIT"
-	systemctl --user status "$UNIT"
+  systemctl --user enable "$UNIT"
+  systemctl --user daemon-reload
+  systemctl --user restart "$UNIT"
+  systemctl --user status "$UNIT"
 }
 uninstall_service() {
-	local UNIT="$1"
+  local UNIT="$1"
 
-	if [[ -z "$UNIT" ]]; then
-		echo "Please provide a unit name."
-		return 1
-	fi
+  if [[ -z "$UNIT" ]]; then
+    echo "Please provide a unit name."
+    return 1
+  fi
 
-	systemctl --user stop "$UNIT"
-	systemctl --user disable "$UNIT"
-	systemctl --user daemon-reload
+  systemctl --user stop "$UNIT"
+  systemctl --user disable "$UNIT"
+  systemctl --user daemon-reload
 }
 
 install_system_service() {
-	local UNIT="$1"
+  local UNIT="$1"
 
-	if [[ -z "$UNIT" ]]; then
-		echo "Please provide a unit name."
-		return 1
-	fi
+  if [[ -z "$UNIT" ]]; then
+    echo "Please provide a unit name."
+    return 1
+  fi
 
-	sudo systemctl enable "$UNIT"
-	sudo systemctl daemon-reload
-	sudo systemctl restart "$UNIT"
-	sudo systemctl status "$UNIT"
+  sudo systemctl enable "$UNIT"
+  sudo systemctl daemon-reload
+  sudo systemctl restart "$UNIT"
+  sudo systemctl status "$UNIT"
 }
 uninstall_system_service() {
-	local UNIT="$1"
+  local UNIT="$1"
 
-	if [[ -z "$UNIT" ]]; then
-		echo "Please provide a unit name."
-		return 1
-	fi
+  if [[ -z "$UNIT" ]]; then
+    echo "Please provide a unit name."
+    return 1
+  fi
 
-	sudo systemctl stop "$UNIT"
-	sudo systemctl disable "$UNIT"
-	sudo systemctl daemon-reload
+  sudo systemctl stop "$UNIT"
+  sudo systemctl disable "$UNIT"
+  sudo systemctl daemon-reload
 }
 
 proxy() {
-	export HTTP_PROXY="http://127.0.0.1:7890"
-	export HTTPS_PROXY="http://127.0.0.1:7890"
-	export SOCKS_PROXY="socks://127.0.0.1:7890"
-	export ALL_PROXY="socks://127.0.0.1:7890"
-	# lowercase
-	export http_proxy="$HTTP_PROXY"
-	export https_proxy="$HTTPS_PROXY"
-	export socks_proxy="$SOCKS_PROXY"
-	export all_proxy="$ALL_PROXY"
+  export HTTP_PROXY="http://127.0.0.1:7890"
+  export HTTPS_PROXY="http://127.0.0.1:7890"
+  export SOCKS_PROXY="socks://127.0.0.1:7890"
+  export ALL_PROXY="socks://127.0.0.1:7890"
+  # lowercase
+  export http_proxy="$HTTP_PROXY"
+  export https_proxy="$HTTPS_PROXY"
+  export socks_proxy="$SOCKS_PROXY"
+  export all_proxy="$ALL_PROXY"
 }
 
 noproxy() {
-	unset HTTP_PROXY
-	unset HTTPS_PROXY
-	unset SOCKS_PROXY
-	unset ALL_PROXY
-	unset http_proxy
-	unset https_proxy
-	unset socks_proxy
-	unset all_proxy
+  unset HTTP_PROXY
+  unset HTTPS_PROXY
+  unset SOCKS_PROXY
+  unset ALL_PROXY
+  unset http_proxy
+  unset https_proxy
+  unset socks_proxy
+  unset all_proxy
 }
 
 # other config
@@ -192,14 +195,14 @@ noproxy() {
 
 # editor
 if [ -z "$EDITOR_FORCE" ]; then
-	# check is nvim exists
-	if command -v nvim >/dev/null 2>&1; then
-		export VIM_EDITOR=nvim
-	else
-		export VIM_EDITOR=vi
-	fi
+  # check is nvim exists
+  if command -v nvim >/dev/null 2>&1; then
+    export VIM_EDITOR=nvim
+  else
+    export VIM_EDITOR=vi
+  fi
 else
-	export VIM_EDITOR="$EDITOR_FORCE"
+  export VIM_EDITOR="$EDITOR_FORCE"
 fi
 export MAIN_EDITOR=$VIM_EDITOR
 export EDITOR=$MAIN_EDITOR

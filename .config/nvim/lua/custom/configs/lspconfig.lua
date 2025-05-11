@@ -3,7 +3,7 @@ local capabilities = require("plugins.configs.lspconfig").capabilities
 
 local parent_lspconfig = require "lspconfig"
 
-local servers = { "html", "cssls", "denols", "tsserver", "clangd" }
+local servers = { "html", "cssls", "denols", "ts_ls", "clangd" }
 -- "denols",
 
 local custom_on_attach = function(client, bufnr)
@@ -17,7 +17,7 @@ for _, lsp in ipairs(servers) do
     on_attach = custom_on_attach,
     capabilities = capabilities,
   }
-  if lsp == "tsserver" then
+  if lsp == "ts_ls" then
     options.root_dir = parent_lspconfig.util.root_pattern "package.json"
     options.single_file_support = false
   end
