@@ -55,7 +55,8 @@ M.general = {
     ["<Leader>s"] = { ":%sno/", "substitute exactly" },
     ["<leader>o"] = {
       function()
-        local node = require("nvim-tree.lib").get_node_at_cursor()
+        local api = require("nvim-tree.api")
+        local node = api.tree.get_node_under_cursor()
         if node then
           vim.cmd("!open " .. node.absolute_path:match "(.*)/[^/]*$")
         end
