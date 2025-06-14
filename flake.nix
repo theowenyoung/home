@@ -39,6 +39,7 @@
         fzf
         inetutils # telnet
         awscli2
+        claude-code
         mdbook
         hurl
         stripe-cli

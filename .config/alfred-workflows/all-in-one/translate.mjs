@@ -6,6 +6,7 @@ import { encode } from "punycode";
 // Alfred translate script
 async function main() {
   const args = process.argv.slice(2);
+  // console.log("args", args);
   let sourceText = args[0];
   if (sourceText) {
     sourceText = sourceText.trim();
@@ -83,11 +84,22 @@ async function main() {
     deeplResult.remoteFrom
   }/${targetLanguage}/${encodeURIComponent(sourceText)}`;
 
+  // items = [
+  //   {
+  //     title: deeplTranslationText,
+  //     subtitle:
+  //       "By Deepl, Enter 复制, cmd+L 放大显示并复制, 右方向键 -> 更多操作",
+  //     arg: deeplTranslationText,
+  //     action: {
+  //       url: deeplSiteUrl,
+  //     },
+  //     quicklookurl: deeplSiteUrl,
+  //   },
+  // ];
+
   items = [
     {
-      title: deeplTranslationText,
-      subtitle:
-        "By Deepl, Enter 复制, cmd+L 放大显示并复制, 右方向键 -> 更多操作",
+      response: deeplTranslationText,
       arg: deeplTranslationText,
       action: {
         url: deeplSiteUrl,
@@ -95,6 +107,14 @@ async function main() {
       quicklookurl: deeplSiteUrl,
     },
   ];
+  let response = `## 原文
+
+${sourceText}
+
+## 译文
+
+${deeplTranslationText}
+`;
   // const result = await translate({
   //   from: "auto",
   //   to: targetLanguage,
@@ -123,10 +143,19 @@ async function main() {
 
   console.log(
     JSON.stringify({
-      items,
+      response: response,
+      footer: "",
+      // items,
       variables: {
         type: "sentence",
+        translation: deeplTranslationText,
+        url: deeplSiteUrl,
       },
+      arg: deeplTranslationText,
+      action: {
+        url: deeplSiteUrl,
+      },
+      quicklookurl: deeplSiteUrl,
     }),
   );
 }
