@@ -676,6 +676,27 @@ exit 1
 			<key>variable</key>
 			<string>DEEPL_AUTH_KEY</string>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>OPENAI_API_KEY</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>OPENAI_API_KEY</string>
+		</dict>
 	</array>
 	<key>version</key>
 	<string>1.0</string>
