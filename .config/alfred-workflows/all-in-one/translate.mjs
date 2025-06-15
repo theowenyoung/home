@@ -34,7 +34,7 @@ async function main() {
   // check if it is a word
   if (/^[a-zA-Z]+$/.test(sourceText)) {
     const icibaResult = await getIcibaWord(sourceText);
-    const items = parseIcibaWordResult(icibaResult);
+    const { items, response } = parseIcibaWordResult(icibaResult);
     // check is items empty
     if (items.length > 0) {
       const soundUrl = getSoundUrl(icibaResult);
@@ -60,10 +60,12 @@ async function main() {
 
       console.log(
         JSON.stringify({
-          items,
+          response,
+          footer: "Enter 复制, cmd+Enter 朗读并复制",
           variables: {
             url: items[0].action.url,
             type: "word",
+            translation: response,
           },
         }),
       );
@@ -84,19 +86,6 @@ async function main() {
     deeplResult.remoteFrom
   }/${targetLanguage}/${encodeURIComponent(sourceText)}`;
 
-  // items = [
-  //   {
-  //     title: deeplTranslationText,
-  //     subtitle:
-  //       "By Deepl, Enter 复制, cmd+L 放大显示并复制, 右方向键 -> 更多操作",
-  //     arg: deeplTranslationText,
-  //     action: {
-  //       url: deeplSiteUrl,
-  //     },
-  //     quicklookurl: deeplSiteUrl,
-  //   },
-  // ];
-
   items = [
     {
       response: deeplTranslationText,
@@ -115,36 +104,11 @@ ${sourceText}
 
 ${deeplTranslationText}
 `;
-  // const result = await translate({
-  //   from: "auto",
-  //   to: targetLanguage,
-  //   text: sourceText,
-  // });
-  //
-  // const translationText = result.text;
-  //
-  // const siteUrl = `https://translate.google.com/?sl=${
-  //   result.remoteFrom
-  // }&tl=${targetLanguage}&text=${encodeURIComponent(sourceText)}&op=translate`;
-  //
-  // items = [
-  //   ...items,
-  //   {
-  //     title: translationText,
-  //     subtitle:
-  //       "By Google, Enter 复制, cmd+L 放大显示并复制,  右方向键 -> 更多操作",
-  //     arg: translationText,
-  //     action: {
-  //       url: siteUrl,
-  //     },
-  //     quicklookurl: siteUrl,
-  //   },
-  // ];
 
   console.log(
     JSON.stringify({
       response: response,
-      footer: "",
+      footer: "Enter 复制, cmd+Enter 朗读并复制",
       // items,
       variables: {
         type: "sentence",
@@ -225,9 +189,9 @@ export async function translateWithDeepl(options = {}) {
 
 export function parseIcibaWordResult(icibaResult) {
   let items = [];
+  let responseText = `## ${icibaResult.word_name}\n\n`;
 
   const siteUrl = `https://dictionary.cambridge.org/us/dictionary/english/${icibaResult.word_name}`;
-  // 含义
 
   const symbols = icibaResult.symbols;
   if (symbols && symbols.length) {
@@ -242,6 +206,8 @@ export function parseIcibaWordResult(icibaResult) {
     if (phEn) {
       ph = ph + ` 英音: [${phEn}]`;
     }
+
+    responseText += `${ph}\n\n`;
 
     const parts = symbol.parts;
     if (parts && parts.length) {
@@ -259,6 +225,7 @@ export function parseIcibaWordResult(icibaResult) {
               },
             },
           ];
+          responseText += `### ${part.part}\n${means.join(", ")}\n\n`;
         }
       }
     }
@@ -286,8 +253,10 @@ export function parseIcibaWordResult(icibaResult) {
         },
       },
     ];
+    responseText += `### 变形\n${exchanges.join(", ")}\n\n`;
   }
-  return items;
+
+  return { items, response: responseText };
 }
 
 export async function getIcibaWord(word) {

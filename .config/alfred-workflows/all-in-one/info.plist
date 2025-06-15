@@ -220,7 +220,7 @@
 				<key>removeextension</key>
 				<false/>
 				<key>text</key>
-				<string>{query}</string>
+				<string>{var:translation}</string>
 				<key>title</key>
 				<string>已复制到剪贴板</string>
 			</dict>
@@ -641,9 +641,9 @@ exit 1
 		<key>E4A98DC0-6A53-4FE3-B7C6-66E167930386</key>
 		<dict>
 			<key>xpos</key>
-			<real>570</real>
+			<real>590</real>
 			<key>ypos</key>
-			<real>325</real>
+			<real>300</real>
 		</dict>
 		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
 		<dict>
