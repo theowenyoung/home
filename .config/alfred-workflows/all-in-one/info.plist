@@ -58,9 +58,9 @@
 			</dict>
 			<dict>
 				<key>destinationuid</key>
-				<string>21635651-08E7-47A4-9EE6-6E3FB8069FD3</string>
+				<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
 				<key>modifiers</key>
-				<integer>131072</integer>
+				<integer>524288</integer>
 				<key>modifiersubtext</key>
 				<string></string>
 				<key>vitoclose</key>
@@ -111,6 +111,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>BE250A49-3CF5-4F3E-A212-5333D84166B1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>CAF9BD18-AA88-4D39-AC66-916A9A319F10</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -448,23 +461,21 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>skipqueryencode</key>
+				<key>autopaste</key>
 				<false/>
-				<key>skipvarencode</key>
+				<key>clipboardtext</key>
+				<string>{var:openai_translation}</string>
+				<key>ignoredynamicplaceholders</key>
 				<false/>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>{var:url}</string>
+				<key>transient</key>
+				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
+			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>21635651-08E7-47A4-9EE6-6E3FB8069FD3</string>
+			<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -484,6 +495,27 @@ exit 1
 			<string>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{var:openai_translation}</string>
+				<key>title</key>
+				<string>已复制到剪贴板</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>CAF9BD18-AA88-4D39-AC66-916A9A319F10</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -568,13 +600,6 @@ exit 1
 			<key>ypos</key>
 			<real>540</real>
 		</dict>
-		<key>21635651-08E7-47A4-9EE6-6E3FB8069FD3</key>
-		<dict>
-			<key>xpos</key>
-			<real>595</real>
-			<key>ypos</key>
-			<real>465</real>
-		</dict>
 		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
 		<dict>
 			<key>xpos</key>
@@ -637,6 +662,20 @@ exit 1
 			<real>790</real>
 			<key>ypos</key>
 			<real>400</real>
+		</dict>
+		<key>BE250A49-3CF5-4F3E-A212-5333D84166B1</key>
+		<dict>
+			<key>xpos</key>
+			<real>575</real>
+			<key>ypos</key>
+			<real>460</real>
+		</dict>
+		<key>CAF9BD18-AA88-4D39-AC66-916A9A319F10</key>
+		<dict>
+			<key>xpos</key>
+			<real>945</real>
+			<key>ypos</key>
+			<real>530</real>
 		</dict>
 		<key>E4A98DC0-6A53-4FE3-B7C6-66E167930386</key>
 		<dict>

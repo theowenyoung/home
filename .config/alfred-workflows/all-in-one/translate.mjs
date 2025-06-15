@@ -3,10 +3,10 @@ import { spawn } from "child_process";
 import path from "node:path";
 import fs from "node:fs";
 import { encode } from "punycode";
-// Alfred translate script
+
+// Alfred translate script with streaming OpenAI
 async function main() {
   const args = process.argv.slice(2);
-  // console.log("args", args);
   let sourceText = args[0];
   if (sourceText) {
     sourceText = sourceText.trim();
@@ -16,7 +16,7 @@ async function main() {
   let targetLanguage = args[1];
 
   if (!targetLanguage) {
-    // check ascci
+    // check ascii
     const isAscii = /^[\x00-\x7F]*$/.test(sourceText);
     if (isAscii) {
       targetLanguage = "zh";
@@ -31,32 +31,27 @@ async function main() {
     return;
   }
 
-  // check if it is a word
+  // 检查是否是单词查询
   if (/^[a-zA-Z]+$/.test(sourceText)) {
     const icibaResult = await getIcibaWord(sourceText);
     const { items, response } = parseIcibaWordResult(icibaResult);
-    // check is items empty
     if (items.length > 0) {
       const soundUrl = getSoundUrl(icibaResult);
-      if (!soundUrl) {
-        return;
+      if (soundUrl) {
+        const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
+        const nodePath = getNodeExecPath();
+        if (nodePath) {
+          const child = spawn(
+            nodePath,
+            [path.join(__dirname, "./play.mjs"), soundUrl],
+            {
+              detached: true,
+              stdio: "ignore",
+            },
+          );
+          child.unref();
+        }
       }
-      const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-      const nodePath = getNodeExecPath();
-      if (!nodePath) {
-        return;
-      }
-
-      // 在子进程异步播放
-      const child = spawn(
-        nodePath,
-        [path.join(__dirname, "./play.mjs"), soundUrl],
-        {
-          detached: true,
-          stdio: "ignore",
-        },
-      );
-      child.unref(); // 允许主进程退出而不等待子进程
 
       console.log(
         JSON.stringify({
@@ -72,87 +67,329 @@ async function main() {
       return;
     }
   }
-  let items = [];
 
-  const deeplResult = await translateWithDeepl({
-    from: "auto",
-    to: targetLanguage,
-    text: sourceText,
-  });
+  // 获取缓存文件路径
+  const cacheDir = process.env.alfred_workflow_cache || "/tmp";
 
-  const deeplTranslationText = deeplResult.text;
+  // 确保缓存目录存在
+  if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+  }
 
-  const deeplSiteUrl = `https://www.deepl.com/translator#${
-    deeplResult.remoteFrom
-  }/${targetLanguage}/${encodeURIComponent(sourceText)}`;
+  const streamFile = path.join(cacheDir, "openai_stream.txt");
+  const pidFile = path.join(cacheDir, "openai_pid.txt");
+  const stateFile = path.join(cacheDir, "translate_state.json");
 
-  items = [
-    {
-      response: deeplTranslationText,
-      arg: deeplTranslationText,
-      action: {
-        url: deeplSiteUrl,
-      },
-      quicklookurl: deeplSiteUrl,
-    },
-  ];
-  let response = `## 原文
+  // 检查是否正在流式传输
+  const isStreaming = process.env.streaming_now === "1";
 
-${sourceText}
+  if (isStreaming) {
+    // 继续读取流式传输
+    const result = await readOpenAIStream(streamFile, pidFile, stateFile);
+    return outputStreamingResult(result);
+  }
 
-## 译文
+  // 检查是否有遗留的流文件（窗口关闭后恢复）
+  if (fs.existsSync(streamFile)) {
+    const state = readState(stateFile);
+    if (state) {
+      // 恢复流式传输状态
+      console.log(
+        JSON.stringify({
+          rerun: 0.5,
+          variables: { streaming_now: "1" },
+          response: formatResponse(
+            state.sourceText,
+            state.deeplResult,
+            { text: "⏳ 恢复连接中..." },
+            false,
+          ),
+          behaviour: { scroll: "end" },
+        }),
+      );
+      return;
+    }
+  }
 
-${deeplTranslationText}
-`;
+  // 新的翻译请求
+  try {
+    // 1. 立即开始 DeepL 翻译
+    const deeplResult = await translateWithDeepl({
+      from: "auto",
+      to: targetLanguage,
+      text: sourceText,
+    });
 
-  console.log(
-    JSON.stringify({
-      response: response,
-      footer: "Enter 复制, cmd+Enter 朗读并复制",
-      // items,
-      variables: {
-        type: "sentence",
-        translation: deeplTranslationText,
-        url: deeplSiteUrl,
-      },
-      arg: deeplTranslationText,
-      action: {
-        url: deeplSiteUrl,
-      },
-      quicklookurl: deeplSiteUrl,
-    }),
-  );
-}
+    // 2. 同时启动 OpenAI 流式翻译
+    await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
 
-export async function translate(options = {}) {
-  const { from, to, text } = options;
+    // 3. 保存状态
+    const state = {
+      sourceText,
+      targetLanguage,
+      deeplResult,
+      timestamp: Date.now(),
+    };
+    saveState(stateFile, state);
 
-  const params = new URLSearchParams({
-    client: "gtx",
-    dt: "t",
-    sl: from,
-    tl: to,
-    q: text,
-  });
-  const url =
-    `https://translate.googleapis.com/translate_a/single?` + params.toString();
-  const response = await fetch(url);
-  const statusCode = response.status;
-  const responseText = await response.text();
-  let result = {
-    text: "",
-    remoteFrom: "",
-  };
-  if (response.ok) {
-    const json = JSON.parse(responseText);
-    result.text = json[0][0][0];
-    result.remoteFrom = json[2];
-    return result;
-  } else {
-    throw new Error("翻译失败: " + statusCode + ", " + responseText);
+    // 4. 输出初始结果并开始流式传输
+    const response = formatResponse(
+      sourceText,
+      deeplResult,
+      { text: "" },
+      false,
+    );
+
+    console.log(
+      JSON.stringify({
+        rerun: 0.5,
+        variables: { streaming_now: "1" },
+        response: response,
+        footer: "DeepL 翻译完成，OpenAI 翻译生成中...",
+        behaviour: { scroll: "end" },
+      }),
+    );
+  } catch (error) {
+    console.log(
+      JSON.stringify({
+        response: `翻译出错: ${error.message}`,
+        footer: "请检查网络连接和 API 配置",
+      }),
+    );
   }
 }
 
+// 启动 OpenAI 流式翻译
+async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
+  const systemPrompt =
+    targetLang === "zh"
+      ? "You are a professional translator. Translate the given text to Chinese. Only output the translation result, no explanations."
+      : "You are a professional translator. Translate the given text to English. Only output the translation result, no explanations.";
+
+  const messages = [
+    { role: "system", content: systemPrompt },
+    { role: "user", content: text },
+  ];
+
+  const requestBody = JSON.stringify({
+    model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+    messages: messages,
+    stream: true,
+    temperature: 0.1,
+  });
+
+  // 确保流文件存在
+  fs.writeFileSync(streamFile, "");
+
+  // 使用 curl 进行流式请求
+  const curlArgs = [
+    process.env.OPENAI_API_ENDPOINT ||
+      "https://o.immersivetranslate.net/v1/chat/completions",
+    "--silent",
+    "--no-buffer",
+    "--speed-limit",
+    "0",
+    "--speed-time",
+    "10",
+    "--header",
+    "Content-Type: application/json",
+    "--header",
+    `Authorization: Bearer ${process.env.OPENAI_API_KEY}`,
+    "--data",
+    requestBody,
+    "--output",
+    streamFile,
+  ];
+
+  try {
+    const curlProcess = spawn("curl", curlArgs, {
+      detached: true,
+      stdio: "ignore",
+    });
+
+    // 保存进程 ID
+    fs.writeFileSync(pidFile, curlProcess.pid.toString());
+    curlProcess.unref();
+  } catch (error) {
+    throw new Error(`启动 OpenAI 流式翻译失败: ${error.message}`);
+  }
+}
+
+// 读取 OpenAI 流式响应
+async function readOpenAIStream(streamFile, pidFile, stateFile) {
+  const state = readState(stateFile);
+  if (!state) {
+    return { error: "状态丢失", finished: true };
+  }
+
+  let streamContent = "";
+  if (fs.existsSync(streamFile)) {
+    try {
+      streamContent = fs.readFileSync(streamFile, "utf8");
+    } catch (e) {
+      // 文件可能正在写入中
+    }
+  }
+
+  // 检查是否是 API 错误
+  if (streamContent.startsWith("{")) {
+    try {
+      const errorObj = JSON.parse(streamContent);
+      if (errorObj.error) {
+        cleanup(streamFile, pidFile);
+        return {
+          sourceText: state.sourceText,
+          deeplResult: state.deeplResult,
+          openaiResult: { error: `OpenAI 错误: ${errorObj.error.message}` },
+          finished: true,
+        };
+      }
+    } catch (e) {
+      // 不是错误 JSON，继续处理
+    }
+  }
+
+  // 解析流式响应
+  const chunks = streamContent
+    .split("\n")
+    .filter((line) => line.trim())
+    .map((line) => line.replace(/^data: /, ""))
+    .filter((line) => line !== "[DONE]")
+    .map((line) => {
+      try {
+        return JSON.parse(line);
+      } catch {
+        return null;
+      }
+    })
+    .filter(Boolean);
+
+  const responseText = chunks
+    .map((chunk) => chunk.choices?.[0]?.delta?.content || "")
+    .join("");
+
+  const finishReason = chunks.slice(-1)[0]?.choices?.[0]?.finish_reason;
+  const finished = !!finishReason;
+
+  // 检查连接是否超时
+  if (!finished && fs.existsSync(streamFile)) {
+    const stats = fs.statSync(streamFile);
+    const stalled = Date.now() - stats.mtime.getTime() > 10000; // 10秒超时
+
+    if (stalled && streamContent.length === 0) {
+      cleanup(streamFile, pidFile);
+      return {
+        sourceText: state.sourceText,
+        deeplResult: state.deeplResult,
+        openaiResult: { error: "OpenAI 连接超时" },
+        finished: true,
+      };
+    }
+  }
+
+  if (finished) {
+    cleanup(streamFile, pidFile);
+  }
+
+  return {
+    sourceText: state.sourceText,
+    deeplResult: state.deeplResult,
+    openaiResult: { text: responseText },
+    finished,
+  };
+}
+
+// 输出流式结果
+function outputStreamingResult(result) {
+  const response = formatResponse(
+    result.sourceText,
+    result.deeplResult,
+    result.openaiResult,
+    result.finished,
+  );
+
+  const output = {
+    response: response,
+    behaviour: { scroll: "end" },
+  };
+
+  if (result.finished) {
+    // 翻译完成
+    output.footer =
+      "翻译完成 - Enter 复制 DeepL 结果, option+Enter 复制 OpenAI 结果";
+    output.variables = {
+      type: "sentence",
+      translation: result.deeplResult.text,
+      openai_translation:
+        result.openaiResult.text || result.openaiResult.error || "",
+    };
+  } else {
+    // 继续流式传输
+    output.rerun = 0.5;
+    output.variables = { streaming_now: "1" };
+    output.footer = "OpenAI 翻译生成中...";
+  }
+
+  console.log(JSON.stringify(output));
+}
+
+// 格式化显示响应
+function formatResponse(sourceText, deeplResult, openaiResult, openaiFinished) {
+  const deeplSiteUrl = `https://www.deepl.com/translator#auto/${deeplResult.source || "auto"}/${encodeURIComponent(sourceText)}`;
+
+  let response = `## 原文\n\n${sourceText}\n\n`;
+  response += `## DeepL 翻译\n\n${deeplResult.text}\n\n`;
+  response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
+
+  if (openaiResult.error) {
+    response += `❌ ${openaiResult.error}\n\n`;
+  } else if (openaiResult.text) {
+    response += `${openaiResult.text}${openaiFinished ? "" : "▊"}\n\n`;
+  } else {
+    response += `⏳ 正在生成...\n\n`;
+  }
+
+  return response;
+}
+
+// 状态管理
+function saveState(stateFile, state) {
+  try {
+    // 确保目录存在
+    const dir = path.dirname(stateFile);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(stateFile, JSON.stringify(state));
+  } catch (error) {
+    console.error("保存状态失败:", error.message);
+  }
+}
+
+function readState(stateFile) {
+  if (!fs.existsSync(stateFile)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  } catch (error) {
+    console.error("读取状态失败:", error.message);
+    return null;
+  }
+}
+
+// 清理文件
+function cleanup(streamFile, pidFile) {
+  [streamFile, pidFile].forEach((file) => {
+    if (fs.existsSync(file)) {
+      try {
+        fs.unlinkSync(file);
+      } catch (e) {
+        // 忽略删除错误
+      }
+    }
+  });
+}
+
+// 保留原有的翻译函数
 export async function translateWithDeepl(options = {}) {
   let { to, text } = options;
   if (to.startsWith("zh")) {
@@ -187,6 +424,7 @@ export async function translateWithDeepl(options = {}) {
   }
 }
 
+// 保留原有的单词查询功能
 export function parseIcibaWordResult(icibaResult) {
   let items = [];
   let responseText = `## ${icibaResult.word_name}\n\n`;
@@ -277,9 +515,6 @@ export async function getIcibaWord(word) {
   }
 }
 
-/**
- * download icicba word audio file
- */
 export function getSoundUrl(icibaResult) {
   const icibaDictionaryResult = icibaResult;
   if (!icibaDictionaryResult.symbols.length) {
@@ -293,6 +528,21 @@ export function getSoundUrl(icibaResult) {
       : symbol.ph_en_mp3;
   if (phoneticUrl.length) {
     return phoneticUrl;
+  }
+}
+
+function getNodeExecPath() {
+  const nodePaths = [
+    path.join(process.env.HOME, ".nix-profile", "bin", "node"),
+    "/usr/local/bin/node",
+    "/usr/bin/node",
+    "/opt/local/bin/node",
+  ];
+
+  for (const nodePath of nodePaths) {
+    if (fs.existsSync(nodePath)) {
+      return nodePath;
+    }
   }
 }
 
@@ -310,20 +560,4 @@ if (import.meta.url === url.pathToFileURL(process.argv[1]).href) {
       }),
     );
   });
-}
-
-function getNodeExecPath() {
-  const nodePaths = [
-    path.join(process.env.HOME, ".nix-profile", "bin", "node"),
-    "/usr/local/bin/node",
-    "/usr/bin/node",
-    "/opt/local/bin/node",
-  ];
-
-  for (const nodePath of nodePaths) {
-    if (fs.existsSync(nodePath)) {
-      return nodePath;
-      break;
-    }
-  }
 }
