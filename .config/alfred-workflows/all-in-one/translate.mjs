@@ -120,18 +120,18 @@ async function main() {
       text: sourceText,
     });
 
-    // 2. 同时启动 OpenAI 流式翻译
-    await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
-
-    // 3. 保存状态
-    const state = {
-      sourceText,
-      targetLanguage,
-      deeplResult,
-      timestamp: Date.now(),
-    };
-    saveState(stateFile, state);
-
+    // // 2. 同时启动 OpenAI 流式翻译
+    // await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
+    //
+    // // 3. 保存状态
+    // const state = {
+    //   sourceText,
+    //   targetLanguage,
+    //   deeplResult,
+    //   timestamp: Date.now(),
+    // };
+    // saveState(stateFile, state);
+    //
     // 4. 输出初始结果并开始流式传输
     const response = formatResponse(
       sourceText,
@@ -142,10 +142,10 @@ async function main() {
 
     console.log(
       JSON.stringify({
-        rerun: 0.5,
-        variables: { streaming_now: "1" },
+        // rerun: 0.5,
+        // variables: { streaming_now: "1" },
         response: response,
-        footer: "DeepL 翻译完成，OpenAI 翻译生成中...",
+        // footer: "DeepL 翻译完成，OpenAI 翻译生成中...",
         behaviour: { scroll: "end" },
       }),
     );
@@ -339,14 +339,14 @@ function formatResponse(sourceText, deeplResult, openaiResult, openaiFinished) {
 
   let response = `## 原文\n\n${sourceText}\n\n`;
   response += `## DeepL 翻译\n\n${deeplResult.text}\n\n`;
-  response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
+  // response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
 
   if (openaiResult.error) {
     response += `❌ ${openaiResult.error}\n\n`;
   } else if (openaiResult.text) {
     response += `${openaiResult.text}${openaiFinished ? "" : "▊"}\n\n`;
   } else {
-    response += `⏳ 正在生成...\n\n`;
+    // response += `⏳ 正在生成...\n\n`;
   }
 
   return response;
@@ -406,6 +406,7 @@ export async function translateWithDeepl(options = {}) {
     body: JSON.stringify({
       text: [text],
       target_lang: to.toUpperCase(),
+      model_type: "prefer_quality_optimized",
     }),
   });
   const statusCode = response.status;
