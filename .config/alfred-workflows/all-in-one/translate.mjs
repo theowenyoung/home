@@ -149,6 +149,10 @@ async function main() {
       JSON.stringify({
         // rerun: 0.5,
         // variables: { streaming_now: "1" },
+        variables: {
+          type: "sentence",
+          translation: deeplResult.text,
+        },
         response: response,
         // footer: "DeepL 翻译完成，OpenAI 翻译生成中...",
         behaviour: { scroll: "end" },
