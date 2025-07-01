@@ -17,7 +17,12 @@ async function main() {
 
   if (!targetLanguage) {
     // check ascii
-    const isAscii = /^[\x00-\x7F]*$/.test(sourceText);
+    const asciiCount = sourceText
+      .split("")
+      .filter((char) => char.charCodeAt(0) <= 127).length;
+    const asciiRatio = asciiCount / sourceText.length;
+    const isAscii = asciiRatio > 0.7;
+
     if (isAscii) {
       targetLanguage = "zh";
     } else {
