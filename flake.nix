@@ -31,6 +31,7 @@
       paths = with pkgs; [
         deno
         cachix
+        ansible
         # fastlane
         # direnv
         devenv.packages."${system}".default

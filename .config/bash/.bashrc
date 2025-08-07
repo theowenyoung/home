@@ -34,6 +34,8 @@ export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 # x11 forward
 export DISPLAY=:0
 
+export KUBECONFIG="/Users/green/secret/kubenetes/vultr.yaml"
+
 # alias
 
 # whistle
