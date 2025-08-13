@@ -14,10 +14,16 @@ if command -v kubectl >/dev/null 2>&1; then
   echo "kubectl is installed"
   source <(kubectl completion bash)
 fi
+
+# check mise is exist
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
+
 test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}/.config/bash/.iterm2_shell_integration.bash" || tru
 
 # add path
-export PATH="$HOME/.config/bin:/opt/homebrew/bin:$PATH"
+export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
 
 # ruby
 export PATH="/opt/homebrew/opt/ruby/bin:$PATH"

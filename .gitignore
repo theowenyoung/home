@@ -4,6 +4,7 @@
 # except these
 !.gitignore
 !.prettierrc
+!.default-npm-packages
 !README.md
 !nix/
 !nix/**
@@ -70,6 +71,7 @@
 .config/ssh/keys/*.pem
 .config/tmux/plugins
 .config/wslu
+bin/**
 
 # work things
 .config/sh/env.work

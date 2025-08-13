@@ -40,6 +40,7 @@
         fzf
         inetutils # telnet
         awscli2
+        sshpass
         claude-code
         mdbook
         hurl

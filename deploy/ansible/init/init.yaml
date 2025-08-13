@@ -1,0 +1,55 @@
+---
+- name: Init Debian
+  hosts: all
+  become: yes
+
+  vars:
+    server_user: "deploy"
+    github_user: "theowenyoung"
+
+  tasks:
+    - name: Create non-root user
+      user:
+        name: "{{ server_user }}"
+        groups: sudo
+        shell: /bin/bash
+
+    - name: Set authorized keys taken from url
+      authorized_key:
+        user: "{{ server_user }}"
+        state: present
+        key: "https://github.com/{{ github_user }}.keys"
+
+    - name: Allow sudo without password for new user
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: "^{{ server_user }} ALL="
+        line: "{{ server_user }} ALL=(ALL) NOPASSWD: ALL"
+        validate: "visudo -cf %s"
+
+    - name: Ensure public key authentication is enabled
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PubkeyAuthentication"
+        line: "PubkeyAuthentication yes"
+      notify: Restart SSH
+
+    - name: Disable password-based SSH authentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PasswordAuthentication"
+        line: "PasswordAuthentication no"
+      notify: Restart SSH
+    - name: Disable root login via SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^#?PermitRootLogin"
+        line: "PermitRootLogin no"
+      notify: Restart SSH
+
+  handlers:
+    - name: Restart SSH
+      service:
+        name: ssh
+        state: restarted

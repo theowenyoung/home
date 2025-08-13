@@ -3,6 +3,27 @@
 
 
 HOST='root@${K3S_HOST}'
+serverip := $(IP)
+# Remote user
+ruser := $(or $(RUSER), root)
+
+# IP=xxx make serverinstall
+.PHONY: installserver
+installserver:
+ifndef IP
+	$(error IP is not set. Usage:  IP=192.168.1.100 make serverinstall)
+endif
+	rsync -chazP deploy/ansible/init.sh $(ruser)@$(serverip):
+	ssh $(ruser)@$(serverip) './init.sh'
+
+.PHONY: initserver
+initserver:
+	ansible-playbook deploy/ansible/init/init.yaml -i deploy/ansible/init/inventory.ini --ask-pass
+	uc machine init deploy@deploy1
+
+.PHONY: deployserver
+deployserver:
+	ansible-playbook deploy/ansible/playbook.yaml -i deploy/ansible/inventory.ini
 
 .PHONY: init
 init:

@@ -462,6 +462,29 @@ nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 
 删除 flake.lock 文件, 然后 make update, 然后 make install
 
+## mise
+
+我使用 [mise](https://mise.jdx.dev/) 来管理依赖动态语言的全局脚本和项目级别的依赖。比如全局安装的 node_modules, python modules, ruby gems 等等，直接在 `.default-npm-packages` 指定即可。
+
+安装全局node:
+
+```
+mise u -g node@lts
+```
+
+## ai-shell
+
+<https://github.com/BuilderIO/ai-shell>
+
+初始化配置:
+
+```
+ai config set OPENAI_API_ENDPOINT=https://openrouter.ai/api/v1
+ai config set OPENAI_KEY=<your token>
+
+
+```
+
 ## 如何卸载 nix （当升级的时候）
 
 1. 参考[这里](https://nix.dev/manual/nix/2.22/installation/uninstall)
