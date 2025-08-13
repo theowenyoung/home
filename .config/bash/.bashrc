@@ -46,6 +46,9 @@ export DISPLAY=:0
 
 export KUBECONFIG="$HOME/secret/kubenetes/vultr.yaml"
 
+# for gpg tmux
+export GPG_TTY=$(tty)
+
 # alias
 
 # whistle
