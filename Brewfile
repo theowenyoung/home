@@ -29,6 +29,7 @@ brew "coreutils"
 brew "gnupg"
 brew "age"
 brew "nmap"
+brew "ansible"
 
 # ===== 应用程序 (cask) =====
 

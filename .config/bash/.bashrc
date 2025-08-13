@@ -1,17 +1,33 @@
 #! /bin/bash
 # nix allow unfree
 NIXPKGS_ALLOW_UNFREE=1
-# check is git exist
-
-if [[ -x ~/.nix-profile/bin/git ]]; then
-  source "$HOME/.config/bash/git-completion.bash"
-fi
 
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
+
+# path first
+
+# add path
+export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
+
+# ruby
+# export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+# cargo
+# export PATH="$HOME/.cargo/bin:$PATH"
+
+# curl
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+
+# check is git exist
+
+if command -v git >/dev/null 2>&1; then
+  source "$HOME/.config/bash/git-completion.bash"
+fi
+
 # test if kubectl is installed
 if command -v kubectl >/dev/null 2>&1; then
-  echo "kubectl is installed"
   source <(kubectl completion bash)
 fi
 
@@ -20,27 +36,15 @@ if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate bash)"
 fi
 
-test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash" && source "${HOME}/.config/bash/.iterm2_shell_integration.bash" || tru
-
-# add path
-export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
-
-# ruby
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
-
-# cargo
 #
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# curl
-export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+if [[ "$TERM_PROGRAM" == "iTerm.app" ]] && test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash"; then
+  source "${HOME}/.config/bash/.iterm2_shell_integration.bash"
+fi
 
 # x11 forward
 export DISPLAY=:0
 
-export KUBECONFIG="/Users/green/secret/kubenetes/vultr.yaml"
+export KUBECONFIG="$HOME/secret/kubenetes/vultr.yaml"
 
 # alias
 

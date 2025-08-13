@@ -5,6 +5,7 @@
 !.gitignore
 !.prettierrc
 !.default-npm-packages
+!.default-gems
 !README.md
 !nix/
 !nix/**
