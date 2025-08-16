@@ -33,6 +33,7 @@ brew "ansible"
 brew "sshpass"
 brew "tree"
 brew "fd"
+brew "fluxcd/tap/flux"
 
 # ===== 应用程序 (cask) =====
 
