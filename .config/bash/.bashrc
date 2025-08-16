@@ -1,9 +1,10 @@
 #! /bin/bash
+# try to set XDG_CONFIG_HOME to ~/.config, if not exists
+if [ -z "$XDG_CONFIG_HOME" ]; then
+  export XDG_CONFIG_HOME="$HOME/.config"
+fi
 # nix allow unfree
 NIXPKGS_ALLOW_UNFREE=1
-
-source "$HOME/.config/bash/ssh-completion.bash"
-source "$HOME/.config/bash/make-completion.bash"
 
 # path first
 
@@ -20,8 +21,24 @@ export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
 # curl
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
-# check is git exist
+# check mise is exist
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate bash)"
+fi
 
+source "$HOME/.config/bash/ssh-completion.bash"
+source "$HOME/.config/bash/make-completion.bash"
+source "$HOME/.config/bash/mise-completion.bash"
+
+# add alias
+# 推荐：函数转发 + 绑定补全
+function mr() {
+  mise run "$@"
+}
+
+# 把 mr 的补全指向 mise 的补全函数（名字通常叫 _mise）
+# 注意：这行要在上面的 completion 加载之后
+complete -o default -o bashdefault -F _mise mr
 if command -v git >/dev/null 2>&1; then
   source "$HOME/.config/bash/git-completion.bash"
 fi
@@ -29,11 +46,6 @@ fi
 # test if kubectl is installed
 if command -v kubectl >/dev/null 2>&1; then
   source <(kubectl completion bash)
-fi
-
-# check mise is exist
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate bash)"
 fi
 
 #
@@ -44,7 +56,8 @@ fi
 # x11 forward
 export DISPLAY=:0
 
-export KUBECONFIG="$HOME/secret/kubenetes/vultr.yaml"
+# export KUBECONFIG="$HOME/secret/kubenetes/vultr.yaml"
+export KUBECONFIG="$HOME/secret/kubenetes/kubeconfig-owen.yaml"
 
 # for gpg tmux
 export GPG_TTY=$(tty)

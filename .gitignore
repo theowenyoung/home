@@ -6,6 +6,12 @@
 !.prettierrc
 !.default-npm-packages
 !.default-gems
+!ansible.cfg
+*.retry
+.config/deploy/ansible/roles/external
+!.gnupg
+.gnupg/**
+!.gnupg/gpg-agent.conf
 !README.md
 !nix/
 !nix/**
@@ -21,7 +27,6 @@
 !.zshrc
 !.librewolf
 !.librewolf/**
-
 # liberally include everything in our .config
 !.config
 !.config/**

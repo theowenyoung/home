@@ -30,6 +30,9 @@ brew "gnupg"
 brew "age"
 brew "nmap"
 brew "ansible"
+brew "sshpass"
+brew "tree"
+brew "fd"
 
 # ===== 应用程序 (cask) =====
 

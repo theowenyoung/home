@@ -485,6 +485,8 @@ ai config set OPENAI_KEY=<your token>
 
 ```
 
+## Ansible
+
 ## 如何卸载 nix （当升级的时候）
 
 1. 参考[这里](https://nix.dev/manual/nix/2.22/installation/uninstall)

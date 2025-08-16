@@ -7,6 +7,15 @@ serverip := $(IP)
 # Remote user
 ruser := $(or $(RUSER), root)
 
+
+.PHONY: setupansible
+setupansible:
+	ansible-galaxy install -r ./deploy/ansible/requirements.yml
+	ansible-galaxy collection install -r ./deploy/ansible/requirements.yml
+# 语法检查
+.PHONY: checkansible
+checkansible:
+	ansible-playbook playbooks/site.yml --syntax-check
 # IP=xxx make serverinstall
 .PHONY: installserver
 installserver:
@@ -16,11 +25,21 @@ endif
 	rsync -chazP deploy/ansible/init.sh $(ruser)@$(serverip):
 	ssh $(ruser)@$(serverip) './init.sh'
 
+
 .PHONY: initserver
 initserver:
-	ansible-playbook deploy/ansible/init/init.yaml -i deploy/ansible/init/inventory.ini --ask-pass
-	uc machine init deploy@deploy1
+	make setupansible
+	# ansible-playbook deploy/ansible/init/init.yaml -i deploy/ansible/init/inventory.ini --ask-pass
 
+.PHONY: bootstrapserver
+bootstrapserver:
+	make setupansible
+	ansible-playbook deploy/ansible/playbooks/bootstrap.yml -i deploy/ansible/inventory.ini --ask-pass -u root
+
+.PHONY: initserverwithoutpass
+initserverwithoutpass:
+	ansible-playbook deploy/ansible/init/init.yaml -i deploy/ansible/init/inventory.ini
+	uc machine init deploy@deploy1
 .PHONY: deployserver
 deployserver:
 	ansible-playbook deploy/ansible/playbook.yaml -i deploy/ansible/inventory.ini
