@@ -1,0 +1,11 @@
+collections:
+  - name: community.general
+    version: ">=11.0.0,<12.0.0"
+  - name: ansible.posix
+    version: ">=2.0.0,<3.0.0"
+  - name: devsec.hardening
+    version: ">=10.0.0,<11.0.0"
+
+roles:
+  - name: robertdebock.bootstrap
+    version: ">=7.0.0,<8.0.0"

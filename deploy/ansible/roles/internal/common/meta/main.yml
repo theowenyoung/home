@@ -1,0 +1,7 @@
+dependencies:
+  - role: robertdebock.bootstrap
+    tags: bootstrap
+
+collections:
+  - community.general
+  - ansible.posix
