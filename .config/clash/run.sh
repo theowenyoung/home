@@ -91,4 +91,4 @@ else
 	exit 1
 fi
 
-$HOME/.nix-profile/bin/clash-with-ui -f $HOME/.config/clash/config.yml -d $HOME/.config/clash
+/usr/local/bin/mihomo -f $HOME/.config/clash/config.yml -d $HOME/.config/clash

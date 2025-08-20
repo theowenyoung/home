@@ -7,6 +7,7 @@ tun:
 hosts:
   "*.test": 192.168.31.2
 
+external-ui: ui
 profile:
   # Store the `select` results in $HOME/.config/clash/.cache
   # set false If you don't want this behavior
