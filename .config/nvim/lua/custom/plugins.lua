@@ -7,19 +7,28 @@ local plugins = {
 
   {
     "neovim/nvim-lspconfig",
-    dependencies = {
-      -- format & linting
-      {
-        "jose-elias-alvarez/null-ls.nvim",
-        config = function()
-          require "custom.configs.null-ls"
-        end,
-      },
-    },
     config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end, -- Override to setup mason-lspconfig
+  },
+  {
+    "stevearc/conform.nvim",
+    event = { "BufWritePre" }, -- 在保存前加载，提高性能
+    cmd = { "ConformInfo" }, -- 添加命令支持
+    config = function()
+      require "custom.configs.conform"
+    end,
+  },
+  {
+    "Exafunction/windsurf.vim",
+    event = "BufEnter",
+    config = function()
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set("i", "<M-j>", function()
+        return vim.fn["codeium#Accept"]()
+      end, { expr = true, silent = true })
+    end,
   },
   {
     "APZelos/blamer.nvim",
@@ -46,28 +55,28 @@ local plugins = {
   },
 
   -- Install a plugin
-  {
-    "max397574/better-escape.nvim",
-    event = "InsertEnter",
-    config = function()
-      require("better_escape").setup()
-    end,
-  },
+  -- {
+  --   "max397574/better-escape.nvim",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("better_escape").setup()
+  --   end,
+  -- },
 
-  {
-    "github/copilot.vim",
-    lazy = false,
-    config = function()
-      -- copliot options
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-      -- vim.g.copilot_filetypes = {
-      --   yaml = true,
-      -- }
-
-      vim.api.nvim_set_keymap("i", "<A-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    end,
-  },
+  -- {
+  --   "github/copilot.vim",
+  --   lazy = false,
+  --   config = function()
+  --     -- copliot options
+  --     vim.g.copilot_no_tab_map = true
+  --     vim.g.copilot_assume_mapped = true
+  --     -- vim.g.copilot_filetypes = {
+  --     --   yaml = true,
+  --     -- }
+  --
+  --     vim.api.nvim_set_keymap("i", "<A-j>", 'copilot#Accept("<CR>")', { silent = true, expr = true })
+  --   end,
+  -- },
   {
     "alexghergh/nvim-tmux-navigation",
     lazy = false,

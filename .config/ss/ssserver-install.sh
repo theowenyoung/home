@@ -2,31 +2,52 @@
 
 set -e
 
+update_sysctl_conf() {
+	local config_file="/etc/sysctl.conf"
+	local configs=(
+		"net.core.default_qdisc=fq"
+		"net.ipv4.tcp_congestion_control=bbr"
+	)
+
+	for config in "${configs[@]}"; do
+		if ! grep -q "^$config" "$config_file"; then
+			echo "$config" >>"$config_file"
+		fi
+	done
+
+	sysctl -p
+	sysctl net.ipv4.tcp_available_congestion_control
+}
+update_sysctl_conf
+
 SS_PORT=36000
 # set method
 SS_METHOD="chacha20-ietf-poly1305"
-# SS_PASSWORD="$(openssl rand -base64 12)"
-SS_PASSWORD="Ss#12345678"
+
+# SS_PASSWORD="Ss#12345678"
+SS_PASSWORD=${P:="Ss123456"}
 
 # export env
 export SS_PASSWORD=$SS_PASSWORD
 
 # get public ip first
 PUBLIC_IP_V4=$(curl -s https://api.ipify.org)
-PUBLIC_IP="[$(curl -6 -s https://api64.ipify.org)]"
+# PUBLIC_IP="[$(curl -6 -s https://api64.ipify.org)]"
 # COUNTRY=$(curl -s "https://ipapi.co/$PUBLIC_IP/country_name")
 # replace space with -
 # COUNTRY=${COUNTRY// /-}
 
 THE_DATE=$(date "+%Y%m%d")
 # get ss uri
-SS_SERVER_URL="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC_IP:$SS_PORT#ss$THE_DATE"
+# SS_SERVER_URL="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC_IP:$SS_PORT#ss$THE_DATE"
 SS_SERVER_URL_V4="ss://$(printf "%s" "$SS_METHOD:$SS_PASSWORD" | base64)@$PUBLIC_IP_V4:$SS_PORT#ss$THE_DATE"
 
 sudo apt-get -y update
 sudo apt -y install qrencode
+sudo apt -y install xz-utils
 sudo apt -y install sudo
 sudo apt -y install sudo perl
+
 get_latest_release() {
 	api_url="https://api.github.com/repos/$1/releases/latest"
 	curl --silent "$api_url" | json_pp | grep '"tag_name" :' | sed -E 's/.*"v([^"]+)".*/\1/'
@@ -86,17 +107,19 @@ echo " "
 
 # output sh
 
-echo "$SS_SERVER_URL"
+# echo "$SS_SERVER_URL"
 
-qrencode -o - -t UTF8 "$SS_SERVER_URL"
+# qrencode -o - -t UTF8 "$SS_SERVER_URL"
 
 echo "$SS_SERVER_URL_V4"
+
+qrencode -o - -t UTF8 "$SS_SERVER_URL_V4"
 echo "!!! Please remember to open ports at console"
 
 # print one key command
 #
 
-printf "curl -sSL sslocal.owenyoung.com | bash -s -- %s && export http_proxy=http://127.0.0.1:8080 && export https_proxy=http://127.0.0.1:8080\n\n" "$SS_SERVER_URL"
+printf "curl -sSL sslocal.owenyoung.com | bash -s -- %s && export http_proxy=http://127.0.0.1:8080 && export https_proxy=http://127.0.0.1:8080\n\n" "$SS_SERVER_URL_V4"
 
 # url encode ss url
 
@@ -111,6 +134,6 @@ urlencode() {
 	done
 }
 
-encoded_ss_url=$(urlencode "$SS_SERVER_URL")
+encoded_ss_url=$(urlencode "$SS_SERVER_URL_V4")
 
 printf "<https://sslocal.owenyoung.com?ss=%s>" "$encoded_ss_url"

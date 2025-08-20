@@ -8,6 +8,65 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
+		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>3D684B33-0345-42E5-90E0-B0865C18E9F3</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+				<key>modifiers</key>
+				<integer>1048576</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
+				<key>modifiers</key>
+				<integer>524288</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<array>
 			<dict>
@@ -25,7 +84,7 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>BF036634-2C70-4EB9-96D0-BA404E3B5A39</string>
+				<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -34,7 +93,7 @@
 				<false/>
 			</dict>
 		</array>
-		<key>787D7E0A-A358-4D87-B730-CB84D4925653</key>
+		<key>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
@@ -47,23 +106,11 @@
 				<false/>
 			</dict>
 		</array>
-		<key>AAA51207-26C9-41F4-89CB-0C0954772F29</key>
+		<key>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>21635651-08E7-47A4-9EE6-6E3FB8069FD3</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>sourceoutputuid</key>
-				<string>F7CD88F4-000C-4EF5-8ACA-AC4A5B5A3C25</string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
-				<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+				<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -72,31 +119,11 @@
 				<false/>
 			</dict>
 		</array>
-		<key>BF036634-2C70-4EB9-96D0-BA404E3B5A39</key>
+		<key>BE250A49-3CF5-4F3E-A212-5333D84166B1</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>C4B41742-B137-4767-91DB-55BC7B710472</string>
-				<key>modifiers</key>
-				<integer>1048576</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
-				<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
-				<string>AAA51207-26C9-41F4-89CB-0C0954772F29</string>
+				<string>CAF9BD18-AA88-4D39-AC66-916A9A319F10</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -105,11 +132,11 @@
 				<false/>
 			</dict>
 		</array>
-		<key>C4B41742-B137-4767-91DB-55BC7B710472</key>
+		<key>E4A98DC0-6A53-4FE3-B7C6-66E167930386</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>787D7E0A-A358-4D87-B730-CB84D4925653</string>
+				<string>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -132,123 +159,6 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>alignment</key>
-				<integer>0</integer>
-				<key>backgroundcolor</key>
-				<string></string>
-				<key>fadespeed</key>
-				<integer>0</integer>
-				<key>fillmode</key>
-				<integer>0</integer>
-				<key>font</key>
-				<string></string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>largetypetext</key>
-				<string>{query}</string>
-				<key>textcolor</key>
-				<string></string>
-				<key>wrapat</key>
-				<integer>50</integer>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.largetype</string>
-			<key>uid</key>
-			<string>C4B41742-B137-4767-91DB-55BC7B710472</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>787D7E0A-A358-4D87-B730-CB84D4925653</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<false/>
-				<key>queuedelaymode</key>
-				<integer>1</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string></string>
-				<key>script</key>
-				<string>#!/bin/bash
-
-SCRIPT_PATH="translate.mjs" # Change this to your script's path
-
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
-)
-
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH "$@"
-		exit
-	fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>翻译中...</string>
-				<key>type</key>
-				<integer>11</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>BF036634-2C70-4EB9-96D0-BA404E3B5A39</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>subtext</key>
 				<string>自动识别单词和句子</string>
 				<key>text</key>
@@ -264,21 +174,33 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>lastpathcomponent</key>
+				<key>behaviour</key>
+				<integer>2</integer>
+				<key>fontmode</key>
+				<integer>0</integer>
+				<key>fontsizing</key>
+				<integer>0</integer>
+				<key>footertext</key>
+				<string>translated</string>
+				<key>inputfile</key>
+				<string>translate_textview</string>
+				<key>inputtype</key>
+				<integer>1</integer>
+				<key>loadingtext</key>
+				<string></string>
+				<key>outputmode</key>
+				<integer>0</integer>
+				<key>scriptinput</key>
+				<integer>0</integer>
+				<key>spellchecking</key>
+				<integer>0</integer>
+				<key>stackview</key>
 				<false/>
-				<key>onlyshowifquerypopulated</key>
-				<true/>
-				<key>removeextension</key>
-				<false/>
-				<key>text</key>
-				<string>{query}</string>
-				<key>title</key>
-				<string>已复制到剪贴板</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.notification</string>
+			<string>alfred.workflow.userinterface.text</string>
 			<key>uid</key>
-			<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
+			<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -288,7 +210,7 @@ exit 1
 				<key>autopaste</key>
 				<false/>
 				<key>clipboardtext</key>
-				<string>{query}</string>
+				<string>{var:translation}</string>
 				<key>ignoredynamicplaceholders</key>
 				<false/>
 				<key>transient</key>
@@ -304,57 +226,23 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>browser</key>
-				<string></string>
-				<key>skipqueryencode</key>
+				<key>lastpathcomponent</key>
 				<false/>
-				<key>skipvarencode</key>
-				<false/>
-				<key>spaces</key>
-				<string></string>
-				<key>url</key>
-				<string>{var:url}</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.action.openurl</string>
-			<key>uid</key>
-			<string>21635651-08E7-47A4-9EE6-6E3FB8069FD3</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>text</key>
-				<string></string>
-				<key>usevoiceover</key>
+				<key>onlyshowifquerypopulated</key>
 				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{var:translation}</string>
+				<key>title</key>
+				<string>已复制到剪贴板</string>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.speak</string>
+			<string>alfred.workflow.output.notification</string>
 			<key>uid</key>
-			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+			<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</string>
-			<key>version</key>
-			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -430,53 +318,308 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>conditions</key>
-				<array>
-					<dict>
-						<key>inputstring</key>
-						<string>{var:type}</string>
-						<key>matchcasesensitive</key>
-						<false/>
-						<key>matchmode</key>
-						<integer>0</integer>
-						<key>matchstring</key>
-						<string>word</string>
-						<key>outputlabel</key>
-						<string>open</string>
-						<key>uid</key>
-						<string>F7CD88F4-000C-4EF5-8ACA-AC4A5B5A3C25</string>
-					</dict>
-				</array>
-				<key>elselabel</key>
-				<string>else</string>
-				<key>hideelse</key>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
 				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.utility.conditional</string>
+			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>AAA51207-26C9-41F4-89CB-0C0954772F29</string>
+			<string>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>text</key>
+				<string>{var:translation}</string>
+				<key>usevoiceover</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.speak</string>
+			<key>uid</key>
+			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
 			<key>version</key>
 			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>j</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>parsing...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="string2json.mjs" # Change this to your script's path
+
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+	"$HOME/.nix-profile/bin/node"
+	"/usr/local/bin/node"
+	"/usr/bin/node"
+	"/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+	if [ -f "$node" ]; then
+		"$node" $SCRIPT_PATH "$@"
+		exit
+	fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>string to json string</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{var:openai_translation}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{var:openai_translation}</string>
+				<key>title</key>
+				<string>已复制到剪贴板</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>CAF9BD18-AA88-4D39-AC66-916A9A319F10</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>s</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>parsing...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="json2string.mjs" # Change this to your script's path
+
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+	"$HOME/.nix-profile/bin/node"
+	"/usr/local/bin/node"
+	"/usr/bin/node"
+	"/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+	if [ -f "$node" ]; then
+		"$node" $SCRIPT_PATH "$@"
+		exit
+	fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>json string to string</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>19239983-96F5-4262-AC24-4372128E5DDC</string>
+			<key>version</key>
+			<integer>3</integer>
 		</dict>
 	</array>
 	<key>readme</key>
 	<string>Owen's tool for alfred</string>
 	<key>uidata</key>
 	<dict>
-		<key>21635651-08E7-47A4-9EE6-6E3FB8069FD3</key>
+		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
 		<dict>
 			<key>xpos</key>
-			<real>720</real>
+			<real>60</real>
 			<key>ypos</key>
-			<real>255</real>
+			<real>540</real>
+		</dict>
+		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
+		<dict>
+			<key>xpos</key>
+			<real>55</real>
+			<key>ypos</key>
+			<real>415</real>
+		</dict>
+		<key>3D684B33-0345-42E5-90E0-B0865C18E9F3</key>
+		<dict>
+			<key>xpos</key>
+			<real>285</real>
+			<key>ypos</key>
+			<real>55</real>
 		</dict>
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<dict>
 			<key>xpos</key>
-			<real>70</real>
+			<real>45</real>
 			<key>ypos</key>
-			<real>415</real>
+			<real>265</real>
 		</dict>
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<dict>
@@ -495,51 +638,58 @@ exit 1
 		<key>60559819-5D23-4156-8252-18CBAC9EDE17</key>
 		<dict>
 			<key>xpos</key>
-			<real>1005</real>
+			<real>940</real>
 			<key>ypos</key>
-			<real>90</real>
+			<real>140</real>
 		</dict>
-		<key>787D7E0A-A358-4D87-B730-CB84D4925653</key>
+		<key>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</key>
 		<dict>
 			<key>xpos</key>
-			<real>845</real>
+			<real>330</real>
 			<key>ypos</key>
-			<real>15</real>
+			<real>520</real>
 		</dict>
-		<key>AAA51207-26C9-41F4-89CB-0C0954772F29</key>
+		<key>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</key>
 		<dict>
 			<key>xpos</key>
-			<real>630</real>
+			<real>345</real>
 			<key>ypos</key>
-			<real>435</real>
+			<real>420</real>
 		</dict>
-		<key>BF036634-2C70-4EB9-96D0-BA404E3B5A39</key>
+		<key>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</key>
 		<dict>
 			<key>xpos</key>
-			<real>335</real>
+			<real>790</real>
 			<key>ypos</key>
-			<real>55</real>
+			<real>400</real>
 		</dict>
-		<key>C4B41742-B137-4767-91DB-55BC7B710472</key>
+		<key>BE250A49-3CF5-4F3E-A212-5333D84166B1</key>
 		<dict>
 			<key>xpos</key>
-			<real>670</real>
+			<real>575</real>
 			<key>ypos</key>
-			<real>15</real>
+			<real>460</real>
+		</dict>
+		<key>CAF9BD18-AA88-4D39-AC66-916A9A319F10</key>
+		<dict>
+			<key>xpos</key>
+			<real>945</real>
+			<key>ypos</key>
+			<real>530</real>
 		</dict>
 		<key>E4A98DC0-6A53-4FE3-B7C6-66E167930386</key>
 		<dict>
 			<key>xpos</key>
-			<real>855</real>
+			<real>590</real>
 			<key>ypos</key>
-			<real>350</real>
+			<real>300</real>
 		</dict>
 		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
 		<dict>
 			<key>xpos</key>
-			<real>420</real>
+			<real>200</real>
 			<key>ypos</key>
-			<real>355</real>
+			<real>290</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
@@ -564,6 +714,27 @@ exit 1
 			<string>textfield</string>
 			<key>variable</key>
 			<string>DEEPL_AUTH_KEY</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string></string>
+				<key>required</key>
+				<true/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>OPENAI_API_KEY</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>OPENAI_API_KEY</string>
 		</dict>
 	</array>
 	<key>version</key>

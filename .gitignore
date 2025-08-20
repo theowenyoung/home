@@ -4,6 +4,14 @@
 # except these
 !.gitignore
 !.prettierrc
+!.default-npm-packages
+!.default-gems
+!ansible.cfg
+*.retry
+.config/deploy/ansible/roles/external
+!.gnupg
+.gnupg/**
+!.gnupg/gpg-agent.conf
 !README.md
 !nix/
 !nix/**
@@ -19,7 +27,6 @@
 !.zshrc
 !.librewolf
 !.librewolf/**
-
 # liberally include everything in our .config
 !.config
 !.config/**
@@ -29,7 +36,10 @@
 !flake.nix
 !flake.lock
 .config/raycast
+.config/uv
+.config/bin/**
 .config/kraftkit/**
+.config/simple-update-notifier/**
 .config/clash/**
 .config/mihomo/**
 !.config/clash/config_template.yml
@@ -67,6 +77,7 @@
 .config/ssh/keys/*.pem
 .config/tmux/plugins
 .config/wslu
+bin/**
 
 # work things
 .config/sh/env.work

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SCRIPT_PATH="translate.mjs" # Change this to your script's path
+
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+  "$HOME/.nix-profile/bin/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1

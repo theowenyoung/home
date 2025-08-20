@@ -11,21 +11,28 @@
     deno-old.url = "github:NixOS/nixpkgs/351e470e61610ab5cc1625891d6b540ff638796f";
     deno-old.flake = false;
   };
-  outputs = { self, nixpkgs,devenv,disko,agenix}: {
+  outputs = { self, nixpkgs,devenv,disko,agenix,deno-old}: {
     # profile for my arm -darwin machine
     
     packages."aarch64-darwin".default = let
       system = "aarch64-darwin";
-      pkgs = (nixpkgs.legacyPackages.${system}.extend (final: prev: {
-        deno = (import deno-old { inherit system; }).deno;
-      }));
+      pkgs = import nixpkgs {
+        inherit system;
+        config = { allowUnfree = true; };
+        overlays = [
+          (final: prev: {
+            deno = (import deno-old { inherit system; }).deno;
+          })
+        ];
+      };
       customOverlays = import ./nix/overlays.nix;
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
         deno
-        bashInteractive
         cachix
+        ansible
+        # fastlane
         # direnv
         devenv.packages."${system}".default
         # nix-direnv
@@ -33,14 +40,21 @@
         fzf
         inetutils # telnet
         awscli2
+        sshpass
+        claude-code
+        mdbook
+        hurl
         stripe-cli
         jq
         miniserve # http serve
-        nodejs_20
+        nss
+        cargo
+        mkcert # ssl, localhost
+        nodejs
         # mongodb
         mongodb-ce
+        pnpm
         # (pkgs.callPackage ./nix/packages/nodejs/default.nix {})
-        nodePackages.pnpm
         nodePackages.nodemon
         # nodePackages.wrangler # broken https://github.com/NixOS/nixpkgs/issues/265653
         nodePackages.grunt-cli
@@ -56,7 +70,7 @@
         tmux
         neovim
         ripgrep
-        (nerdfonts.override { fonts = [ "FiraCode" ]; })
+        nerd-fonts.fira-code
         coreutils
         ruby
         # custom packages
@@ -102,7 +116,6 @@
     in pkgs.buildEnv {
       name = "global-env";
       paths = with pkgs; [
-        bashInteractive
         cachix
         direnv
         devenv.packages."${system}".default
@@ -130,9 +143,10 @@
         tmux
         neovim
         ripgrep
-        (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
         coreutils
-        ruby
+        nerd-fonts.fira-code
+        # ruby
+        # rubyPackages.rails
         # custom packages
         (pkgs.callPackage ./nix/packages/whistle/default.nix {})
         (pkgs.callPackage ./nix/packages/web-ext/default.nix {})
@@ -153,13 +167,12 @@
     in pkgs.buildEnv {
       name = "pure-env";
       paths = with pkgs; [
-      bashInteractive
       git
       tmux
       fzf
       neovim
       ripgrep
-      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
+      nerd-fonts.fira-code
       ];
     };
 
@@ -172,7 +185,6 @@
         git
         gnumake
         gcc
-        bashInteractive
         iptables
         tmux
         deno
@@ -213,7 +225,6 @@
         git
         gnumake
         gcc
-        bashInteractive
         iptables
         tmux
         deno
@@ -240,7 +251,6 @@
         caddy
         gcc
         adguardhome
-        bashInteractive
         iptables
         # infisical
         # sops

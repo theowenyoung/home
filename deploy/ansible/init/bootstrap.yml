@@ -1,0 +1,8 @@
+- name: bootstrap all hosts
+  hosts: all
+  gather_facts: no
+  vars:
+    ansible_user: root
+  roles:
+    - role: robertdebock.bootstrap
+devsec.hardening.os_hardening

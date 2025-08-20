@@ -53,6 +53,16 @@ M.general = {
     ["<Leader>c"] = { [["+c]], "change with cut" },
     ["<Leader>D"] = { [["+D]], "delete with cut" },
     ["<Leader>s"] = { ":%sno/", "substitute exactly" },
+    ["<leader>o"] = {
+      function()
+        local api = require("nvim-tree.api")
+        local node = api.tree.get_node_under_cursor()
+        if node then
+          vim.cmd("!open " .. node.absolute_path:match "(.*)/[^/]*$")
+        end
+      end,
+      desc = "Open in finder",
+    },
     ["x"] = { [["_x]], "delete not cut" },
     ["d"] = { [["_d]], "delete not cut" },
     ["c"] = { [["_c]], "change not cut" },
