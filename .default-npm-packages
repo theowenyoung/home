@@ -1,3 +1,4 @@
 @builder.io/ai-shell
 whistle
 @anthropic-ai/claude-code
+pnpm

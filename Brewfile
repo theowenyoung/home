@@ -34,6 +34,7 @@ brew "sshpass"
 brew "tree"
 brew "fd"
 brew "fluxcd/tap/flux"
+brew "mkcert"
 
 # ===== 应用程序 (cask) =====
 

@@ -1,6 +1,6 @@
 [tools]
 deno = "latest"
-node = "lts"
+node = "latest"
 python = "latest"
 ruby = "latest"
 bun = "latest"
