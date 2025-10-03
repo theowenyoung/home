@@ -48,3 +48,4 @@ fullscreen = true
 font-family = "FiraCode Nerd Font Mono"
 font-size = 12
 
+keybind = shift+enter=text:\x1b\r
