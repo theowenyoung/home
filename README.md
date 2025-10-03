@@ -466,10 +466,10 @@ nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 
 我使用 [mise](https://mise.jdx.dev/) 来管理依赖动态语言的全局脚本和项目级别的依赖。比如全局安装的 node_modules, python modules, ruby gems 等等，直接在 `.default-npm-packages` 指定即可。
 
-安装全局node:
+安装全局node(--force 触发重新安装所有的.default-npm-packages):
 
 ```
-mise u -g node@lts
+mise u -g node@lts --force
 ```
 
 ## ai-shell
