@@ -49,3 +49,71 @@ font-family = "FiraCode Nerd Font Mono"
 font-size = 12
 
 keybind = shift+enter=text:\x1b\r
+
+
+
+
+
+# ====================
+# Leader Key: Alt+F (对应 tmux 的 M-f)
+# ====================
+
+# ====================
+# 窗口和标签管理
+# ====================
+
+# 新建标签（对应 tmux: bind-key c new-window）
+keybind = alt+f>c=new_tab
+
+# ====================
+# Split 窗格创建
+# ====================
+
+# Alt+F s: 水平分割（创建上下两个窗格）
+# 对应 tmux: bind-key s split-window -v -c '#{pane_current_path}' -l 20
+keybind = alt+f>s=new_split:down
+
+# Alt+F v: 垂直分割（创建左右两个窗格）
+# 对应 tmux: bind-key v split-window -h -c '#{pane_current_path}' -p 80
+keybind = alt+f>v=new_split:right
+
+# ====================
+# Split 窗格导航（vim 风格）
+# ====================
+
+# 对应 tmux: bind-key h select-pane -L
+keybind = alt+f>h=goto_split:left
+
+# 对应 tmux: bind-key j select-pane -D
+keybind = alt+f>j=goto_split:bottom
+
+# 对应 tmux: bind-key k select-pane -U
+keybind = alt+f>k=goto_split:top
+
+# 对应 tmux: bind-key l select-pane -R
+keybind = alt+f>l=goto_split:right
+
+# ====================
+# 窗格和标签关闭
+# ====================
+
+# 关闭当前 split（对应 tmux: bind-key w kill-pane）
+keybind = alt+f>w=close_surface
+
+# 关闭当前标签（对应 tmux: bind-key D kill-window）
+keybind = alt+f>shift+d=close_tab
+
+# 关闭会话（对应 tmux: bind-key X kill-session）
+keybind = alt+f>shift+x=close_all_windows
+
+# 进入 copy 模式（对应 tmux: bind Space copy-mode）
+keybind = alt+f>space=toggle_split_zoom
+
+# Vim 风格导航 (全局，直接覆盖)
+keybind = cmd+h=goto_split:left
+keybind = cmd+j=goto_split:bottom
+keybind = cmd+k=goto_split:top
+keybind = cmd+l=goto_split:right
+
+
+
