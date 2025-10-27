@@ -2,70 +2,10 @@
 
 我用这个 Repo 来存放我所有的电脑环境和配置文件，这样我可以在任何一台电脑上快速地初始化我的环境，而不用担心配置文件的丢失或遗忘。
 
-理论上我可以只用 Brew 或者只用 nix 来管理所有的软件和配置，但是两者都有各自的问题：
-
-- 只使用 Brew 的问题：Brew 的命令行工具依赖管理很混乱，每次更新软件时总会出现未知的问题，它的依赖管理并不是可重现的。
-- 只使用 Nix 的问题：我的主力电脑是 macOS，很多 GUI 的软件 Nix 上并没有。而且我发现在 macOS 上搭建那样一套纯 Nix 的环境，实际上是一件非常耗费心智的事，我更愿意让 Nix 保持轻量化，只用它来管理命令行工具，只把它作为一个mac上的可重现的命令行包管理工具，这样我的心智负担就最小化了。
-
-下面的步骤是写给我自己看的，所以有一些地方可能不太详细并且混乱，仅供参考。
-
-我的原则是：
-
-GUI 应用只使用 Homebrew 安装，用单文件 `~/Brewfile` 管理即可，比如：
-
-```
-cask "firefox-developer-edition"
-cask "google-chrome"
-cask "iterm2"
-cask "telegram"
-cask "visual-studio-code"
-mas "CoffeeTea - Prevent Sleep", id: 6443935401
-mas "Immersive Translate", id: 6447957425
-mas "iPic", id: 1101244278
-mas "Microsoft Word", id: 462054704
-mas "S3", id: 6447647340
-mas "WeChat", id: 836500024
-mas "Xcode", id: 497799835
-```
-
-所有的命令行应用，只使用 Nix 安装，也是只用一个文件 `~/flake.nix` 管理就行了，比如：
-
-```nix
-{
-  description = "my global env";
-  inputs = {
-	nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    devenv.url = "github:cachix/devenv/latest";
-    disko.url = "github:nix-community/disko";
-    disko.inputs.nixpkgs.follows = "nixpkgs";
-
-  };
-  outputs = { self, nixpkgs,devenv,disko }: {
-    # profile for my arm -darwin machine
-    packages."aarch64-darwin".default = let
-      system = "aarch64-darwin";
-      pkgs = (nixpkgs.legacyPackages.${system}.extend (import ./overlays.nix));
-    in pkgs.buildEnv {
-      name = "global-env";
-      paths = with pkgs; [
-        nixVersions.nix_2_21
-        bashInteractive
-        cachix
-        devenv.packages."${system}".default
-        git
-        fzf
-        inetutils # telnet
-        awscli2
-        stripe-cli
-        jq
-        # custom packages
-        (pkgs.callPackage ./packages/whistle/default.nix {})
-        (pkgs.callPackage ./packages/web-ext/default.nix {})
-      ];
-    };
-  };
-}
-```
+- 所有应用都应该使用 `~/Brewfile` 来安装，比如：
+- 所有开发环境相关的软件，都使用 [mise](https://mise.jdx.dev/), 来管理，也就是 `~/.config/mise/config.toml`
+  - 所有 npm 的全局软件包，使用 `~/.default-npm-packages`来管理，这个会由 mise 来安装
+  - 所有 gems 的全局软件包，使用 `~/.default-gem-packages`来管理，这个会由 mise 来安装
 
 ## Macos Setup
 
@@ -95,19 +35,7 @@ sudo xcodebuild -license
 
 ```
 
-2. 安装 [nix](https://nixos.org/download.html#nix-install-macos)
-
-```
-
-sh <(curl -L https://nixos.org/nix/install)
-
-```
-
-一路确认就ok，nix 很详细的描述了它具体都做了啥，可以观察学习一下。 我更推荐使用官方的安装脚本，很多人喜欢用第三方的，他们觉得更干净，默认的配置更友好，但是我觉得好像也没差多少，用原生的，可以顺便学习一下。另外就是我昨天测试的时候，发现第三方安装的nix版本不是最新的，并且在我的osx 14 电脑上有权限错误，但是nix官方的脚本是正常的。
-
-运行完成后重启 terminal 客户端
-
-3. 安装 homebrew
+2. 安装 homebrew
 
 (用于安装 casks)
 
@@ -117,7 +45,7 @@ sh <(curl -L https://nixos.org/nix/install)
 
 ```
 
-3.1 用 brew 安装最新版的 bash （这是使用 brew 安装命令行的一个例外，因为 bash 太低层了，如果都用 nix 来管理的话，可能在重装的时候会出现一些边缘问题)
+3.1 用 brew 安装最新版的 bash
 
 ```
 brew install bash
@@ -131,7 +59,7 @@ mkdir -p ~/inbox
 git clone http://github.com/theowenyoung/home ~/inbox/home
 ```
 
-5. 安装gui软件
+5. 安装所有软件
 
 ```
 cd ~/inbox/home && brew bundle
@@ -216,25 +144,14 @@ source it
 . ~/.bash_profile
 ```
 
-10. 安装字体
-
-nix 安装的字体不会自动被安装到系统，需要手动打开 `font book`, 选择 `file` `add fonts to current user`, 选择 `~/.nix-profile/share/fonts/truetype/nerdfonts`
-
-11. 打开 iterm2:
-
-    1. Profile -> Window -> Style[Full Screen]
-    1. Profile -> Keys -> Left Option Key -> Esc+
-    1. Profile -> Keys -> Right Option Key -> Esc+
-    1. Profile -> Text -> Font -> FiraCode Nerd Font
-    1. General -> Selections -> Applications in terminal may access clipboard.
-    1. General -> Selections -> double click performs smart selections
-
 12. alfred 工作流配置, 参考[这里](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
-13. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
-14. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
+    1. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
+    2. 修改剪贴板管理的快捷键为 `cmd+cmd`, 两次cmd
+    3. 修改 text action 的快捷键为 `option+cmd`
+    4. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
 
-15. vimium 浏览器插件配置
+13. vimium 浏览器插件配置
 
 ```bash
 unmapAll
@@ -460,7 +377,9 @@ nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
 
 ## 如何升级现有的软件？
 
-删除 flake.lock 文件, 然后 make update, 然后 make install
+```
+brew upgrade
+```
 
 ## mise
 

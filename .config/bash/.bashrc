@@ -10,6 +10,8 @@ NIXPKGS_ALLOW_UNFREE=1
 
 # add path
 export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
+# mise experimental
+export MISE_EXPERIMENTAL=1
 
 # ruby
 # export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
