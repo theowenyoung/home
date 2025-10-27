@@ -9,5 +9,5 @@ pnpm completion bash > ~/config/bash/pnpm-completion.bash
 Then,
 
 ```
-source "$HOME/pnpm-completion.bash"
+source "$HOME/.config/bash/pnpm-completion.bash"
 ```

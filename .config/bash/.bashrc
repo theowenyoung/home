@@ -29,7 +29,7 @@ fi
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 source "$HOME/.config/bash/mise-completion.bash"
-source "$HOME/pnpm-completion.bash"
+source "$HOME/.config/bash/pnpm-completion.bash"
 
 # add alias
 # 推荐：函数转发 + 绑定补全
