@@ -47,8 +47,18 @@ M.mason = {
 
 -- git support in nvimtree
 M.nvimtree = {
+  filters = {
+    dotfiles = false, -- 显示隐藏文件（如 .env, .gitignore）
+    git_ignored = false,
+    custom = {
+      "^.git$", -- 隐藏 .git 目录
+      "^node_modules$", -- 隐藏 node_modules
+      "^.DS_Store$", -- 隐藏 macOS 系统文件
+    },
+  },
   git = {
     enable = true,
+    ignore = false,
   },
 
   renderer = {

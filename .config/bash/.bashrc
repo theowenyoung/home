@@ -257,3 +257,5 @@ alias pp="pnpm"
 
 # Bash 需要用 complete 命令
 complete -F _pnpm_completion pp
+
+alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
