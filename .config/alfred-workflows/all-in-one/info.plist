@@ -21,6 +21,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>1EA22923-62BF-4342-81A0-F0681DD050F2</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
 		<array>
 			<dict>
@@ -260,7 +273,7 @@
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>t</string>
+				<string>tt</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -384,7 +397,7 @@ exit 1
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>j</string>
+				<string>jj</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -533,7 +546,7 @@ exit 1
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>s</string>
+				<string>ss</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
 				<key>queuedelayimmediatelyinitially</key>
@@ -588,6 +601,96 @@ exit 1
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>ll</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>parsing...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="length.mjs" # Change this to your script's path
+
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+	"$HOME/.nix-profile/bin/node"
+	"/usr/local/bin/node"
+	"/usr/bin/node"
+	"/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+	if [ -f "$node" ]; then
+		"$node" $SCRIPT_PATH "$@"
+		exit
+	fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>length</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>1EA22923-62BF-4342-81A0-F0681DD050F2</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Owen's tool for alfred</string>
@@ -599,6 +702,13 @@ exit 1
 			<real>60</real>
 			<key>ypos</key>
 			<real>540</real>
+		</dict>
+		<key>1EA22923-62BF-4342-81A0-F0681DD050F2</key>
+		<dict>
+			<key>xpos</key>
+			<real>70</real>
+			<key>ypos</key>
+			<real>700</real>
 		</dict>
 		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
 		<dict>
@@ -683,6 +793,13 @@ exit 1
 			<real>590</real>
 			<key>ypos</key>
 			<real>300</real>
+		</dict>
+		<key>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</key>
+		<dict>
+			<key>xpos</key>
+			<real>330</real>
+			<key>ypos</key>
+			<real>675</real>
 		</dict>
 		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
 		<dict>

@@ -29,6 +29,7 @@ fi
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 source "$HOME/.config/bash/mise-completion.bash"
+source "$HOME/pnpm-completion.bash"
 
 # add alias
 # 推荐：函数转发 + 绑定补全
@@ -38,6 +39,10 @@ function mr() {
 
 # 把 mr 的补全指向 mise 的补全函数（名字通常叫 _mise）
 # 注意：这行要在上面的 completion 加载之后
+
+function pp() {
+  pnpm "$@"
+}
 complete -o default -o bashdefault -F _mise mr
 if command -v git >/dev/null 2>&1; then
   source "$HOME/.config/bash/git-completion.bash"

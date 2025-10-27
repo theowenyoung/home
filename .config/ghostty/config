@@ -42,7 +42,7 @@
 # # Just for example:
 # resize-overlay-duration = 4s 200ms
 macos-option-as-alt = true
-keybind = global:alt+space=toggle_quick_terminal
+#keybind = global:alt+space=toggle_quick_terminal
 quick-terminal-animation-duration = 0.1
 fullscreen = true
 font-family = "FiraCode Nerd Font Mono"
@@ -114,6 +114,12 @@ keybind = cmd+h=goto_split:left
 keybind = cmd+j=goto_split:bottom
 keybind = cmd+k=goto_split:top
 keybind = cmd+l=goto_split:right
+
+# 方向切换（仅当该方向确有终端分屏时才生效；否则“像没绑定一样”把按键交给程序）
+keybind = performable:ctrl+h=goto_split:left
+keybind = performable:ctrl+j=goto_split:down
+keybind = performable:ctrl+k=goto_split:up
+keybind = performable:ctrl+l=goto_split:right
 
 
 

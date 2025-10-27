@@ -1,5 +1,9 @@
 # Alfred 自定义工作流
 
+## 其他人的workflow:
+
+1. Better Dictionsary: <https://github.com/mr-pennyworth/alfred-better-dictionaries>
+
 ## 如何安装 all-in-one 工作流
 
 ```bash
@@ -8,7 +12,6 @@ cd ~/.config/alfred-workflows/all-in-one
 ```
 
 安装之后，需要在 workflow 中配置 deepl key
-
 
 然后设置一些动作显示在 Fallback 结果中：
 

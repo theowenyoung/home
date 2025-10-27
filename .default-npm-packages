@@ -1,5 +1,7 @@
 @builder.io/ai-shell
 whistle
 @anthropic-ai/claude-code
+@openai/codex
 pnpm
 turbo
+serve
