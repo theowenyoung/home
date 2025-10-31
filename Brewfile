@@ -9,6 +9,7 @@ tap "homebrew/services"            # 系统服务管理
 tap "melonamin/formulae"           # 第三方软件源
 tap "psviderski/tap"               # 第三方软件源
 tap "telepresenceio/telepresence"  # Kubernetes 开发工具源
+tap "shakacode/brew"
 
 # ===== 命令行工具 (brew) =====
 brew "autoconf"                    # 自动配置工具
@@ -19,7 +20,6 @@ brew "mas"                         # Mac App Store 命令行工具
 brew "mise"                        # 运行时版本管理器
 brew "git"
 brew "fzf"
-brew "awscli"
 brew "jq"
 brew "wget"
 brew "tmux"

@@ -4,14 +4,14 @@ if [ -z "$XDG_CONFIG_HOME" ]; then
   export XDG_CONFIG_HOME="$HOME/.config"
 fi
 # nix allow unfree
-NIXPKGS_ALLOW_UNFREE=1
+export NIXPKGS_ALLOW_UNFREE=1
 
 # path first
 
 # add path
 export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
 # mise experimental
-export MISE_EXPERIMENTAL=1
+export MISE_EXPERIMENTAL="1"
 
 # ruby
 # export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
@@ -261,3 +261,7 @@ alias pp="pnpm"
 complete -F _pnpm_completion pp
 
 alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
+
+alias c="claude --dangerously-skip-permissions"
+alias cc="ccc"
+alias mm="mise u -g node@lts --force"

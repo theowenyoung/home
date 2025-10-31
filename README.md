@@ -391,6 +391,12 @@ brew upgrade
 mise u -g node@lts --force
 ```
 
+安装mise全局的软件:
+
+```
+mise install
+```
+
 ## ai-shell
 
 <https://github.com/BuilderIO/ai-shell>
