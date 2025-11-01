@@ -47,6 +47,7 @@ quick-terminal-animation-duration = 0.1
 fullscreen = true
 font-family = "FiraCode Nerd Font Mono"
 font-size = 12
+clipboard-paste-protection = false
 
 keybind = shift+enter=text:\x1b\r
 
@@ -109,11 +110,6 @@ keybind = alt+f>shift+x=close_all_windows
 # 进入 copy 模式（对应 tmux: bind Space copy-mode）
 keybind = alt+f>space=toggle_split_zoom
 
-# Vim 风格导航 (全局，直接覆盖)
-keybind = cmd+h=goto_split:left
-keybind = cmd+j=goto_split:bottom
-keybind = cmd+k=goto_split:top
-keybind = cmd+l=goto_split:right
 
 # 方向切换（仅当该方向确有终端分屏时才生效；否则“像没绑定一样”把按键交给程序）
 keybind = performable:ctrl+h=goto_split:left
