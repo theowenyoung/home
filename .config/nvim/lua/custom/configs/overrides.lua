@@ -52,7 +52,6 @@ M.nvimtree = {
     git_ignored = false,
     custom = {
       "^.git$", -- 隐藏 .git 目录
-      "^node_modules$", -- 隐藏 node_modules
       "^.DS_Store$", -- 隐藏 macOS 系统文件
     },
   },

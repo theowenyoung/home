@@ -52,9 +52,6 @@ clipboard-paste-protection = false
 keybind = shift+enter=text:\x1b\r
 
 
-
-
-
 # ====================
 # Leader Key: Alt+F (对应 tmux 的 M-f)
 # ====================

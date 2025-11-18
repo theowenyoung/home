@@ -1,6 +1,7 @@
 # ignore everything
 *
 
+node_modules
 # except these
 !.gitignore
 !.prettierrc

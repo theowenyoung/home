@@ -51,16 +51,6 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-			<dict>
-				<key>destinationuid</key>
 				<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
 				<key>modifiers</key>
 				<integer>1048576</integer>
@@ -73,7 +63,7 @@
 				<key>destinationuid</key>
 				<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
 				<key>modifiers</key>
-				<integer>524288</integer>
+				<integer>0</integer>
 				<key>modifiersubtext</key>
 				<string></string>
 				<key>vitoclose</key>
@@ -98,19 +88,6 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -216,25 +193,6 @@
 			<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
 			<key>version</key>
 			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{var:translation}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</string>
-			<key>version</key>
-			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -737,13 +695,6 @@ exit 1
 			<real>65</real>
 			<key>ypos</key>
 			<real>55</real>
-		</dict>
-		<key>5BBD32C1-B4EE-428A-8C1A-05A612FE18F7</key>
-		<dict>
-			<key>xpos</key>
-			<real>605</real>
-			<key>ypos</key>
-			<real>135</real>
 		</dict>
 		<key>60559819-5D23-4156-8252-18CBAC9EDE17</key>
 		<dict>

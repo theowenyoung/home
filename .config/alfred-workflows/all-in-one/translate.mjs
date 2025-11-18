@@ -86,29 +86,33 @@ async function main() {
   const stateFile = path.join(cacheDir, "translate_state.json");
 
   // 检查是否正在流式传输
-  const isStreaming = process.env.streaming_now === "1";
+  let isStreaming = process.env.streaming_now === "1";
+  // also, if streaming file is empty
+  console.error("isStreaming", isStreaming);
 
   if (isStreaming) {
     // 继续读取流式传输
     const result = await readOpenAIStream(streamFile, pidFile, stateFile);
+    console.error("stream result", result);
     return outputStreamingResult(result);
   }
 
   // 检查是否有遗留的流文件（窗口关闭后恢复）
   if (fs.existsSync(streamFile)) {
     const state = readState(stateFile);
+    console.error("state", state);
     if (state) {
       // 恢复流式传输状态
       console.log(
         JSON.stringify({
           rerun: 0.5,
           variables: { streaming_now: "1" },
-          response: formatResponse(
-            state.sourceText,
-            state.deeplResult,
-            { text: "⏳ 恢复连接中..." },
-            false,
-          ),
+          response: formatResponse({
+            sourceText: state.sourceText,
+            // deeplResult: state.deeplResult,
+            openaiResult: { text: "⏳ 响应中..." },
+            openaiFinished: false,
+          }),
           behaviour: { scroll: "end" },
         }),
       );
@@ -119,45 +123,40 @@ async function main() {
   // 新的翻译请求
   try {
     // 1. 立即开始 DeepL 翻译
-    const deeplResult = await translateWithDeepl({
-      from: "auto",
-      to: targetLanguage,
-      text: sourceText,
-    });
+    // const deeplResult = await translateWithDeepl({
+    //   from: "auto",
+    //   to: targetLanguage,
+    //   text: sourceText,
+    // });
 
-    // // 2. 同时启动 OpenAI 流式翻译
-    // await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
-    //
-    // // 3. 保存状态
-    // const state = {
-    //   sourceText,
-    //   targetLanguage,
-    //   deeplResult,
-    //   timestamp: Date.now(),
-    // };
-    // saveState(stateFile, state);
-    //
-    // 4. 输出初始结果并开始流式传输
-    const response = formatResponse(
+    console.error("startOpenAIStream");
+    // 2. 保存状态
+    const state = {
       sourceText,
-      deeplResult,
-      { text: "" },
-      false,
-    );
+      targetLanguage,
+      // deeplResult,
+      timestamp: Date.now(),
+    };
+    saveState(stateFile, state);
+
+    const response = formatResponse({
+      sourceText: sourceText,
+      // deeplResult,
+      openaiResult: { text: "" },
+      openaiFinished: false,
+    });
 
     console.log(
       JSON.stringify({
-        // rerun: 0.5,
-        // variables: { streaming_now: "1" },
-        variables: {
-          type: "sentence",
-          translation: deeplResult.text,
-        },
+        rerun: 0.5,
+        variables: { streaming_now: "1" },
         response: response,
-        // footer: "DeepL 翻译完成，OpenAI 翻译生成中...",
         behaviour: { scroll: "end" },
       }),
     );
+
+    // 2. 同时启动 OpenAI 流式翻译
+    await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
   } catch (error) {
     console.log(
       JSON.stringify({
@@ -248,13 +247,14 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
         cleanup(streamFile, pidFile);
         return {
           sourceText: state.sourceText,
-          deeplResult: state.deeplResult,
+          // deeplResult: state.deeplResult,
           openaiResult: { error: `OpenAI 错误: ${errorObj.error.message}` },
           finished: true,
         };
       }
     } catch (e) {
       // 不是错误 JSON，继续处理
+      console.error("not json", e);
     }
   }
 
@@ -289,7 +289,7 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
       cleanup(streamFile, pidFile);
       return {
         sourceText: state.sourceText,
-        deeplResult: state.deeplResult,
+        // deeplResult: state.deeplResult,
         openaiResult: { error: "OpenAI 连接超时" },
         finished: true,
       };
@@ -298,11 +298,12 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
 
   if (finished) {
     cleanup(streamFile, pidFile);
+    console.error("cleanup streamfile");
   }
 
   return {
     sourceText: state.sourceText,
-    deeplResult: state.deeplResult,
+    // deeplResult: state.deeplResult,
     openaiResult: { text: responseText },
     finished,
   };
@@ -310,12 +311,12 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
 
 // 输出流式结果
 function outputStreamingResult(result) {
-  const response = formatResponse(
-    result.sourceText,
-    result.deeplResult,
-    result.openaiResult,
-    result.finished,
-  );
+  const response = formatResponse({
+    sourceText: result.sourceText,
+    // deeplResult: result.deeplResult,
+    openaiResult: result.openaiResult,
+    openaiFinished: result.finished,
+  });
 
   const output = {
     response: response,
@@ -324,11 +325,10 @@ function outputStreamingResult(result) {
 
   if (result.finished) {
     // 翻译完成
-    output.footer =
-      "翻译完成 - Enter 复制 DeepL 结果, option+Enter 复制 OpenAI 结果";
+    output.footer = "翻译完成 - Enter 复制 OpenAI 结果";
     output.variables = {
       type: "sentence",
-      translation: result.deeplResult.text,
+      // translation: result.deeplResult.text,
       openai_translation:
         result.openaiResult.text || result.openaiResult.error || "",
     };
@@ -343,19 +343,24 @@ function outputStreamingResult(result) {
 }
 
 // 格式化显示响应
-function formatResponse(sourceText, deeplResult, openaiResult, openaiFinished) {
-  const deeplSiteUrl = `https://www.deepl.com/translator#auto/${deeplResult.source || "auto"}/${encodeURIComponent(sourceText)}`;
+function formatResponse(options = {}) {
+  console.error("options", options);
+  const { sourceText, deeplResult, openaiResult, openaiFinished } = options;
 
   let response = `## 原文\n\n${sourceText}\n\n`;
-  response += `## DeepL 翻译\n\n${deeplResult.text}\n\n`;
-  // response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
 
-  if (openaiResult.error) {
+  if (deeplResult) {
+    const deeplSiteUrl = `https://www.deepl.com/translator#auto/${deeplResult.source || "auto"}/${encodeURIComponent(sourceText)}`;
+    response += `## DeepL 翻译\n\n${deeplResult.text}\n\n`;
+  }
+  response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
+
+  if (openaiResult && openaiResult.error) {
     response += `❌ ${openaiResult.error}\n\n`;
-  } else if (openaiResult.text) {
+  } else if (openaiResult && openaiResult.text) {
     response += `${openaiResult.text}${openaiFinished ? "" : "▊"}\n\n`;
   } else {
-    // response += `⏳ 正在生成...\n\n`;
+    response += `⏳ 正在生成...\n\n`;
   }
 
   return response;

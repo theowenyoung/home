@@ -2,6 +2,8 @@
 
 SCRIPT_PATH="translate.mjs" # Change this to your script's path
 
+export NODE_NO_WARNINGS=1
+
 # List of common locations where Node.js might be installed
 NODE_PATHS=(
   "$HOME/.nix-profile/bin/node"

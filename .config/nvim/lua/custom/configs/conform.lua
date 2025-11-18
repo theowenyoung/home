@@ -25,36 +25,69 @@ conform.setup {
   },
 
   formatters = {
-    -- 1. 项目特定的prettier（最高优先级）
     prettier_from_project = {
-      -- 复制prettier的所有配置
       command = "prettier",
-      -- 仅在项目根目录有.prettierrc文件时激活
+      args = { "--stdin-filepath", "$FILENAME" },
+      range_args = function(self, ctx)
+        return { "--stdin-filepath", "$FILENAME", "--range-start", "$RANGE_START", "--range-end", "$RANGE_END" }
+      end,
+      stdin = true,
+      cwd = require("conform.util").root_file {
+        ".prettierrc",
+        ".prettierrc.json",
+        ".prettierrc.yml",
+        ".prettierrc.yaml",
+        ".prettierrc.js",
+        "prettier.config.js",
+        "package.json",
+      },
+      -- 仅在项目根目录有prettier配置文件时激活
       condition = function(self, ctx)
-        -- 查找项目根目录（有.git或package.json的目录）
         local root_markers = { ".git", "package.json", "deno.json" }
         local root_dir = vim.fs.dirname(vim.fs.find(root_markers, {
           upward = true,
           path = ctx.filename,
           type = "file",
-        })[1] or ".")
+        })[1])
 
-        -- 在项目根目录查找prettier配置文件
-        local prettier_configs = { ".prettierrc", ".prettierrc.js", ".prettierrc.json" }
+        if not root_dir then
+          return false
+        end
+
+        local prettier_configs = {
+          ".prettierrc",
+          ".prettierrc.js",
+          ".prettierrc.json",
+          ".prettierrc.yml",
+          ".prettierrc.yaml",
+          "prettier.config.js",
+          "package.json", -- package.json 中也可能有 prettier 配置
+        }
+
         for _, config in ipairs(prettier_configs) do
-          if vim.fn.filereadable(root_dir .. "/" .. config) == 1 then
-            return true
+          local config_path = root_dir .. "/" .. config
+          if vim.fn.filereadable(config_path) == 1 then
+            -- 如果是 package.json,检查是否有 prettier 字段
+            if config == "package.json" then
+              local ok, package_json = pcall(vim.fn.readfile, config_path)
+              if ok then
+                local content = table.concat(package_json, "\n")
+                if content:match '"prettier"' then
+                  return true
+                end
+              end
+            else
+              return true
+            end
           end
         end
         return false
       end,
     },
 
-    -- 2. deno_fmt（次高优先级）
+    -- 2. deno_fmt(次高优先级)
     deno_fmt = {
-      -- 仅在项目中有deno.json时激活
       condition = function(self, ctx)
-        -- 查找包含deno.json的根目录
         local deno_files = vim.fs.find({ "deno.json", "deno.jsonc" }, {
           upward = true,
           path = ctx.filename,
