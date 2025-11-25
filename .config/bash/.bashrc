@@ -227,18 +227,9 @@ export HOMEBREW_NO_ANALYTICS=1
 # no analytics
 export FLOX_DISABLE_METRICS=true
 
-# add alias
-# 推荐：函数转发 + 绑定补全
-function mr() {
-  mise run "$@"
-}
-
-# 把 mr 的补全指向 mise 的补全函数（名字通常叫 _mise）
-# 注意：这行要在上面的 completion 加载之后
-
 source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
-source "$HOME/.config/bash/mise-completion.bash"
+
 source "$HOME/.config/bash/pnpm-completion.bash"
 complete -o default -o bashdefault -F _mise mr
 if command -v git >/dev/null 2>&1; then
@@ -250,6 +241,16 @@ if command -v kubectl >/dev/null 2>&1; then
   source <(kubectl completion bash)
 fi
 
+# 改成类似 kubectl的,mise completion bash
+source <(mise completion bash --include-bash-completion-lib)
+
+# 把 mr 的补全指向 mise 的补全函数（名字通常叫 _mise）
+# 注意：这行要在上面的 completion 加载之后
+# add alias
+# 推荐：函数转发 + 绑定补全
+function mr() {
+  mise run "$@"
+}
 #
 if [[ "$TERM_PROGRAM" == "iTerm.app" ]] && test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash"; then
   source "${HOME}/.config/bash/.iterm2_shell_integration.bash"
@@ -263,5 +264,6 @@ complete -F _pnpm_completion pp
 alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
 
 alias c="claude --dangerously-skip-permissions"
+alias cccc="claude --dangerously-skip-permissions --continue"
 alias cc="ccc"
 alias mm="mise u -g node@lts --force"
