@@ -35,6 +35,7 @@ brew "tree"
 brew "fd"
 brew "fluxcd/tap/flux"
 brew "mkcert"
+brew "telnet"
 
 # ===== 应用程序 (cask) =====
 

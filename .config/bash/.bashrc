@@ -175,6 +175,7 @@ proxy() {
   export socks_proxy="$SOCKS_PROXY"
   export all_proxy="$ALL_PROXY"
 }
+#proxy
 
 noproxy() {
   unset HTTP_PROXY

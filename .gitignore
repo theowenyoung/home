@@ -37,6 +37,7 @@ node_modules
 !flake.nix
 !flake.lock
 .config/raycast
+.config/swiftpm
 .config/uv
 .config/bin/**
 .config/kraftkit/**
