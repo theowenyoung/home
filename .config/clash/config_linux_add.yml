@@ -35,6 +35,8 @@ dns:
     - "*.lan"
     - "*.local"
     - "*.test"
+    - "*.local.owenyoung.com"
+    - "*.local.tonormal.com"
 
   # Supports UDP, TCP, DoT, DoH. You can specify the port to connect to.
   # All DNS questions are sent directly to the nameserver, without proxies

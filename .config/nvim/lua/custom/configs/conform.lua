@@ -41,19 +41,21 @@ conform.setup {
         "prettier.config.js",
         "package.json",
       },
-      -- 仅在项目根目录有prettier配置文件时激活
       condition = function(self, ctx)
+        -- 排除 .min.js 文件
+        if ctx.filename:match "%.min%.js$" then
+          return false
+        end
+
         local root_markers = { ".git", "package.json", "deno.json" }
         local root_dir = vim.fs.dirname(vim.fs.find(root_markers, {
           upward = true,
           path = ctx.filename,
           type = "file",
         })[1])
-
         if not root_dir then
           return false
         end
-
         local prettier_configs = {
           ".prettierrc",
           ".prettierrc.js",
@@ -61,13 +63,11 @@ conform.setup {
           ".prettierrc.yml",
           ".prettierrc.yaml",
           "prettier.config.js",
-          "package.json", -- package.json 中也可能有 prettier 配置
+          "package.json",
         }
-
         for _, config in ipairs(prettier_configs) do
           local config_path = root_dir .. "/" .. config
           if vim.fn.filereadable(config_path) == 1 then
-            -- 如果是 package.json,检查是否有 prettier 字段
             if config == "package.json" then
               local ok, package_json = pcall(vim.fn.readfile, config_path)
               if ok then
@@ -84,10 +84,13 @@ conform.setup {
         return false
       end,
     },
-
-    -- 2. deno_fmt(次高优先级)
     deno_fmt = {
       condition = function(self, ctx)
+        -- 排除 .min.js 文件
+        if ctx.filename:match "%.min%.js$" then
+          return false
+        end
+
         local deno_files = vim.fs.find({ "deno.json", "deno.jsonc" }, {
           upward = true,
           path = ctx.filename,
@@ -96,17 +99,20 @@ conform.setup {
         return #deno_files > 0
       end,
     },
-
-    -- 3. 全局prettier（最低优先级）
-    prettier = {},
-
+    prettier = {
+      condition = function(self, ctx)
+        -- 排除 .min.js 文件
+        if ctx.filename:match "%.min%.js$" then
+          return false
+        end
+        return true
+      end,
+    },
     stylua = {},
-
     shfmt = {
       args = { "-i", "2", "-ci" },
     },
   },
-
   format_on_save = {
     timeout_ms = 500,
     lsp_fallback = true,
