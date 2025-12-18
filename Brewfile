@@ -43,6 +43,7 @@ cask "firefox"                     # Mozilla Firefox 浏览器
 cask "google-chrome"               # Google Chrome 浏览器
 cask "microsoft-edge"              # Microsoft Edge 浏览器
 cask "alex313031-thorium"          # Thorium 浏览器，最快的 Chromium 浏览器
+cask "hyperkey" # 修改 caps 键为 hyper key
 
 cask "font-fira-code-nerd-font"
 
