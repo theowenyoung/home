@@ -18,6 +18,8 @@
     3. 启用三指拖动 Settings -> (Accessibility) -> Enable (Use trackpad for dragging) -> (Dragging Style -> Three Finger Drag)
     4. 启用 tap to click: (Trackpad) -> Enable [Tap to click]
     5. 自动隐藏 dock 栏 Settings -> Dock -> Automatically hide and show the Dock
+    6. 输入法里面把 caps 切换中英输入法打开.
+    7. hyperkey.app 设置 right cmd 为 hyper 键
 
 1.  install xcode tools
 
