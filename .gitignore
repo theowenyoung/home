@@ -2,6 +2,7 @@
 *
 
 node_modules
+.zshrc
 # except these
 !.gitignore
 !.prettierrc
@@ -25,7 +26,6 @@ node_modules
 !bin
 !bin/**
 !Brewfile
-!.zshrc
 !.librewolf
 !.librewolf/**
 # liberally include everything in our .config
@@ -87,3 +87,6 @@ bin/**
 .config/ssh/config.d/work
 .config/git/work
 bin/work/**
+
+!.config/fish
+.config/fish/**

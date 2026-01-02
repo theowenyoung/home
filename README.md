@@ -423,3 +423,21 @@ coming soon.
 ## 参考
 
 - [andreykaipov home](https://github.com/andreykaipov/home)
+
+## Claude code mcp 设置
+
+`~/.claude.json`
+
+```
+  "mcpServers": {
+    "spec-workflow": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "@pimzino/spec-workflow-mcp@latest",
+        "."
+      ],
+      "env": {}
+    }
+  }
+```

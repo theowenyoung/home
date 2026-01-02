@@ -22,18 +22,7 @@
 			</dict>
 		</array>
 		<key>1EA22923-62BF-4342-81A0-F0681DD050F2</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
+		<array/>
 		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
 		<array>
 			<dict>
@@ -96,6 +85,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>61B96450-5408-446B-9287-BFDB92C95983</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>EF0E855E-7590-462C-8E59-D338A02A74B7</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</key>
 		<array>
 			<dict>
@@ -127,6 +129,19 @@
 			<dict>
 				<key>destinationuid</key>
 				<string>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>EF0E855E-7590-462C-8E59-D338A02A74B7</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>4442918B-032B-46B5-8283-ECB05EDC7F30</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -197,6 +212,21 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>text</key>
+				<string>{var:translation}</string>
+				<key>usevoiceover</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.speak</string>
+			<key>uid</key>
+			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
 				<key>lastpathcomponent</key>
 				<false/>
 				<key>onlyshowifquerypopulated</key>
@@ -214,6 +244,25 @@
 			<string>60559819-5D23-4156-8252-18CBAC9EDE17</string>
 			<key>version</key>
 			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{var:openai_translation}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
+			<key>version</key>
+			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -249,18 +298,18 @@ SCRIPT_PATH="time.mjs" # Change this to your script's path
 
 # List of common locations where Node.js might be installed
 NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
+  "$HOME/.local/share/mise/shims/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
 )
 
 # Loop through the paths and use the first one that exists
 for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH "$@"
-		exit
-	fi
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
 done
 
 echo "Node.js not found. Please install it or check your paths."
@@ -308,21 +357,6 @@ exit 1
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>text</key>
-				<string>{var:translation}</string>
-				<key>usevoiceover</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.speak</string>
-			<key>uid</key>
-			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
-			<key>version</key>
-			<integer>1</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>autopaste</key>
 				<false/>
 				<key>clipboardtext</key>
@@ -335,7 +369,7 @@ exit 1
 			<key>type</key>
 			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</string>
+			<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -370,21 +404,20 @@ exit 1
 				<string>#!/bin/bash
 
 SCRIPT_PATH="string2json.mjs" # Change this to your script's path
-
 # List of common locations where Node.js might be installed
 NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
+  "$HOME/.local/share/mise/shims/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
 )
 
 # Loop through the paths and use the first one that exists
 for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH "$@"
-		exit
-	fi
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
 done
 
 echo "Node.js not found. Please install it or check your paths."
@@ -425,26 +458,77 @@ exit 1
 			<key>type</key>
 			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</string>
+			<string>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
+				<key>alfredfiltersresults</key>
 				<false/>
-				<key>clipboardtext</key>
-				<string>{var:openai_translation}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>ss</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>parsing...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="json2string.mjs" # Change this to your script's path
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+  "$HOME/.local/share/mise/shims/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>json string to string</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
+			<string>alfred.workflow.input.scriptfilter</string>
 			<key>uid</key>
-			<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
+			<string>19239983-96F5-4262-AC24-4372128E5DDC</string>
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
@@ -504,96 +588,6 @@ exit 1
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
-				<string>ss</string>
-				<key>queuedelaycustom</key>
-				<integer>3</integer>
-				<key>queuedelayimmediatelyinitially</key>
-				<true/>
-				<key>queuedelaymode</key>
-				<integer>0</integer>
-				<key>queuemode</key>
-				<integer>1</integer>
-				<key>runningsubtext</key>
-				<string>parsing...</string>
-				<key>script</key>
-				<string>#!/bin/bash
-
-SCRIPT_PATH="json2string.mjs" # Change this to your script's path
-
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
-)
-
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH "$@"
-		exit
-	fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
-</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>subtext</key>
-				<string></string>
-				<key>title</key>
-				<string>json string to string</string>
-				<key>type</key>
-				<integer>11</integer>
-				<key>withspace</key>
-				<true/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.input.scriptfilter</string>
-			<key>uid</key>
-			<string>19239983-96F5-4262-AC24-4372128E5DDC</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-				<key>ignoredynamicplaceholders</key>
-				<false/>
-				<key>transient</key>
-				<false/>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</string>
-			<key>version</key>
-			<integer>3</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
-				<key>alfredfiltersresults</key>
-				<false/>
-				<key>alfredfiltersresultsmatchmode</key>
-				<integer>0</integer>
-				<key>argumenttreatemptyqueryasnil</key>
-				<true/>
-				<key>argumenttrimmode</key>
-				<integer>0</integer>
-				<key>argumenttype</key>
-				<integer>0</integer>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>keyword</key>
 				<string>ll</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
@@ -609,21 +603,20 @@ exit 1
 				<string>#!/bin/bash
 
 SCRIPT_PATH="length.mjs" # Change this to your script's path
-
 # List of common locations where Node.js might be installed
 NODE_PATHS=(
-	"$HOME/.nix-profile/bin/node"
-	"/usr/local/bin/node"
-	"/usr/bin/node"
-	"/opt/local/bin/node"
+  "$HOME/.local/share/mise/shims/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
 )
 
 # Loop through the paths and use the first one that exists
 for node in "${NODE_PATHS[@]}"; do
-	if [ -f "$node" ]; then
-		"$node" $SCRIPT_PATH "$@"
-		exit
-	fi
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
 done
 
 echo "Node.js not found. Please install it or check your paths."
@@ -649,6 +642,89 @@ exit 1
 			<key>version</key>
 			<integer>3</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<true/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>4442918B-032B-46B5-8283-ECB05EDC7F30</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>columncount</key>
+				<integer>6</integer>
+				<key>filterable</key>
+				<true/>
+				<key>fixedorder</key>
+				<true/>
+				<key>imageaspect</key>
+				<integer>0</integer>
+				<key>inputfile</key>
+				<string>show-tags</string>
+				<key>inputtype</key>
+				<integer>1</integer>
+				<key>loadingtext</key>
+				<string></string>
+				<key>showsubtitles</key>
+				<true/>
+				<key>showtitles</key>
+				<true/>
+				<key>subtitlesinfooter</key>
+				<false/>
+				<key>titlesinfooter</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.userinterface.grid</string>
+			<key>uid</key>
+			<string>EF0E855E-7590-462C-8E59-D338A02A74B7</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>action</key>
+				<integer>0</integer>
+				<key>argument</key>
+				<integer>0</integer>
+				<key>focusedappvariable</key>
+				<false/>
+				<key>focusedappvariablename</key>
+				<string></string>
+				<key>hotkey</key>
+				<integer>39</integer>
+				<key>hotmod</key>
+				<integer>1048576</integer>
+				<key>hotstring</key>
+				<string>'</string>
+				<key>leftcursor</key>
+				<false/>
+				<key>modsmode</key>
+				<integer>0</integer>
+				<key>relatedAppsMode</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.hotkey</string>
+			<key>uid</key>
+			<string>61B96450-5408-446B-9287-BFDB92C95983</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Owen's tool for alfred</string>
@@ -657,23 +733,23 @@ exit 1
 		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
 		<dict>
 			<key>xpos</key>
-			<real>60</real>
+			<real>75</real>
 			<key>ypos</key>
-			<real>540</real>
+			<real>460</real>
 		</dict>
 		<key>1EA22923-62BF-4342-81A0-F0681DD050F2</key>
 		<dict>
 			<key>xpos</key>
-			<real>70</real>
+			<real>85</real>
 			<key>ypos</key>
-			<real>700</real>
+			<real>620</real>
 		</dict>
 		<key>3AFE07D7-01EE-40BE-A825-9C9DF52C3F2A</key>
 		<dict>
 			<key>xpos</key>
-			<real>55</real>
+			<real>70</real>
 			<key>ypos</key>
-			<real>415</real>
+			<real>335</real>
 		</dict>
 		<key>3D684B33-0345-42E5-90E0-B0865C18E9F3</key>
 		<dict>
@@ -685,9 +761,16 @@ exit 1
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<dict>
 			<key>xpos</key>
-			<real>45</real>
+			<real>60</real>
 			<key>ypos</key>
-			<real>265</real>
+			<real>185</real>
+		</dict>
+		<key>4442918B-032B-46B5-8283-ECB05EDC7F30</key>
+		<dict>
+			<key>xpos</key>
+			<real>535</real>
+			<key>ypos</key>
+			<real>660</real>
 		</dict>
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<dict>
@@ -703,19 +786,26 @@ exit 1
 			<key>ypos</key>
 			<real>140</real>
 		</dict>
+		<key>61B96450-5408-446B-9287-BFDB92C95983</key>
+		<dict>
+			<key>xpos</key>
+			<real>70</real>
+			<key>ypos</key>
+			<real>745</real>
+		</dict>
 		<key>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</key>
 		<dict>
 			<key>xpos</key>
-			<real>330</real>
+			<real>350</real>
 			<key>ypos</key>
-			<real>520</real>
+			<real>505</real>
 		</dict>
 		<key>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</key>
 		<dict>
 			<key>xpos</key>
-			<real>345</real>
+			<real>430</real>
 			<key>ypos</key>
-			<real>420</real>
+			<real>225</real>
 		</dict>
 		<key>B8D772A1-2E9B-4C89-A7D7-35BCD079CF23</key>
 		<dict>
@@ -727,9 +817,9 @@ exit 1
 		<key>BE250A49-3CF5-4F3E-A212-5333D84166B1</key>
 		<dict>
 			<key>xpos</key>
-			<real>575</real>
+			<real>650</real>
 			<key>ypos</key>
-			<real>460</real>
+			<real>160</real>
 		</dict>
 		<key>CAF9BD18-AA88-4D39-AC66-916A9A319F10</key>
 		<dict>
@@ -741,23 +831,23 @@ exit 1
 		<key>E4A98DC0-6A53-4FE3-B7C6-66E167930386</key>
 		<dict>
 			<key>xpos</key>
-			<real>590</real>
+			<real>630</real>
 			<key>ypos</key>
-			<real>300</real>
+			<real>60</real>
 		</dict>
-		<key>E4E6A95E-3DEF-45AD-8E82-3B5CF849E58B</key>
+		<key>EF0E855E-7590-462C-8E59-D338A02A74B7</key>
 		<dict>
 			<key>xpos</key>
-			<real>330</real>
+			<real>320</real>
 			<key>ypos</key>
-			<real>675</real>
+			<real>695</real>
 		</dict>
 		<key>F06E6F3F-E75F-4F49-822C-05A5F6B3ECA8</key>
 		<dict>
 			<key>xpos</key>
-			<real>200</real>
+			<real>215</real>
 			<key>ypos</key>
-			<real>290</real>
+			<real>210</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>

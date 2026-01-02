@@ -3,6 +3,9 @@
 if [ -z "$XDG_CONFIG_HOME" ]; then
   export XDG_CONFIG_HOME="$HOME/.config"
 fi
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+  source "$GHOSTTY_RESOURCES_DIR/shell-integration/bash/ghostty.bash"
+fi
 # nix allow unfree
 export NIXPKGS_ALLOW_UNFREE=1
 
@@ -266,5 +269,6 @@ alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
 
 alias c="claude --dangerously-skip-permissions"
 alias cccc="claude --dangerously-skip-permissions --continue"
+alias ccccc="claude --dangerously-skip-permissions --resume"
 alias cc="ccc"
 alias mm="mise u -g node@lts --force"
