@@ -1,14 +1,14 @@
 [core]
   editor = vi
-[gpg]
-	program = gpg
+; [gpg]
+; 	program = gpg
 
 [commit]
-	gpgsign = true
+	; gpgsign = true
 [user]
     name = Owen Young
     email = owen@owenyoung.com
-    signingkey = B12C44A2E9386B993A8FFC53F822CE4444B1D606
+    ; signingkey = B12C44A2E9386B993A8FFC53F822CE4444B1D606
 [push]
   autoSetupRemote = true
 

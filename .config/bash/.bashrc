@@ -47,6 +47,7 @@ export WHISTLE_PATH="$HOME/secret/.WhistleAppData"
 alias w2start="w2 start --socksPort 8889"
 alias di="dig @114.114.114.114"
 alias dd="devbox shell"
+alias vv="cd $HOME/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Vault"
 
 alias t='tmux attach || tmux new-session'
 
