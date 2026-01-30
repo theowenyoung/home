@@ -39,6 +39,7 @@ node_modules
 .config/raycast
 .config/swiftpm
 .config/uv
+.config/cagent
 .config/bin/**
 .config/kraftkit/**
 .config/simple-update-notifier/**
