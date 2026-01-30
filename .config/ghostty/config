@@ -6,7 +6,8 @@ fullscreen = true
 font-family = "FiraCode Nerd Font Mono"
 font-size = 12
 clipboard-paste-protection = false
-auto-update-channel = tip
+# auto-update-channel = tip
+
 keybind = shift+enter=text:\x1b\r
 # shell-integration-features = ssh-terminfo,ssh-env, sudo 
 window-inherit-working-directory = true
