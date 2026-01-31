@@ -37,6 +37,7 @@ dns:
     - "*.test"
     - "*.local.owenyoung.com"
     - "*.local.tonormal.com"
+    - "local.jant.me"
     - "local.*"
     - "*.local"
     - "localhost"
