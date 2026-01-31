@@ -37,6 +37,12 @@ dns:
     - "*.test"
     - "*.local.owenyoung.com"
     - "*.local.tonormal.com"
+    - "local.*"
+    - "*.local"
+    - "localhost"
+    - "+.pool.ntp.org"
+    - "captive.apple.com"
+    - "*.msftconnecttest.com"
 
   # Supports UDP, TCP, DoT, DoH. You can specify the port to connect to.
   # All DNS questions are sent directly to the nameserver, without proxies
