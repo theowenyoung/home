@@ -192,6 +192,33 @@ noproxy() {
   unset all_proxy
 }
 
+# ==============================================================================
+# sec - macOS Keychain 密钥管理工具
+#
+# 用法:
+#   sec add <key> <value>   添加一个密钥 (例: sec add GITHUB_TOKEN "ghp_xxx")
+#   sec get <key>           获取密钥的值 (例: sec get GITHUB_TOKEN)
+#   sec rm <key>            删除一个密钥 (例: sec rm GITHUB_TOKEN)
+#   sec ls                  列出所有已存储的密钥
+#
+# 密钥会以 "secret/<key>" 的格式存入 macOS Keychain，由系统加密保护。
+# 磁盘上不会有任何明文 token。
+#
+# 配合 export 使用，替代在 .zshrc 里写死 token：
+#   export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
+#   export OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
+# ==============================================================================
+sec() {
+  local prefix="secret"
+  case "$1" in
+    add) security add-generic-password -a "$USER" -s "$prefix/$2" -w "$3" ;;
+    get) security find-generic-password -a "$USER" -s "$prefix/$2" -w ;;
+    rm) security delete-generic-password -a "$USER" -s "$prefix/$2" ;;
+    ls) security dump-keychain | grep "svce" | grep "$prefix/" | awk -F'"' '{print $4}' | sed "s|$prefix/||" ;;
+    *) echo "usage: sec <add|get|rm|ls> [key] [value]" ;;
+  esac
+}
+
 # other config
 # if [ -t 1 ]; then
 # bash config
