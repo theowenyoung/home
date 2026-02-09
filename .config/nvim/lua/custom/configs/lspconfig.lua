@@ -21,6 +21,11 @@ for _, lsp in ipairs(servers) do
     options.root_dir = parent_lspconfig.util.root_pattern "package.json"
     options.single_file_support = false
   end
+  if lsp == "cssls" then
+    options.settings = {
+      css = { lint = { unknownAtRules = "ignore" } },
+    }
+  end
   if lsp == "denols" then
     options.root_dir = parent_lspconfig.util.root_pattern("deno.json", "deno.jsonc")
   end
