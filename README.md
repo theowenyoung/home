@@ -1,76 +1,100 @@
 # Digital Home
 
-我用这个 Repo 来存放我所有的电脑环境和配置文件，这样我可以在任何一台电脑上快速地初始化我的环境，而不用担心配置文件的丢失或遗忘。
+我的 dotfiles 仓库。这个 Repo 就是我的 `$HOME` 目录，用 `.gitignore` 白名单模式管理，只跟踪需要的配置文件。
 
-- 所有应用都应该使用 `~/Brewfile` 来安装，比如：
-- 所有开发环境相关的软件，都使用 [mise](https://mise.jdx.dev/), 来管理，也就是 `~/.config/mise/config.toml`
-  - 所有 npm 的全局软件包，使用 `~/.default-npm-packages`来管理，这个会由 mise 来安装
-  - 所有 gems 的全局软件包，使用 `~/.default-gem-packages`来管理，这个会由 mise 来安装
+## 原则
 
-## Macos Setup
+- 所有 GUI 应用和命令行工具通过 [Homebrew](https://brew.sh/) 安装，统一在 `~/Brewfile` 中管理，使用 `brew bundle` 安装、`brew bundle --cleanup` 清理不在列表中的软件
+- 所有开发语言运行时通过 [mise](https://mise.jdx.dev/) 管理，配置在 `~/.config/mise/config.toml`
+  - npm 全局包：`~/.default-npm-packages`（mise 安装 node 时自动安装）
+  - gems 全局包：`~/.default-gems`（mise 安装 ruby 时自动安装）
+- 敏感信息（token、密钥）使用 macOS Keychain 管理，通过 `sec` 函数操作（定义在 bashrc 中）
+- `.gitignore` 采用白名单模式：默认忽略所有文件，显式取消忽略需要跟踪的配置
 
-遗憾的事，初始化的时候目前还做不到一键，但是理论上下面的操作可以用一些脚本来自动化，也许未来会优化这里，目前手动也能接受：
-
-0.  手动设置
-
-    1. 输入法设置为双拼
-    2. 键盘速度调整：Settings -> Keyboard 按键速度和延迟都调到最低。
-    3. 启用三指拖动 Settings -> (Accessibility) -> Enable (Use trackpad for dragging) -> (Dragging Style -> Three Finger Drag)
-    4. 启用 tap to click: (Trackpad) -> Enable [Tap to click]
-    5. 自动隐藏 dock 栏 Settings -> Dock -> Automatically hide and show the Dock
-    6. 输入法里面把 caps 切换中英输入法打开.
-    7. hyperkey.app 设置 right cmd 为 hyper 键
-
-1.  install xcode tools
+## 目录结构
 
 ```
+~/
+├── Brewfile                    # Homebrew 软件清单
+├── .default-npm-packages       # mise 安装 node 时自动安装的 npm 全局包
+├── .default-gems               # mise 安装 ruby 时自动安装的 gems
+├── .config/
+│   ├── bash/                   # bash 配置、补全脚本
+│   ├── git/                    # git 配置和全局 ignore
+│   ├── ghostty/                # Ghostty 终端配置
+│   ├── tmux/                   # tmux 配置
+│   ├── nvim/                   # Neovim 配置（NvChad）
+│   ├── mise/                   # mise 运行时版本配置
+│   ├── alfred-workflows/       # Alfred 自定义工作流
+│   ├── surfingkeys/            # SurfingKeys 浏览器插件配置
+│   ├── caddy/                  # Caddy 反向代理配置
+│   ├── ss/ sslocal/            # 代理相关配置
+│   ├── clash/                  # Clash 代理配置
+│   ├── systemd/                # systemd 用户服务
+│   └── ...
+├── deploy/                     # 服务器部署（Ansible、K3s、Helm）
+└── .gnupg/gpg-agent.conf       # GPG agent 配置
+```
 
+## macOS 初始化
+
+### 0. 系统偏好设置
+
+1. 输入法设置为双拼，caps 切换中英输入法
+2. Settings -> Keyboard：按键速度和延迟都调到最快
+3. Settings -> Accessibility：启用三指拖动（Three Finger Drag）
+4. Settings -> Trackpad：启用 Tap to click
+5. Settings -> Dock：自动隐藏 Dock 栏
+6. [HyperKey.app](https://hyperkey.app/) 设置 caps lock 为 Hyper 键
+
+### 1. 安装 Xcode Command Line Tools
+
+```bash
 xcode-select --install
-
-```
-
-然后同意协议：
-
-```
-
 sudo xcodebuild -license
-
 ```
 
-2. 安装 homebrew
+### 2. 安装 Homebrew
 
-(用于安装 casks)
-
-```
-
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 ```
 
-3.1 用 brew 安装最新版的 bash
+### 3. 安装所有软件
 
-```
-brew install bash
-```
+先将 Repo 克隆到临时目录，用 Brewfile 安装所有软件：
 
-4. 下载我的配置 Repo 到 临时目录
-
-```
-
+```bash
 mkdir -p ~/inbox
-git clone http://github.com/theowenyoung/home ~/inbox/home
-```
-
-5. 安装所有软件
-
-```
+git clone https://github.com/theowenyoung/home ~/inbox/home
 cd ~/inbox/home && brew bundle
-
 ```
 
-6. 在浏览器打开 Github 上存放 keepassxc 加密文件的repo，下载密钥文件 `main.kdbx`, 用 keepassxc 打开，找到我保存的 ssh 条目，保存该条目下的所有附件到 `~/.ssh/`, （finder 无法直接选中 `~/.ssh`文件夹，需要`cmd+shift+g` 手动输入该文件夹，选择后，keepassxc软件就会帮我把我的主ssh 下载到本机电脑，这样就可以恢复我的 ssh 文件，随后用于 github repo下载，加密解密密钥等。
+### 4. SSH 密钥
 
-6.1 将 home repo 下载到当前用户：
+SSH 私钥以文本形式存储在 macOS Passwords app 中（作为密码条目的值），通过 iCloud 在设备间同步。
+
+**备份密钥到 Passwords app：**
+
+```bash
+# 复制私钥内容到剪贴板，然后在 Passwords app 中新建条目粘贴保存
+cat ~/.ssh/id_ed25519 | pbcopy
+```
+
+**在新机器上恢复密钥：**
+
+```bash
+mkdir -p ~/.ssh && chmod 700 ~/.ssh
+
+# 在 Passwords app 中找到 SSH 条目，复制内容，然后粘贴写入文件
+pbpaste > ~/.ssh/id_ed25519
+chmod 600 ~/.ssh/id_ed25519
+
+# 从私钥生成对应的公钥
+ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
+```
+
+### 5. 将 home repo 初始化到 $HOME
 
 ```bash
 cd "$HOME"
@@ -81,50 +105,17 @@ git fetch origin main
 git reset --hard origin/main
 git branch --set-upstream-to origin/main main
 git remote set-url --push origin git@github.com:theowenyoung/home.git
-git remote -v
 ```
 
-6.2 把 我的bashrc 引入到系统：
-
-加入到 `~/.bashrc`
-
-```
-if [ -f ~/.config/bash/.bashrc ]; then
-    source ~/.config/bash/.bashrc
-fi
-```
-
-6.3 临时切换zsh到 bash
-
-```
-/bin/bash
-source /etc/bashrc
-source ~/.bashrc
-```
-
-7. 用 nix 安装所有的命令行工具
-
-```
-NIXPKGS_ALLOW_UNFREE=1 nix --extra-experimental-features "nix-command flakes" profile install --refresh ~
-```
-
-8. 使用 homebrew 的最新版 bash 版本：
+### 6. 切换默认 Shell 为 Homebrew Bash
 
 ```bash
-sudo vi /etc/shells
-```
-
-添加下面的内容到最后一行：
-
-```
-/opt/homebrew/bin/bash
-```
-
-```
+# 添加 homebrew bash 到合法 shell 列表
+echo '/opt/homebrew/bin/bash' | sudo tee -a /etc/shells
 chsh -s /opt/homebrew/bin/bash
 ```
 
-9. 使用我的bashrc
+### 7. 加载自定义 bashrc
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bash_profile; then
@@ -140,304 +131,71 @@ EOF
 fi
 ```
 
-source it
+```bash
+source ~/.bash_profile
+```
+
+### 8. GPG 密钥（可选）
+
+如果需要保持同一个 GPG 签名身份，GPG 私钥同样以文本形式存储在 Passwords app 中。
+
+**备份密钥到 Passwords app：**
 
 ```bash
-. ~/.bash_profile
+# 导出私钥内容到剪贴板，然后在 Passwords app 中新建条目粘贴保存
+gpg --export-secret-keys --armor | pbcopy
 ```
 
-12. alfred 工作流配置, 参考[这里](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
-
-    1. 修改快捷键为 `cmd+space`, 移除默认的 spotlight 快捷键
-    2. 修改剪贴板管理的快捷键为 `cmd+cmd`, 两次cmd
-    3. 修改 text action 的快捷键为 `option+cmd`
-    4. item to finder: <https://github.com/LeEnno/alfred-terminalfinder>
-
-13. vimium 浏览器插件配置
+**在新机器上恢复密钥：**
 
 ```bash
-unmapAll
-map j scrollDown
-map k scrollUp
-map d scrollPageDown
-map a LinkHints.activateModeToOpenInNewTab
-map f LinkHints.activateMode
-map J nextTab
-map K previousTab
-map gg scrollToTop
-map G scrollToBottom
-map h scrollLeft
-map l scrollRight
+# 在 Passwords app 中找到 GPG 条目，复制内容，然后导入
+pbpaste | gpg --import
 ```
 
-16. 导入 gpg 私钥，在 keepassxc 里先下载私钥，然后：
+### 9. Alfred 配置
 
-```
-gpg --import gpg-private.asc
-gpg --import gpn2.as
-```
+参考 [alfred-workflows](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
-## Linux Proxy init
+1. 快捷键改为 `Cmd+Space`，移除默认 Spotlight 快捷键
+2. 剪贴板管理快捷键：`Cmd+Cmd`（双击 Cmd）
+3. Text action 快捷键：`Option+Cmd`
 
-0. (可选) 打开端口
+## 日常使用
 
-TCP: 34000-37000
-UDP: 34000-37000
-
-0. (可选) 如果需要代理的话，在这里启动，请查看 `./.config/bin/ssnow.sh`
-
-```
-sudo apt-get -y update
-sudo apt -y install snapd
-sudo apt -y install sudo
-sudo snap install shadowsocks-rust
-
-# use your own ss://xxxxx
-export SERVER_URL=
-
-/snap/bin/shadowsocks-rust.sslocal -b 127.0.0.1:1080 --server-url $SERVER_URL &
-/snap/bin/shadowsocks-rust.sslocal --protocol http -b 127.0.0.1:8080 --server-url $SERVER_URL &
-export http_proxy=http://127.0.0.1:8080
-export https_proxy=http://127.0.0.1:8080
-export all_proxy=socks5://127.0.0.1:1080
-
-```
-
-1. 安装nix
-
-```
-sh <(curl -L https://nixos.org/nix/install) --daemon --yes
-```
-
-2. 重新进入 sheel
-
-```
-exit
-# reconnect to ssh
-```
-
-（可选）
-
-临时代理需要重新开启：
-
-```
-export SERVER_URL=
-
-/snap/bin/shadowsocks-rust.sslocal -b 127.0.0.1:1080 --server-url $SERVER_URL &
-/snap/bin/shadowsocks-rust.sslocal --protocol http -b 127.0.0.1:8080 --server-url $SERVER_URL &
-export http_proxy=http://127.0.0.1:8080
-export https_proxy=http://127.0.0.1:8080
-export all_proxy=socks5://127.0.0.1:1080
-
-```
-
-3. 启用 linger (这样让用户级别的任务即使退出也能运行)
-
-```
-sudo loginctl enable-linger $USER
-```
-
-4. 安装对应的环境软件
-
-```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home#proxy"
-```
-
-（可选）如果需要安装root only：
-
-```
-sudo su
-```
-
-如果需要代理：
-
-```
-export http_proxy=http://127.0.0.1:8080
-export https_proxy=http://127.0.0.1:8080
-export all_proxy=socks5://127.0.0.1:1080
-```
-
-安装 rootonly
-
-```
-nix --extra-experimental-features "nix-command flakes" profile install --refresh "github:theowenyoung/home#rootonly"
-```
-
-5. 写入 密钥token
-
-// infisical 似乎被墙了...?
-
-在[这里](https://app.infisical.com/project/6547bc625cd2f14fb4bfc19f/members)获取服务器密钥，根据需要选择过期时间
-
-```
-# Get infisical token
-export INFISICAL_TOKEN=
-# 写入到该地址，root 和 普通用户 应该都需要一份
-touch ~/.infisicalenv && chmod 600 ~/.infisicalenv && echo "INFISICAL_TOKEN=$INFISICAL_TOKEN" > ~/.infisicalenv
-```
-
-4. 下载 dotfiles
-
-只读：
-
-```
-cd "$HOME"
-rm -rf .git
-git init -b main
-git remote add origin https://github.com/theowenyoung/home.git
-git fetch origin main
-git reset --hard origin/main
-git branch --set-upstream-to origin/main main
-
-```
-
-后期可写：
-
-```
-cd "$HOME"
-rm -rf .git
-git init -b main
-git remote add origin https://github.com/theowenyoung/home.git
-git fetch origin main
-git reset --hard origin/main
-git branch --set-upstream-to origin/main main
-git remote set-url --push origin git@github.com:theowenyoung/home.git
-git remote -v
-```
-
-5. 使用我的bashrc(可选)
+### 升级所有软件
 
 ```bash
-if ! grep -q "# green-bashrc-start" ~/.bashrc; then
-cat >>~/.bashrc <<EOF
-# green-bashrc-start
-
-if [ -f ~/.config/bash/.bashrc ]; then
-    source ~/.config/bash/.bashrc
-fi
-
-# green-bashrc-end
-EOF
-fi
-```
-
-6. source it(可选)
-
-```bash
-. ~/.bashrc
-```
-
-7. 安装 ss 的service（只能普通用户）
-
-```
-./.config/ss/init.sh
-```
-
-8. 启动 ss
-
-```
-./.config/ss/up.sh
-```
-
-9. （可选）安装 Clash meta
-
-**Clone secret**
-
-```
-git clone git@github.com:theowenyoung/secret.git
-```
-
-```
-./.config/clash/init.sh
-```
-
-everything is ok now.
-
-## 客户端 ss
-
-## 一键ss
-
-## nixos 初始化
-
-制作 flake.lock 文件
-
-```
-nix flake lock
-```
-
-```
-nix run github:nix-community/nixos-anywhere -- --flake .#nixos root@5.78.116.171 --build-on-remote
-```
-
-更新：
-
-ssh to server
-
-```
-nixos-rebuild switch --refresh --flake github:theowenyoung/home#nixos
-```
-
-## 如何升级现有的软件？
-
-```
 brew upgrade
 ```
 
-## mise
+### mise 管理开发环境
 
-我使用 [mise](https://mise.jdx.dev/) 来管理依赖动态语言的全局脚本和项目级别的依赖。比如全局安装的 node_modules, python modules, ruby gems 等等，直接在 `.default-npm-packages` 指定即可。
+安装/更新全局 node（`--force` 会重新安装 `.default-npm-packages` 中的所有包）：
 
-安装全局node(--force 触发重新安装所有的.default-npm-packages):
-
-```
+```bash
 mise u -g node@lts --force
 ```
 
-安装mise全局的软件:
+安装 mise 配置中的所有运行时：
 
-```
+```bash
 mise install
 ```
 
-## ai-shell
+当前通过 mise 管理的运行时（见 `.config/mise/config.toml`）：
+node, deno, bun, python, ruby, rust, go, zig, uv, redis, zola, awscli, ansible(pipx)
 
-<https://github.com/BuilderIO/ai-shell>
+### 密钥管理
 
-初始化配置:
+API token 等敏感信息不应该写死在 bashrc 。这里用 macOS Keychain（iCloud 同步）来存储，通过定义在 bashrc 中的 `sec` 函数操作：
 
-```
-ai config set OPENAI_API_ENDPOINT=https://openrouter.ai/api/v1
-ai config set OPENAI_KEY=<your token>
+```bash
+sec add GITHUB_TOKEN "ghp_xxx"    # 添加
+sec get GITHUB_TOKEN              # 获取
+sec rm GITHUB_TOKEN               # 删除
+sec ls                            # 列出所有
 
-
-```
-
-## Ansible
-
-coming soon.
-
-## 如何卸载 nix （当升级的时候）
-
-1. 参考[这里](https://nix.dev/manual/nix/2.22/installation/uninstall)
-
-## 参考
-
-- [andreykaipov home](https://github.com/andreykaipov/home)
-
-## Claude code mcp 设置
-
-`~/.claude.json`
-
-```
-  "mcpServers": {
-    "spec-workflow": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "@pimzino/spec-workflow-mcp@latest",
-        "."
-      ],
-      "env": {}
-    }
-  }
+# 配合 export 使用
+export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 ```
