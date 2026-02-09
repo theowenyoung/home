@@ -1,9 +1,0 @@
-apiVersion: v2
-name: traefik
-description: Install and create Traefik on kubernetes
-type: application
-version: 2024.6.10
-dependencies:
-  - name: traefik
-    version: "30.0.0"
-    repository: "@traefik"

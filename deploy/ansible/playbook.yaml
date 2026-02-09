@@ -1,3 +1,0 @@
-- import_playbook: postgres.yaml
-- import_playbook: caddy.yaml
-- import_playbook: app.yaml

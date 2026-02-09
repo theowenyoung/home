@@ -199,3 +199,7 @@ sec ls                            # 列出所有
 # 配合 export 使用
 export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 ```
+
+## 部署
+
+服务器部署和基础设施即代码在单独的仓库管理：[theowenyoung/studio-example](https://github.com/theowenyoung/studio-example)
