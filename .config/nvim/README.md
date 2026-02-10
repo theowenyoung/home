@@ -1,46 +1,30 @@
 # Neovim Configuration
 
-基于 [NvChad v2.0](https://github.com/NvChad/NvChad) 的 Neovim 配置，面向 Web 开发（TypeScript/JavaScript/Deno）、Lua、C/C++ 和 Shell 脚本。
+基于 [NvChad v2.5](https://github.com/NvChad/NvChad) 的 Neovim 配置，面向 Web 开发（TypeScript/JavaScript/Deno）、Lua、C/C++ 和 Shell 脚本。
 
 ## 目录结构
 
 ```
 ~/.config/nvim/
-├── init.lua                    # 入口文件，加载 core、mise PATH、lazy.nvim
+├── init.lua                    # 入口文件，mise PATH、lazy.nvim 引导、加载 NvChad 插件
 ├── .stylua.toml                # Lua 格式化配置
-├── lazy-lock.json              # lazy.nvim 锁文件
 ├── snippets/                   # 自定义 VSCode 格式代码片段
 │   ├── package.json
 │   └── javascript/
 │       └── javascript.json     # JS/TS 片段 (tc=try/catch, cl=console.log)
 └── lua/
-    ├── core/                   # NvChad 核心框架
-    │   ├── bootstrap.lua       # lazy.nvim & base46 引导
-    │   ├── default_config.lua  # 默认配置
-    │   ├── init.lua            # 编辑器选项 & autocmd
-    │   ├── mappings.lua        # 默认键位映射
-    │   └── utils.lua           # 工具函数
-    ├── plugins/                # NvChad 默认插件
-    │   ├── init.lua            # 插件列表 & lazy.nvim setup
-    │   └── configs/            # 插件默认配置
-    │       ├── cmp.lua         # 自动补全
-    │       ├── lazy_nvim.lua
-    │       ├── lspconfig.lua   # LSP 基础配置
-    │       ├── mason.lua
-    │       ├── nvimtree.lua
-    │       ├── telescope.lua
-    │       ├── treesitter.lua
-    │       └── others.lua      # LuaSnip, autopairs, gitsigns 等
-    └── custom/                 # 用户自定义配置（主要修改区域）
-        ├── chadrc.lua          # 主配置：主题 & 插件 & 映射入口
-        ├── init.lua            # 编辑器选项 & autocommand
-        ├── mappings.lua        # 自定义键位映射
-        ├── highlights.lua      # 主题高亮覆盖
-        ├── plugins.lua         # 自定义插件列表
-        └── configs/
-            ├── lspconfig.lua   # LSP 服务器配置
-            ├── conform.lua     # 代码格式化配置
-            └── overrides.lua   # treesitter/mason/nvimtree 覆盖
+    ├── chadrc.lua              # 主配置：主题 & 高亮
+    ├── options.lua             # 编辑器选项
+    ├── autocmds.lua            # Autocommand
+    ├── mappings.lua            # 自定义键位映射（vim.keymap.set 格式）
+    ├── highlights.lua          # 主题高亮覆盖
+    ├── plugins/
+    │   └── init.lua            # 自定义插件列表
+    └── configs/
+        ├── lazy.lua            # lazy.nvim 配置
+        ├── lspconfig.lua       # LSP 服务器配置（vim.lsp.config + vim.lsp.enable）
+        ├── conform.lua         # 代码格式化配置
+        └── overrides.lua       # treesitter/mason/nvimtree 覆盖
 ```
 
 ## 主题
@@ -54,8 +38,7 @@
 ### 核心 UI
 | 插件 | 用途 |
 |------|------|
-| NvChad/base46 | 主题编译系统 |
-| NvChad/ui | UI 组件（statusline, tabufline） |
+| NvChad/NvChad (v2.5) | 框架（base46 主题、ui 组件、nvchad.term 等） |
 | nvim-web-devicons | 文件图标 |
 | nvim-colorizer.lua | 颜色代码高亮 |
 
@@ -93,7 +76,6 @@
 | nvim-tmux-navigation | Tmux/Nvim 无缝窗口导航 |
 | smartim | 输入法自动切换 |
 | vim-open-url | 浏览器打开 URL (`gx`) |
-| nvterm | 内置终端 |
 
 ## LSP 服务器
 
@@ -102,9 +84,9 @@
 | ts_ls | TypeScript/JavaScript | 通过 `package.json` 检测根目录 |
 | denols | Deno | 通过 `deno.json`/`deno.jsonc` 检测根目录 |
 | html | HTML | - |
-| cssls | CSS | - |
+| cssls | CSS | unknownAtRules = ignore |
 | clangd | C/C++ | - |
-| lua_ls | Lua | NvChad 核心配置 |
+| lua_ls | Lua | NvChad 默认配置 |
 
 **注意**: ts_ls 和 denols 通过根目录文件互斥，避免冲突。
 
@@ -172,8 +154,6 @@
 |------|------|
 | `;` | 进入命令模式 |
 | `<C-n>` | 切换文件树 |
-| `<A-i>` | 浮动终端 |
-| `<A-h>` / `<A-v>` | 水平/垂直终端 |
 | `<C-h/j/k/l>` | 窗口导航（兼容 tmux） |
 | `<leader>S` | 查找替换 |
 | `<leader>o` | 在 Finder 中打开（macOS） |
@@ -192,9 +172,8 @@
 ## Autocommand
 
 - **高亮复制**: 复制后短暂高亮选中文本
-- **保存时格式化**: 保存前自动 LSP 格式化 + conform.nvim 格式化
+- **保存时格式化**: conform.nvim format_on_save
 - **VimLeave fix**: 退出时 sleep 10ms（修复 neovim#21856）
-- **配置热重载**: 修改 `lua/custom/` 下文件后自动重载
 
 ## 故障排除
 

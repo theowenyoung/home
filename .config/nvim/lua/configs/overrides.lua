@@ -15,9 +15,6 @@ M.treesitter = {
   },
   indent = {
     enable = true,
-    -- disable = {
-    --   "python"
-    -- },
   },
 }
 
@@ -48,11 +45,11 @@ M.mason = {
 -- git support in nvimtree
 M.nvimtree = {
   filters = {
-    dotfiles = false, -- 显示隐藏文件（如 .env, .gitignore）
+    dotfiles = false,
     git_ignored = false,
     custom = {
-      "^.git$", -- 隐藏 .git 目录
-      "^.DS_Store$", -- 隐藏 macOS 系统文件
+      "^.git$",
+      "^.DS_Store$",
     },
   },
   git = {

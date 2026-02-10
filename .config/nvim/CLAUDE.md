@@ -2,47 +2,44 @@
 
 ## Architecture
 
-NvChad v2.0 based config. DO NOT modify files in `lua/core/` or `lua/plugins/` -- these are NvChad framework files. All user customization goes in `lua/custom/`.
+NvChad v2.5 based config. NvChad is loaded as a lazy.nvim plugin (`NvChad/NvChad` branch `v2.5`). There are no `lua/core/` or `lua/plugins/` framework directories -- all config lives directly under `lua/`.
 
 ## Config Entry Points
 
-- `init.lua` - Main entry: loads core, sets mise PATH, bootstraps lazy.nvim
-- `lua/custom/chadrc.lua` - Central config: theme (`onedark`), plugin list (`custom.plugins`), mappings (`custom.mappings`)
-- `lua/custom/init.lua` - Editor options: cmdheight=0, relativenumber, fold=indent, autocommands
-- `lua/custom/plugins.lua` - Custom plugin specs (NvPluginSpec[] format for lazy.nvim)
-- `lua/custom/mappings.lua` - All custom keybindings (NvChad mapping table format)
+- `init.lua` - Main entry: sets mise PATH, bootstraps lazy.nvim, loads NvChad as plugin
+- `lua/chadrc.lua` - Central config: theme (`onedark`), highlights
+- `lua/options.lua` - Editor options: cmdheight=0, relativenumber, fold=indent
+- `lua/autocmds.lua` - Autocommands: yank highlight, VimLeave fix
+- `lua/mappings.lua` - All custom keybindings (`vim.keymap.set` format)
+- `lua/plugins/init.lua` - Plugin specs (lazy.nvim format)
 
 ## Key Files to Edit
 
 | Task | File |
 |------|------|
-| Add/remove plugins | `lua/custom/plugins.lua` |
-| Change keybindings | `lua/custom/mappings.lua` |
-| Configure LSP servers | `lua/custom/configs/lspconfig.lua` |
-| Configure formatters | `lua/custom/configs/conform.lua` |
-| Override treesitter/mason/nvimtree | `lua/custom/configs/overrides.lua` |
-| Change theme/UI | `lua/custom/chadrc.lua` |
-| Custom highlights | `lua/custom/highlights.lua` |
-| Editor options/autocommands | `lua/custom/init.lua` |
+| Add/remove plugins | `lua/plugins/init.lua` |
+| Change keybindings | `lua/mappings.lua` |
+| Configure LSP servers | `lua/configs/lspconfig.lua` |
+| Configure formatters | `lua/configs/conform.lua` |
+| Override treesitter/mason/nvimtree | `lua/configs/overrides.lua` |
+| Change theme/UI | `lua/chadrc.lua` |
+| Custom highlights | `lua/highlights.lua` |
+| Editor options | `lua/options.lua` |
+| Autocommands | `lua/autocmds.lua` |
 | Custom snippets | `snippets/` (VSCode format JSON) |
 
-## NvChad Mapping Table Format
+## Mapping Format (v2.5)
+
+Mappings use standard `vim.keymap.set`:
 
 ```lua
-M.section_name = {
-  n = {  -- normal mode
-    ["<key>"] = { "action" or function, "description", opts = { ... } },
-  },
-  i = {},  -- insert mode
-  v = {},  -- visual mode
-  x = {},  -- visual block mode
-  t = {},  -- terminal mode
-}
+local map = vim.keymap.set
+map("n", "<key>", action, { desc = "description" })
 ```
 
-Plugin-specific mappings need `plugin = true` in the section table.
+To remove NvChad defaults that conflict with custom mappings, use `vim.keymap.del`.
 
-## Plugin Spec Format (lazy.nvim via NvChad)
+## Plugin Spec Format (lazy.nvim)
 
 ```lua
 {
@@ -57,9 +54,9 @@ Plugin-specific mappings need `plugin = true` in the section table.
 
 ## LSP Setup Pattern
 
-Servers are configured in `lua/custom/configs/lspconfig.lua` by adding to the `servers` table. Each server gets `custom_on_attach` (disables hover) and `capabilities` from NvChad defaults. Special root_dir patterns:
-- `ts_ls`: uses `package.json` (single_file_support=false)
-- `denols`: uses `deno.json` / `deno.jsonc`
+Servers are configured in `lua/configs/lspconfig.lua` using the new `vim.lsp.config()` + `vim.lsp.enable()` API. Special configurations:
+- `ts_ls`: root_markers = `package.json` (single_file_support=false)
+- `denols`: root_markers = `deno.json` / `deno.jsonc`
 
 This prevents ts_ls and denols from conflicting in the same project.
 
@@ -78,11 +75,11 @@ All skip `.min.js` files. Toggle with `:FormatToggle`.
 - **AI completion**: Windsurf/Codeium (`<M-j>` to accept), NOT Copilot (commented out).
 - **Tmux integration**: `<C-h/j/k/l>` works across nvim windows and tmux panes.
 - **Input method**: smartim auto-switches IME on mode change (useful for CJK input).
-- **Auto format**: Dual setup - both `BufWritePre` autocommand (LSP) and conform.nvim `format_on_save`.
+- **Auto format**: conform.nvim `format_on_save` only (no duplicate LSP BufWritePre autocmd).
 
 ## Data Locations
 
 - Plugin installs: `~/.local/share/nvim/lazy/`
 - Mason installs: `~/.local/share/nvim/mason/`
-- Theme cache: `vim.g.base46_cache` (usually `~/.local/share/nvim/base46_cache/`)
+- Theme cache: `vim.g.base46_cache` (usually `~/.local/share/nvim/base46/`)
 - Snippet path: `./snippets` (relative to nvim config dir)

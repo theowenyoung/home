@@ -2,7 +2,6 @@ local conform = require "conform"
 
 conform.setup {
   formatters_by_ft = {
-    -- Web开发相关，列出的顺序决定了优先级
     javascript = { "prettier_from_project", "deno_fmt", "prettier" },
     typescript = { "prettier_from_project", "deno_fmt", "prettier" },
     javascriptreact = { "prettier_from_project", "deno_fmt", "prettier" },
@@ -16,11 +15,7 @@ conform.setup {
     jsonc = { "prettier_from_project", "deno_fmt", "prettier" },
     yaml = { "prettier_from_project", "prettier" },
     markdown = { "prettier_from_project", "deno_fmt", "prettier" },
-
-    -- Lua
     lua = { "stylua" },
-
-    -- Shell
     sh = { "shfmt" },
   },
 
@@ -42,7 +37,6 @@ conform.setup {
         "package.json",
       },
       condition = function(self, ctx)
-        -- 排除 .min.js 文件
         if ctx.filename:match "%.min%.js$" then
           return false
         end
@@ -86,7 +80,6 @@ conform.setup {
     },
     deno_fmt = {
       condition = function(self, ctx)
-        -- 排除 .min.js 文件
         if ctx.filename:match "%.min%.js$" then
           return false
         end
@@ -101,7 +94,6 @@ conform.setup {
     },
     prettier = {
       condition = function(self, ctx)
-        -- 排除 .min.js 文件
         if ctx.filename:match "%.min%.js$" then
           return false
         end
@@ -121,7 +113,6 @@ conform.setup {
   debug = true,
 }
 
--- 可选：格式化切换命令
 vim.api.nvim_create_user_command("FormatToggle", function()
   conform.config.format_on_save.enabled = not conform.config.format_on_save.enabled
   print("Format on save: " .. tostring(conform.config.format_on_save.enabled))
