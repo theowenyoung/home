@@ -13,3 +13,6 @@ rust = "1.91.1"
 zola = "0.21"
 awscli = "latest"
 go = "latest"
+
+[settings]
+trusted_config_paths = ["~/project/jant", "~/project"]

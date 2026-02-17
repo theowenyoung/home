@@ -38,6 +38,7 @@ node_modules
 !flake.lock
 .config/raycast
 .config/swiftpm
+.config/entire/
 .config/uv
 .config/cagent
 .config/bin/**

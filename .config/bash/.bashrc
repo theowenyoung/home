@@ -3,9 +3,9 @@
 if [ -z "$XDG_CONFIG_HOME" ]; then
   export XDG_CONFIG_HOME="$HOME/.config"
 fi
-if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
-  source "$GHOSTTY_RESOURCES_DIR/shell-integration/bash/ghostty.bash"
-fi
+# if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+#   source "$GHOSTTY_RESOURCES_DIR/shell-integration/bash/ghostty.bash"
+# fi
 # nix allow unfree
 export NIXPKGS_ALLOW_UNFREE=1
 
