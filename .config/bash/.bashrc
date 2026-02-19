@@ -296,7 +296,7 @@ complete -F _pnpm_completion pp
 alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
 
 alias c="claude --dangerously-skip-permissions"
+alias cc="claude --dangerously-skip-permissions --permission-mode plan"
 alias cccc="claude --dangerously-skip-permissions --continue"
 alias ccccc="claude --dangerously-skip-permissions --resume"
-alias cc="ccc"
-alias mm="mise u -g node@lts --force"
+alias upnode="mise u -g node@lts --force"
