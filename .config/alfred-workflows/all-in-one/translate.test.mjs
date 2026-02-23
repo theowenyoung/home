@@ -1,9 +1,9 @@
-import { getIcibaWord, translate } from "./translate.mjs";
+import { getIcibaWord, translateWithDeepl } from "./translate.mjs";
 import assert from "node:assert";
 import { test } from "node:test";
 import { downloadAndPlayMP3 } from "./play.mjs";
 test("test translate", async (t) => {
-  const result = await translate({
+  const result = await translateWithDeepl({
     from: "en",
     to: "zh",
     text: "hello",

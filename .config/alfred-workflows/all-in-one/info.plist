@@ -860,7 +860,7 @@ exit 1
 				<key>placeholder</key>
 				<string></string>
 				<key>required</key>
-				<true/>
+				<false/>
 				<key>trim</key>
 				<true/>
 			</dict>
@@ -872,6 +872,27 @@ exit 1
 			<string>textfield</string>
 			<key>variable</key>
 			<string>DEEPL_AUTH_KEY</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string></string>
+				<key>placeholder</key>
+				<string>https://example.com/deepl/translate</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>DeepL compatible translate API URL</string>
+			<key>label</key>
+			<string>DEEPL_API_ENDPOINT</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>DEEPL_API_ENDPOINT</string>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -893,6 +914,69 @@ exit 1
 			<string>textfield</string>
 			<key>variable</key>
 			<string>OPENAI_API_KEY</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>https://api.openai.com/v1</string>
+				<key>placeholder</key>
+				<string>https://api.openai.com/v1</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>OPENAI_API_ENDPOINT</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>OPENAI_API_ENDPOINT</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>gpt-5-mini</string>
+				<key>placeholder</key>
+				<string>gpt-5-mini</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string></string>
+			<key>label</key>
+			<string>OPENAI_MODEL</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>OPENAI_MODEL</string>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>default</key>
+				<string>openai</string>
+				<key>placeholder</key>
+				<string>openai</string>
+				<key>required</key>
+				<false/>
+				<key>trim</key>
+				<true/>
+			</dict>
+			<key>description</key>
+			<string>openai or deepl</string>
+			<key>label</key>
+			<string>TRANSLATE_ENGINE</string>
+			<key>type</key>
+			<string>textfield</string>
+			<key>variable</key>
+			<string>TRANSLATE_ENGINE</string>
 		</dict>
 	</array>
 	<key>version</key>

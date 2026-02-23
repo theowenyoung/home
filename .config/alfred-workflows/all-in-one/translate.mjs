@@ -73,10 +73,39 @@ async function main() {
     }
   }
 
-  // 获取缓存文件路径
-  const cacheDir = process.env.alfred_workflow_cache || "/tmp";
+  // 翻译引擎: "deepl" 或 "openai"
+  const engine = process.env.TRANSLATE_ENGINE || "openai";
 
-  // 确保缓存目录存在
+  if (engine === "deepl") {
+    // DeepL 直接翻译，无需流式
+    try {
+      const deeplResult = await translateWithDeepl({
+        to: targetLanguage,
+        text: sourceText,
+      });
+      console.log(
+        JSON.stringify({
+          response: `## 原文\n\n${sourceText}\n\n## DeepL 翻译\n\n${deeplResult.text}\n\n`,
+          footer: "翻译完成 - Enter 复制",
+          variables: {
+            type: "sentence",
+            openai_translation: deeplResult.text,
+          },
+        }),
+      );
+    } catch (error) {
+      console.log(
+        JSON.stringify({
+          response: `翻译出错: ${error.message}`,
+          footer: "请检查网络连接和 DeepL API 配置",
+        }),
+      );
+    }
+    return;
+  }
+
+  // OpenAI 流式翻译
+  const cacheDir = process.env.alfred_workflow_cache || "/tmp";
   if (!fs.existsSync(cacheDir)) {
     fs.mkdirSync(cacheDir, { recursive: true });
   }
@@ -85,31 +114,28 @@ async function main() {
   const pidFile = path.join(cacheDir, "openai_pid.txt");
   const stateFile = path.join(cacheDir, "translate_state.json");
 
-  // 检查是否正在流式传输
   let isStreaming = process.env.streaming_now === "1";
-  // also, if streaming file is empty
-  console.error("isStreaming", isStreaming);
 
   if (isStreaming) {
-    // 继续读取流式传输
-    const result = await readOpenAIStream(streamFile, pidFile, stateFile);
-    console.error("stream result", result);
-    return outputStreamingResult(result);
+    const oldState = readState(stateFile);
+    if (oldState && oldState.sourceText !== sourceText) {
+      cleanup(streamFile, pidFile, stateFile);
+      isStreaming = false;
+    } else {
+      const result = await readOpenAIStream(streamFile, pidFile, stateFile);
+      return outputStreamingResult(result, streamFile);
+    }
   }
 
-  // 检查是否有遗留的流文件（窗口关闭后恢复）
   if (fs.existsSync(streamFile)) {
     const state = readState(stateFile);
-    console.error("state", state);
     if (state) {
-      // 恢复流式传输状态
       console.log(
         JSON.stringify({
           rerun: 0.5,
           variables: { streaming_now: "1" },
           response: formatResponse({
             sourceText: state.sourceText,
-            // deeplResult: state.deeplResult,
             openaiResult: { text: "⏳ 响应中..." },
             openaiFinished: false,
           }),
@@ -120,42 +146,27 @@ async function main() {
     }
   }
 
-  // 新的翻译请求
   try {
-    // 1. 立即开始 DeepL 翻译
-    // const deeplResult = await translateWithDeepl({
-    //   from: "auto",
-    //   to: targetLanguage,
-    //   text: sourceText,
-    // });
-
-    console.error("startOpenAIStream");
-    // 2. 保存状态
     const state = {
       sourceText,
       targetLanguage,
-      // deeplResult,
       timestamp: Date.now(),
     };
     saveState(stateFile, state);
-
-    const response = formatResponse({
-      sourceText: sourceText,
-      // deeplResult,
-      openaiResult: { text: "" },
-      openaiFinished: false,
-    });
 
     console.log(
       JSON.stringify({
         rerun: 0.5,
         variables: { streaming_now: "1" },
-        response: response,
+        response: formatResponse({
+          sourceText,
+          openaiResult: { text: "" },
+          openaiFinished: false,
+        }),
         behaviour: { scroll: "end" },
       }),
     );
 
-    // 2. 同时启动 OpenAI 流式翻译
     await startOpenAIStream(sourceText, targetLanguage, streamFile, pidFile);
   } catch (error) {
     console.log(
@@ -180,20 +191,22 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
   ];
 
   const requestBody = JSON.stringify({
-    model: process.env.OPENAI_MODEL || "gpt-4o-mini",
+    model: process.env.OPENAI_MODEL || "gpt-5-mini",
     messages: messages,
     stream: true,
-    temperature: 0.1,
   });
 
   // 确保流文件存在
   fs.writeFileSync(streamFile, "");
 
   // 使用 curl 进行流式请求
+  const errFile = streamFile + ".err";
   const curlArgs = [
-    process.env.OPENAI_API_ENDPOINT ||
-      "https://o.immersivetranslate.net/v1/chat/completions",
+    process.env.OPENAI_API_ENDPOINT
+      ? `${process.env.OPENAI_API_ENDPOINT}/v1/chat/completions`
+      : "https://api.openai.com/v1/chat/completions",
     "--silent",
+    "--show-error",
     "--no-buffer",
     "--speed-limit",
     "0",
@@ -210,10 +223,12 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
   ];
 
   try {
+    const errFd = fs.openSync(errFile, "w");
     const curlProcess = spawn("curl", curlArgs, {
       detached: true,
-      stdio: "ignore",
+      stdio: ["ignore", "ignore", errFd],
     });
+    fs.closeSync(errFd);
 
     // 保存进程 ID
     fs.writeFileSync(pidFile, curlProcess.pid.toString());
@@ -254,7 +269,6 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
       }
     } catch (e) {
       // 不是错误 JSON，继续处理
-      console.error("not json", e);
     }
   }
 
@@ -286,31 +300,42 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
     const stalled = Date.now() - stats.mtime.getTime() > 10000; // 10秒超时
 
     if (stalled && streamContent.length === 0) {
-      cleanup(streamFile, pidFile);
+      // 读取 curl 错误信息
+      let curlErr = "";
+      const errFile = streamFile + ".err";
+      try {
+        if (fs.existsSync(errFile)) {
+          curlErr = fs.readFileSync(errFile, "utf8").trim();
+        }
+      } catch (e) {}
+      cleanup(streamFile, pidFile, stateFile);
       return {
         sourceText: state.sourceText,
-        // deeplResult: state.deeplResult,
-        openaiResult: { error: "OpenAI 连接超时" },
+        openaiResult: {
+          error: curlErr ? `连接失败: ${curlErr}` : "OpenAI 连接超时",
+        },
         finished: true,
       };
     }
   }
 
   if (finished) {
+    // 保存原始响应副本供日志打印
+    try {
+      fs.copyFileSync(streamFile, streamFile + ".raw");
+    } catch (e) {}
     cleanup(streamFile, pidFile);
-    console.error("cleanup streamfile");
   }
 
   return {
     sourceText: state.sourceText,
-    // deeplResult: state.deeplResult,
     openaiResult: { text: responseText },
     finished,
   };
 }
 
 // 输出流式结果
-function outputStreamingResult(result) {
+function outputStreamingResult(result, streamFile) {
   const response = formatResponse({
     sourceText: result.sourceText,
     // deeplResult: result.deeplResult,
@@ -324,7 +349,19 @@ function outputStreamingResult(result) {
   };
 
   if (result.finished) {
-    // 翻译完成
+    // 翻译完成，打印完整的原始响应和 curl 参数
+    if (streamFile) {
+      const rawFile = streamFile + ".raw";
+      try {
+        if (fs.existsSync(rawFile)) {
+          console.error(
+            "=== raw response ===\n" + fs.readFileSync(rawFile, "utf8"),
+          );
+          fs.unlinkSync(rawFile);
+        }
+      } catch (e) {}
+    }
+    console.error("=== result ===", JSON.stringify(result, null, 2));
     output.footer = "翻译完成 - Enter 复制 OpenAI 结果";
     output.variables = {
       type: "sentence",
@@ -344,13 +381,12 @@ function outputStreamingResult(result) {
 
 // 格式化显示响应
 function formatResponse(options = {}) {
-  console.error("options", options);
   const { sourceText, deeplResult, openaiResult, openaiFinished } = options;
 
   let response = `## 原文\n\n${sourceText}\n\n`;
 
   if (deeplResult) {
-    const deeplSiteUrl = `https://www.deepl.com/translator#auto/${deeplResult.source || "auto"}/${encodeURIComponent(sourceText)}`;
+    // const deeplSiteUrl = `https://www.deepl.com/translator#auto/${deeplResult.source || "auto"}/${encodeURIComponent(sourceText)}`;
     response += `## DeepL 翻译\n\n${deeplResult.text}\n\n`;
   }
   response += `## OpenAI 翻译${openaiFinished ? "" : " (生成中...)"}\n\n`;
@@ -391,8 +427,8 @@ function readState(stateFile) {
 }
 
 // 清理文件
-function cleanup(streamFile, pidFile) {
-  [streamFile, pidFile].forEach((file) => {
+function cleanup(streamFile, pidFile, stateFile) {
+  [streamFile, pidFile, stateFile].filter(Boolean).forEach((file) => {
     if (fs.existsSync(file)) {
       try {
         fs.unlinkSync(file);
@@ -410,30 +446,47 @@ export async function translateWithDeepl(options = {}) {
     to = "ZH";
   }
 
-  const url = `https://api.deepl.com/v2/translate`;
-  const response = await fetch(url, {
+  const requestUrl = process.env.DEEPL_API_ENDPOINT;
+  if (!requestUrl) {
+    throw new Error("DEEPL_API_ENDPOINT 未配置");
+  }
+  const requestBody = {
+    text: [text],
+    source_lang: "auto",
+    target_lang: to.toUpperCase(),
+  };
+  const response = await fetch(requestUrl, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "DeepL-Auth-Key " + process.env.DEEPL_AUTH_KEY,
+      token: process.env.DEEPL_AUTH_KEY,
     },
-    method: "POST",
-    body: JSON.stringify({
-      text: [text],
-      target_lang: to.toUpperCase(),
-      model_type: "prefer_quality_optimized",
-    }),
+    body: JSON.stringify(requestBody),
   });
   const statusCode = response.status;
   const responseText = await response.text();
-  let result = {
-    text: "",
-    remoteFrom: "",
-  };
+  console.error(
+    "=== DeepL ===\nURL:",
+    requestUrl,
+    "\nBody:",
+    JSON.stringify(requestBody),
+    "\nToken:",
+    process.env.DEEPL_AUTH_KEY ? "set" : "not set",
+    "\nStatus:",
+    statusCode,
+    "\nResponse:",
+    responseText,
+  );
+
   if (response.ok) {
     const json = JSON.parse(responseText);
-    result.text = json.translations[0].text;
-    result.remoteFrom = json.translations[0].detected_source_language;
-    return result;
+    if (json.translations?.[0]?.text) {
+      return {
+        text: json.translations[0].text,
+        remoteFrom: json.translations[0].detected_source_language || "",
+      };
+    }
+    throw new Error("翻译结果为空: " + responseText);
   } else {
     throw new Error("翻译失败: " + statusCode + ", " + responseText);
   }
