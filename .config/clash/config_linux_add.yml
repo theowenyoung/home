@@ -38,6 +38,7 @@ dns:
     - "*.local.owenyoung.com"
     - "*.local.tonormal.com"
     - "*.localtest.me"
+    - "*.*.localtest.me"
     - "localtest.me"
     - "local.jant.me"
     - "local.*"
