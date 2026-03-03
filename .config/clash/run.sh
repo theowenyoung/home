@@ -18,17 +18,17 @@ function cleanup {
 	exit $EXIT_CODE
 }
 
-# is macos , we need to cp $HOME/secret/clash/config.yml to $HOME/.config/clash/config.yml
+# is macos , we need to cp $HOME/secret/clash/config.yaml to $HOME/.config/clash/config.yml
 
 if [ "$(uname)" == "Darwin" ]; then
 	# Do something under Mac OS X platform
-	cp "$HOME/secret/clash/config.yml" "$HOME/.config/clash/config.yml"
+	cp "$HOME/secret/clash/config.yaml" "$HOME/.config/clash/config.yml"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 	# Do something under GNU/Linux platform
 	echo "is linux"
 	# merge config_linux_add.yml content to config_linux.yml
 
-	config_source_path="$HOME/secret/clash/config.yml"
+	config_source_path="$HOME/secret/clash/config.yaml"
 	config_linux_add_path="$HOME/.config/clash/config_linux_add.yml"
 	config_target_path="$HOME/.config/clash/config.yml"
 
