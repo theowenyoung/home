@@ -243,7 +243,14 @@ git reset --hard origin/main
 git branch --set-upstream-to origin/main main
 ```
 
-### 3. 加载自定义 bashrc
+### 3. 安装系统依赖和 mise
+
+```bash
+sudo apt install -y tmux
+curl https://mise.run | sh
+```
+
+### 4. 加载自定义 bashrc
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
@@ -263,23 +270,9 @@ fi
 source ~/.bashrc
 ```
 
-### 4. 安装系统依赖
+### 5. 安装开发运行时
 
 ```bash
-sudo apt install -y tmux
-```
-
-### 5. 安装 mise 及开发运行时
-
-```bash
-# 安装 mise
-curl https://mise.run | sh
-
-# 激活 mise（如果 bashrc 中尚未配置）
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-source ~/.bashrc
-
-# 安装配置中的所有运行时
 mise install
 ```
 

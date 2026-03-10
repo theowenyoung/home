@@ -12,7 +12,7 @@ export NIXPKGS_ALLOW_UNFREE=1
 # path first
 
 # add path
-export PATH="$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.config/bin:/opt/homebrew/bin:$HOME/bin:$PATH"
 # mise experimental
 export MISE_EXPERIMENTAL="1"
 
