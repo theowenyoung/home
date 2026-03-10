@@ -39,6 +39,7 @@ node_modules
 .config/raycast
 .config/swiftpm
 .config/entire/
+.config/nanoclaw/
 .config/uv
 .config/cagent
 .config/bin/**
