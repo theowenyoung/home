@@ -224,7 +224,7 @@ chown -R green:green /home/green/.ssh
 
 # 为 green 用户生成 SSH 密钥（用于 GitHub clone）
 su - green -c 'ssh-keygen -t ed25519 -C "green@$(hostname)" -N ""'
-# 查看公钥，添加到 GitHub -> Settings -> SSH keys
+# 查看公钥，添加到 https://github.com/settings/ssh/new
 cat /home/green/.ssh/id_ed25519.pub
 ```
 
