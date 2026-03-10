@@ -204,31 +204,30 @@ export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 
 适用于需要复用 bash 和 mise 配置的 Linux 服务器环境。
 
-### 1. 创建用户
+### 1. 创建用户并配置 SSH 登录
+
+以 root 登录服务器后执行：
 
 ```bash
-# 以 root 登录后，创建用户并赋予 sudo 权限
+# 创建用户（无密码）并赋予免密 sudo 权限
 useradd -m -s /bin/bash green
-passwd green
 usermod -aG sudo green
+echo "green ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/green
+
+# 将本地公钥写入 authorized_keys
+mkdir -p /home/green/.ssh
+# 把本地 ~/.ssh/id_ed25519.pub 的内容粘贴进去
+echo "<your-public-key>" > /home/green/.ssh/authorized_keys
+chmod 700 /home/green/.ssh
+chmod 600 /home/green/.ssh/authorized_keys
+chown -R green:green /home/green/.ssh
 ```
 
-### 2. SSH 密钥
+之后即可从本地免密登录：`ssh green@<server-ip>`
 
-在本地机器上执行，将公钥复制到服务器：
-
-```bash
-ssh-copy-id green@<server-ip>
-```
-
-之后即可免密登录：`ssh green@<server-ip>`
-
-### 3. 生成服务器 SSH 密钥
+### 2. 生成服务器 SSH 密钥
 
 ```bash
-# 切换到新用户
-su - green
-
 # 生成新的 SSH 密钥
 ssh-keygen -t ed25519 -C "green@$(hostname)"
 
@@ -236,7 +235,7 @@ ssh-keygen -t ed25519 -C "green@$(hostname)"
 cat ~/.ssh/id_ed25519.pub
 ```
 
-### 4. 初始化 home repo
+### 3. 初始化 home repo
 
 ```bash
 # 将 repo 初始化到 $HOME
@@ -250,7 +249,7 @@ git branch --set-upstream-to origin/main main
 git remote set-url --push origin git@github.com:theowenyoung/home.git
 ```
 
-### 5. 加载自定义 bashrc
+### 4. 加载自定义 bashrc
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
@@ -270,13 +269,13 @@ fi
 source ~/.bashrc
 ```
 
-### 6. 安装系统依赖
+### 5. 安装系统依赖
 
 ```bash
 sudo apt install -y tmux
 ```
 
-### 7. 安装 mise 及开发运行时
+### 6. 安装 mise 及开发运行时
 
 ```bash
 # 安装 mise
@@ -290,7 +289,7 @@ source ~/.bashrc
 mise install
 ```
 
-### 8. 添加到 docker 组（可选）
+### 7. 添加到 docker 组（可选）
 
 ```bash
 # 幂等：如果已在组内不会重复添加
