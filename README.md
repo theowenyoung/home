@@ -217,39 +217,33 @@ echo "green ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/green
 # 将本地公钥写入 authorized_keys
 mkdir -p /home/green/.ssh
 # 把本地 ~/.ssh/id_ed25519.pub 的内容粘贴进去
-echo "<your-public-key>" > /home/green/.ssh/authorized_keys
+vi /home/green/.ssh/authorized_keys
 chmod 700 /home/green/.ssh
 chmod 600 /home/green/.ssh/authorized_keys
 chown -R green:green /home/green/.ssh
+
+# 为 green 用户生成 SSH 密钥（用于 GitHub clone）
+su - green -c 'ssh-keygen -t ed25519 -C "green@$(hostname)" -N ""'
+# 查看公钥，添加到 GitHub -> Settings -> SSH keys
+cat /home/green/.ssh/id_ed25519.pub
 ```
 
 之后即可从本地免密登录：`ssh green@<server-ip>`
 
-### 2. 生成服务器 SSH 密钥
-
-```bash
-# 生成新的 SSH 密钥
-ssh-keygen -t ed25519 -C "green@$(hostname)"
-
-# 查看公钥，添加到 GitHub -> Settings -> SSH keys
-cat ~/.ssh/id_ed25519.pub
-```
-
-### 3. 初始化 home repo
+### 2. 初始化 home repo
 
 ```bash
 # 将 repo 初始化到 $HOME
 cd "$HOME"
 rm -rf .git
 git init -b main
-git remote add origin https://github.com/theowenyoung/home.git
+git remote add origin git@github.com:theowenyoung/home.git
 git fetch origin main
 git reset --hard origin/main
 git branch --set-upstream-to origin/main main
-git remote set-url --push origin git@github.com:theowenyoung/home.git
 ```
 
-### 4. 加载自定义 bashrc
+### 3. 加载自定义 bashrc
 
 ```bash
 if ! grep -q "# green-bashrc-start" ~/.bashrc; then
@@ -269,13 +263,13 @@ fi
 source ~/.bashrc
 ```
 
-### 5. 安装系统依赖
+### 4. 安装系统依赖
 
 ```bash
 sudo apt install -y tmux
 ```
 
-### 6. 安装 mise 及开发运行时
+### 5. 安装 mise 及开发运行时
 
 ```bash
 # 安装 mise
@@ -289,7 +283,7 @@ source ~/.bashrc
 mise install
 ```
 
-### 7. 添加到 docker 组（可选）
+### 6. 添加到 docker 组（可选）
 
 ```bash
 # 幂等：如果已在组内不会重复添加
