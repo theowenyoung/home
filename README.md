@@ -200,6 +200,98 @@ sec ls                            # 列出所有
 export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 ```
 
+## Linux 服务器初始化
+
+适用于需要复用 bash 和 mise 配置的 Linux 服务器环境。
+
+### 1. 创建用户
+
+```bash
+# 以 root 登录后，创建用户并赋予 sudo 权限
+useradd -m -s /bin/bash green
+passwd green
+usermod -aG sudo green
+```
+
+### 2. SSH 密钥
+
+在本地机器上执行，将公钥复制到服务器：
+
+```bash
+ssh-copy-id green@<server-ip>
+```
+
+之后即可免密登录：`ssh green@<server-ip>`
+
+### 3. 生成服务器 SSH 密钥
+
+```bash
+# 切换到新用户
+su - green
+
+# 生成新的 SSH 密钥
+ssh-keygen -t ed25519 -C "green@$(hostname)"
+
+# 查看公钥，添加到 GitHub -> Settings -> SSH keys
+cat ~/.ssh/id_ed25519.pub
+```
+
+### 4. 初始化 home repo
+
+```bash
+# 将 repo 初始化到 $HOME
+cd "$HOME"
+rm -rf .git
+git init -b main
+git remote add origin https://github.com/theowenyoung/home.git
+git fetch origin main
+git reset --hard origin/main
+git branch --set-upstream-to origin/main main
+git remote set-url --push origin git@github.com:theowenyoung/home.git
+```
+
+### 5. 加载自定义 bashrc
+
+```bash
+if ! grep -q "# green-bashrc-start" ~/.bashrc; then
+cat >>~/.bashrc <<EOF
+# green-bashrc-start
+
+if [ -f ~/.config/bash/.bashrc ]; then
+    source ~/.config/bash/.bashrc
+fi
+
+# green-bashrc-end
+EOF
+fi
+```
+
+```bash
+source ~/.bashrc
+```
+
+### 6. 安装 mise 及开发运行时
+
+```bash
+# 安装 mise
+curl https://mise.run | sh
+
+# 激活 mise（如果 bashrc 中尚未配置）
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+source ~/.bashrc
+
+# 安装配置中的所有运行时
+mise install
+```
+
+### 7. 添加到 docker 组（可选）
+
+```bash
+# 幂等：如果已在组内不会重复添加
+sudo usermod -aG docker "$(whoami)"
+# 重新登录后生效
+```
+
 ## 部署
 
 服务器部署和基础设施即代码在单独的仓库管理：[theowenyoung/studio-example](https://github.com/theowenyoung/studio-example)
