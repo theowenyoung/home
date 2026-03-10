@@ -30,6 +30,7 @@ node_modules
 !.librewolf/**
 # liberally include everything in our .config
 !.config
+
 !.config/**
 
 # and then ignore things we don't want
@@ -38,6 +39,8 @@ node_modules
 !flake.lock
 .config/raycast
 .config/swiftpm
+.config/systemd
+.config/hydra/
 .config/entire/
 .config/go/
 .config/nanoclaw/
