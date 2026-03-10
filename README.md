@@ -211,7 +211,7 @@ export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 ```bash
 # 创建用户（无密码）并赋予免密 sudo 权限
 useradd -m -s /bin/bash green
-usermod -aG sudo green
+usermod -aG sudo,docker green
 echo "green ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/green
 
 # 将本地公钥写入 authorized_keys
@@ -274,14 +274,6 @@ source ~/.bashrc
 
 ```bash
 mise install
-```
-
-### 6. 添加到 docker 组（可选）
-
-```bash
-# 幂等：如果已在组内不会重复添加
-sudo usermod -aG docker "$(whoami)"
-# 重新登录后生效
 ```
 
 ## 部署
