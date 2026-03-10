@@ -184,7 +184,7 @@ mise install
 ```
 
 当前通过 mise 管理的运行时（见 `.config/mise/config.toml`）：
-node, deno, bun, python, ruby, rust, go, zig, uv, redis, zola, awscli, ansible(pipx)
+node, deno, bun, python, ruby, rust, go, zig, uv, redis, zola, awscli, neovim, ansible(pipx)
 
 ### 密钥管理
 
@@ -270,7 +270,13 @@ fi
 source ~/.bashrc
 ```
 
-### 6. 安装 mise 及开发运行时
+### 6. 安装系统依赖
+
+```bash
+sudo apt install -y tmux
+```
+
+### 7. 安装 mise 及开发运行时
 
 ```bash
 # 安装 mise
@@ -284,7 +290,7 @@ source ~/.bashrc
 mise install
 ```
 
-### 7. 添加到 docker 组（可选）
+### 8. 添加到 docker 组（可选）
 
 ```bash
 # 幂等：如果已在组内不会重复添加
