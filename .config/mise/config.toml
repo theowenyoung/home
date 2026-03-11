@@ -14,6 +14,7 @@ awscli = "latest"
 go = "latest"
 neovim = "latest"
 ripgrep = "latest"
+fzf = "latest"
 
 [settings]
 trusted_config_paths = ["~/project/jant", "~/project"]
