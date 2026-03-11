@@ -9,6 +9,8 @@ clipboard-paste-protection = false
 # auto-update-channel = tip
 auto-update-channel = stable
 
+clipboard-read=allow
+
 keybind = shift+enter=text:\x1b\r
 # shell-integration-features = ssh-terminfo,ssh-env, sudo 
 window-inherit-working-directory = true
