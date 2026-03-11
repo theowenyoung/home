@@ -20,7 +20,6 @@ brew "mas"                         # Mac App Store 命令行工具
 brew "mise"                        # 运行时版本管理器
 brew "git"
 brew "android-platform-tools"
-brew "fzf"
 brew "jq"
 brew "wget"
 brew "tmux"
