@@ -4,7 +4,6 @@ node = "lts"
 ruby = "latest"
 bun = "latest"
 zig = "latest"
-fnox = "latest"
 redis = "latest"
 uv = "latest"
 python = "3.14"
@@ -14,6 +13,7 @@ zola = "0.21"
 awscli = "latest"
 go = "latest"
 neovim = "latest"
+ripgrep = "latest"
 
 [settings]
 trusted_config_paths = ["~/project/jant", "~/project"]
