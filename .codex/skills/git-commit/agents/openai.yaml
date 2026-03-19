@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Commit"
+  short_description: "Review changes and create clean Git commits"
+  default_prompt: "Use $git-commit to review the current diff, stage the right files, and create a clean Git commit."

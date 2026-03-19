@@ -14,6 +14,14 @@ node_modules
 !.gnupg
 .gnupg/**
 !.gnupg/gpg-agent.conf
+
+
+
+!.codex/
+.codex/*
+!.codex/skills
+!.codex/skills/**
+
 !README.md
 !nix/
 !nix/**
