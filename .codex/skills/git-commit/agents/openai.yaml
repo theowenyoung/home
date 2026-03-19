@@ -1,4 +1,4 @@
 interface:
   display_name: "Git Commit"
-  short_description: "Review changes and create clean Git commits"
-  default_prompt: "Use $git-commit to review the current diff, stage the right files, and create a clean Git commit."
+  short_description: "Summarize current changes and commit them"
+  default_prompt: "Use $git-commit to summarize the current working tree and create a straightforward Git commit."
