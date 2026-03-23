@@ -1,5 +1,5 @@
 [tools]
-deno = "2.5.6"
+deno = "latest"
 node = "lts"
 ruby = "latest"
 bun = "latest"
