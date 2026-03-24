@@ -1,9 +1,20 @@
 require "nvchad.autocmds"
 
 local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+
+-- Treat dotenv-style files as INI for syntax highlighting and ft plugins.
+local env_filetype_group = augroup("EnvDosiniFiletype", { clear = true })
+autocmd({ "BufNewFile", "BufRead" }, {
+  group = env_filetype_group,
+  pattern = { ".env", ".env.*" },
+  callback = function(event)
+    vim.bo[event.buf].filetype = "dosini"
+  end,
+})
 
 -- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+local highlight_group = augroup("YankHighlight", { clear = true })
 autocmd("TextYankPost", {
   callback = function()
     vim.highlight.on_yank()

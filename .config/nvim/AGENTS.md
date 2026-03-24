@@ -1,4 +1,4 @@
-# CLAUDE.md - Neovim Config Reference
+# AGENTS.md - Neovim Config Reference
 
 ## Architecture
 
@@ -15,18 +15,18 @@ NvChad v2.5 based config. NvChad is loaded as a lazy.nvim plugin (`NvChad/NvChad
 
 ## Key Files to Edit
 
-| Task | File |
-|------|------|
-| Add/remove plugins | `lua/plugins/init.lua` |
-| Change keybindings | `lua/mappings.lua` |
-| Configure LSP servers | `lua/configs/lspconfig.lua` |
-| Configure formatters | `lua/configs/conform.lua` |
-| Override treesitter/mason/nvimtree | `lua/configs/overrides.lua` |
-| Change theme/UI | `lua/chadrc.lua` |
-| Custom highlights | `lua/highlights.lua` |
-| Editor options | `lua/options.lua` |
-| Autocommands | `lua/autocmds.lua` |
-| Custom snippets | `snippets/` (VSCode format JSON) |
+| Task                               | File                             |
+| ---------------------------------- | -------------------------------- |
+| Add/remove plugins                 | `lua/plugins/init.lua`           |
+| Change keybindings                 | `lua/mappings.lua`               |
+| Configure LSP servers              | `lua/configs/lspconfig.lua`      |
+| Configure formatters               | `lua/configs/conform.lua`        |
+| Override treesitter/mason/nvimtree | `lua/configs/overrides.lua`      |
+| Change theme/UI                    | `lua/chadrc.lua`                 |
+| Custom highlights                  | `lua/highlights.lua`             |
+| Editor options                     | `lua/options.lua`                |
+| Autocommands                       | `lua/autocmds.lua`               |
+| Custom snippets                    | `snippets/` (VSCode format JSON) |
 
 ## Mapping Format (v2.5)
 
@@ -55,6 +55,7 @@ To remove NvChad defaults that conflict with custom mappings, use `vim.keymap.de
 ## LSP Setup Pattern
 
 Servers are configured in `lua/configs/lspconfig.lua` using the new `vim.lsp.config()` + `vim.lsp.enable()` API. Special configurations:
+
 - `ts_ls`: root_markers = `package.json` (single_file_support=false)
 - `denols`: root_markers = `deno.json` / `deno.jsonc`
 
@@ -63,6 +64,7 @@ This prevents ts_ls and denols from conflicting in the same project.
 ## Conform.nvim Formatter Priority
 
 Formatters are tried in order; first available one is used:
+
 1. `prettier_from_project` - only if project has `.prettierrc` or prettier in `package.json`
 2. `deno_fmt` - only if `deno.json`/`deno.jsonc` exists
 3. `prettier` - global fallback
