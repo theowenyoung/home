@@ -1,24 +1,22 @@
 local conform = require "conform"
-
 conform.setup {
   formatters_by_ft = {
-    javascript = { "prettier_from_project", "deno_fmt", "prettier" },
-    typescript = { "prettier_from_project", "deno_fmt", "prettier" },
-    javascriptreact = { "prettier_from_project", "deno_fmt", "prettier" },
-    typescriptreact = { "prettier_from_project", "deno_fmt", "prettier" },
-    vue = { "prettier_from_project", "prettier" },
-    css = { "prettier_from_project", "deno_fmt", "prettier" },
-    scss = { "prettier_from_project", "prettier" },
-    less = { "prettier_from_project", "prettier" },
-    html = { "prettier_from_project", "prettier" },
-    json = { "prettier_from_project", "deno_fmt", "prettier" },
-    jsonc = { "prettier_from_project", "deno_fmt", "prettier" },
-    yaml = { "prettier_from_project", "prettier" },
-    markdown = { "prettier_from_project", "deno_fmt", "prettier" },
+    javascript = { "prettier_from_project" },
+    typescript = { "prettier_from_project" },
+    javascriptreact = { "prettier_from_project" },
+    typescriptreact = { "prettier_from_project" },
+    vue = { "prettier_from_project" },
+    css = { "prettier_from_project" },
+    scss = { "prettier_from_project" },
+    less = { "prettier_from_project" },
+    html = { "prettier_from_project" },
+    json = { "prettier_from_project" },
+    jsonc = { "prettier_from_project" },
+    yaml = { "prettier_from_project" },
+    markdown = { "prettier_from_project" },
     lua = { "stylua" },
     sh = { "shfmt" },
   },
-
   formatters = {
     prettier_from_project = {
       command = "prettier",
@@ -40,7 +38,6 @@ conform.setup {
         if ctx.filename:match "%.min%.js$" then
           return false
         end
-
         local root_markers = { ".git", "package.json", "deno.json" }
         local root_dir = vim.fs.dirname(vim.fs.find(root_markers, {
           upward = true,
@@ -78,28 +75,6 @@ conform.setup {
         return false
       end,
     },
-    deno_fmt = {
-      condition = function(self, ctx)
-        if ctx.filename:match "%.min%.js$" then
-          return false
-        end
-
-        local deno_files = vim.fs.find({ "deno.json", "deno.jsonc" }, {
-          upward = true,
-          path = ctx.filename,
-          type = "file",
-        })
-        return #deno_files > 0
-      end,
-    },
-    prettier = {
-      condition = function(self, ctx)
-        if ctx.filename:match "%.min%.js$" then
-          return false
-        end
-        return true
-      end,
-    },
     stylua = {},
     shfmt = {
       args = { "-i", "2", "-ci" },
@@ -109,10 +84,8 @@ conform.setup {
     timeout_ms = 500,
     lsp_fallback = true,
   },
-
   debug = true,
 }
-
 vim.api.nvim_create_user_command("FormatToggle", function()
   conform.config.format_on_save.enabled = not conform.config.format_on_save.enabled
   print("Format on save: " .. tostring(conform.config.format_on_save.enabled))
