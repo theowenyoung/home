@@ -173,23 +173,29 @@ proxy() {
   export HTTPS_PROXY="http://127.0.0.1:7890"
   export SOCKS_PROXY="socks://127.0.0.1:7890"
   export ALL_PROXY="socks://127.0.0.1:7890"
-  # lowercase
   export http_proxy="$HTTP_PROXY"
   export https_proxy="$HTTPS_PROXY"
   export socks_proxy="$SOCKS_PROXY"
   export all_proxy="$ALL_PROXY"
 }
-#proxy
 
 noproxy() {
-  unset HTTP_PROXY
-  unset HTTPS_PROXY
-  unset SOCKS_PROXY
-  unset ALL_PROXY
-  unset http_proxy
-  unset https_proxy
-  unset socks_proxy
-  unset all_proxy
+  unset HTTP_PROXY HTTPS_PROXY SOCKS_PROXY ALL_PROXY
+  unset http_proxy https_proxy socks_proxy all_proxy
+}
+
+pp() {
+  proxy
+  perl -i -pe 's/^#// if /proxy_start/../proxy_end/ and !/proxy_(start|end)/' ~/.bashrc
+  perl -i -pe 's/^(\s*)# /$1/ if /proxy_start/../proxy_end/ and !/proxy_(start|end)/' ~/.ssh/config
+  echo "proxy ON (shell + bashrc + ssh)"
+}
+
+nopp() {
+  noproxy
+  perl -i -pe 's/^/#/ if /proxy_start/../proxy_end/ and !/proxy_(start|end)/ and !/^#/' ~/.bashrc
+  perl -i -pe 's/^(\s*)(?!#\s*proxy_(start|end))(\S)/$1# $3/ if /proxy_start/../proxy_end/ and !/proxy_(start|end)/ and !/^\s*#/' ~/.ssh/config
+  echo "proxy OFF (shell + bashrc + ssh)"
 }
 
 # ==============================================================================
@@ -288,7 +294,7 @@ if [[ "$TERM_PROGRAM" == "iTerm.app" ]] && test -e "${HOME}/.config/bash/.iterm2
   source "${HOME}/.config/bash/.iterm2_shell_integration.bash"
 fi
 
-alias pp="pnpm"
+alias p="pnpm"
 
 # Bash 需要用 complete 命令
 complete -F _pnpm_completion pp
