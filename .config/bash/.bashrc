@@ -49,6 +49,11 @@ alias di="dig @114.114.114.114"
 alias dd="devbox shell"
 alias vv="cd $HOME/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/Vault"
 
+alias cl="codex-auth list"
+alias cs="codex-auth switch"
+alias clogin="codex-auth login"
+alias cremove="codex-auth remove"
+
 alias t='tmux attach || tmux new-session'
 
 alias m="make"
