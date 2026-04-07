@@ -12,5 +12,8 @@
   "type": "commonjs",
   "devDependencies": {
     "prettier": "^3.6.2"
+  },
+  "dependencies": {
+    "opencc-js": "^1.0.5"
   }
 }

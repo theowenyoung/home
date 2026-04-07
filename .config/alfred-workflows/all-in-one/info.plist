@@ -8,6 +8,19 @@
 	<string>Tools</string>
 	<key>connections</key>
 	<dict>
+		<key>0AFD061F-4E52-444E-9312-E207FA2FEDB1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>7B6BA900-09A6-43CB-8042-E4F94124AADA</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
 		<array>
 			<dict>
@@ -601,6 +614,95 @@ exit 1
 				<key>escaping</key>
 				<integer>102</integer>
 				<key>keyword</key>
+				<string>ts</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>translating...</string>
+				<key>script</key>
+				<string>#!/bin/bash
+
+SCRIPT_PATH="zh-hant-zh-hans.mjs" # Change this to your script's path
+# List of common locations where Node.js might be installed
+NODE_PATHS=(
+  "$HOME/.local/share/mise/shims/node"
+  "/usr/local/bin/node"
+  "/usr/bin/node"
+  "/opt/local/bin/node"
+)
+
+# Loop through the paths and use the first one that exists
+for node in "${NODE_PATHS[@]}"; do
+  if [ -f "$node" ]; then
+    "$node" $SCRIPT_PATH "$@"
+    exit
+  fi
+done
+
+echo "Node.js not found. Please install it or check your paths."
+exit 1
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string>zh-hant zh-hans convert</string>
+				<key>type</key>
+				<integer>11</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>0AFD061F-4E52-444E-9312-E207FA2FEDB1</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>7B6BA900-09A6-43CB-8042-E4F94124AADA</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
 				<string>ll</string>
 				<key>queuedelaycustom</key>
 				<integer>3</integer>
@@ -833,6 +935,13 @@ exit 1
 	<string>Owen's tool for alfred</string>
 	<key>uidata</key>
 	<dict>
+		<key>0AFD061F-4E52-444E-9312-E207FA2FEDB1</key>
+		<dict>
+			<key>xpos</key>
+			<real>70</real>
+			<key>ypos</key>
+			<real>545</real>
+		</dict>
 		<key>14C47A8B-F73F-45F0-AAE3-384BB2102654</key>
 		<dict>
 			<key>xpos</key>
@@ -902,6 +1011,13 @@ exit 1
 			<real>70</real>
 			<key>ypos</key>
 			<real>745</real>
+		</dict>
+		<key>7B6BA900-09A6-43CB-8042-E4F94124AADA</key>
+		<dict>
+			<key>xpos</key>
+			<real>345</real>
+			<key>ypos</key>
+			<real>590</real>
 		</dict>
 		<key>83DF5A31-F828-4C5E-A000-DDFC57AB0E7A</key>
 		<dict>
