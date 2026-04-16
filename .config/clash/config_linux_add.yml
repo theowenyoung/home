@@ -25,6 +25,8 @@ dns:
     - 192.168.31.1
     - 119.29.29.29
   nameserver-policy:
+    "+.cloud-nodes.com":
+      - "124.221.68.73:1053"
     "+.oix_nodes.com": 
       - "124.221.68.73:1053"
   enhanced-mode: fake-ip # or redir-host (not recommended)
