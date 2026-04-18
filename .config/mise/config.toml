@@ -10,6 +10,7 @@ python = "3.14"
 rust = "1.91.1"
 "pipx:ansible" = "13"
 zola = "0.21"
+hugo = "0.160"
 awscli = { version = "2.22.35", symlink_bins = "true" }
 go = "latest"
 neovim = "latest"
