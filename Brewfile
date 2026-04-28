@@ -1,104 +1,113 @@
 # Homebrew 软件包管理器配置文件
-# 使用 brew bundle install 命令安装所有软件
+# 使用 `brew bundle install --file=~/Brewfile` 安装全部
+# 使用 `brew bundle check --file=~/Brewfile` 检查缺失项
 
 # ===== Homebrew Taps (第三方软件源) =====
-tap "homebrew/bundle"              # Brewfile 支持
-tap "homebrew/services"            # 系统服务管理
+tap "homebrew/bundle"              # Brewfile 本身的支持
+tap "homebrew/services"            # `brew services` 守护进程管理
 
 # ===== 命令行工具 (brew) =====
-brew "bash"                        # Bash shell
-brew "curl"                        # 命令行 HTTP 客户端
-brew "mas"                         # Mac App Store 命令行工具
-brew "mise"                        # 运行时版本管理器
-brew "terminal-notifier"
-brew "git"
-brew "jq"
-brew "wget"
-brew "tmux"
-brew "coreutils"
-brew "gnupg"
-brew "age"
-brew "nmap"
-brew "ffmpeg"
-brew "sshpass"
-brew "tree"
-brew "fd"
+brew "bash"                        # 新版 Bash（macOS 自带版本太旧）
+brew "curl"                        # 命令行 HTTP 客户端（比系统自带更新）
+brew "mas"                         # Mac App Store 命令行（管理 mas 条目用）
+brew "mise"                        # 多语言运行时版本管理器
+brew "terminal-notifier"           # 脚本里触发 macOS 通知中心
+brew "git"                         # 版本控制
+brew "jq"                          # JSON 命令行处理器
+brew "wget"                        # 文件下载工具
+brew "tmux"                        # 终端复用器
+brew "coreutils"                   # GNU 核心工具集（gls/gdate 等）
+brew "gnupg"                       # GPG 加密 / 签名
+brew "age"                         # 现代化文件加密（配合 sops 用）
+brew "nmap"                        # 网络扫描 / 端口探测
+brew "ffmpeg"                      # 音视频转码处理
+brew "sshpass"                     # 非交互式 SSH 密码登录
+brew "tree"                        # 树形目录显示
+brew "fd"                          # 用户友好的 find 替代品
 brew "ripgrep"                     # 快速代码搜索（与 fd 配套）
 brew "fzf"                         # 模糊查找（含 shell 集成脚本）
-brew "mkcert"
-brew "telnet"
-brew "gh"
-cask "cc-switch"
-cask "wechat"
-cask "tencent-lemon"
+brew "mkcert"                      # 本地 HTTPS 证书生成
+brew "telnet"                      # 网络端口调试（macOS 已移除）
+brew "gh"                          # GitHub 官方 CLI
 
 # ===== 应用程序 (cask) =====
 
-cask "marta"               # 双面板文件管理器
-  cask "keyboard-maestro"
-cask "telegram"
-cask "google-chrome"               # Google Chrome 浏览器
-cask "google-chrome@beta" # Google Chrome Beta
-cask "helium-browser" # Helium Browser, Mordern Browser from Chrome
-cask "orion" # browser like Safari
-cask "claude-code@latest"
-cask "font-fira-code-nerd-font"
+# --- 浏览器 ---
+cask "google-chrome"               # Chrome 主浏览器
+cask "google-chrome@beta"          # Chrome Beta（提前体验新特性）
+cask "helium-browser"              # Helium，基于 Chromium 的现代浏览器
+cask "orion"                       # 类 Safari 但支持 Chrome 扩展
 
-  cask "notion"
-  cask "obsidian"
-  cask "downie"       # 视频下载
-cask "heynote"
-cask "spotify"
-cask "visual-studio-code"          # Visual Studio Code 代码编辑器
-cask "sequel-ace"                  # MySQL/MariaDB 数据库管理工具
-cask "zed"                         # 高性能代码编辑器
-cask "ghostty"                     # terminal
+# --- 编辑器 / 终端 ---
+cask "visual-studio-code"          # VSCode 代码编辑器
+cask "zed"                         # Zed 高性能编辑器
+cask "ghostty"                     # 现代 GPU 终端
+cask "font-fira-code-nerd-font"    # 等宽字体含图标（终端/编辑器用）
 
-cask "alfred"                      # 快速启动器和生产力工具
-cask "cleanshot"                   # 截图和屏幕录制工具
-cask "selfcontrol"                 # 网站屏蔽工具，帮助专注工作
-cask "bartender"                   # 隐藏菜单栏
-cask "iina"                        # 视频播放器
-cask "feishu"                      # 飞书办公协作平台
-cask "calibre"                     # 电子书管理和转换工具
-cask "tencent-meeting"             # 腾讯会议
-cask "netnewswire"                 # RSS 阅读器
+# --- 开发工具 ---
+cask "claude-code@latest"          # Claude Code CLI（最新版）
+cask "cc-switch"                   # Claude Code 多账号/配置切换
+cask "orbstack"                    # Docker Desktop 替代品（更轻量）
+cask "sequel-ace"                  # MySQL / MariaDB GUI
+cask "postico"                     # PostgreSQL GUI
+
+# --- AI 桌面端 ---
+cask "claude"                      # Claude 桌面端
+cask "chatgpt"                     # ChatGPT 桌面端
+cask "codex"                       # OpenAI Codex 桌面端
+
+# --- 效率工具 ---
+cask "alfred"                      # 启动器 + 工作流
+cask "cleanshot"                   # 截图 / 录屏
+cask "keyboard-maestro"            # 键盘宏自动化
+cask "bartender"                   # 菜单栏整理
+cask "selfcontrol"                 # 屏蔽干扰网站，专注用
 cask "keepingyouawake"             # 菜单栏防睡眠工具
+cask "marta"                       # 双面板文件管理器
 
+# --- 通讯 / 协作 ---
+cask "telegram"                    # Telegram
+cask "wechat"                      # 微信
+cask "feishu"                      # 飞书
+cask "tencent-meeting"             # 腾讯会议
 
-  cask "claude"              # Claude 桌面端
-  cask "chatgpt"             # ChatGPT 桌面端
-  cask "codex"               # OpenAI Codex 桌面端
-  cask "postico"             # PostgreSQL GUI
+# --- 笔记 / 信息流 ---
+cask "notion"                      # Notion 知识库
+cask "obsidian"                    # 本地优先 Markdown 笔记
+cask "heynote"                     # 程序员 scratchpad
+cask "netnewswire"                 # RSS 阅读器
 
+# --- 媒体 / 阅读 ---
+cask "iina"                        # 视频播放器
+cask "spotify"                     # 音乐流媒体
+cask "downie"                      # 视频下载
+cask "calibre"                     # 电子书管理 / 转换
 
+# --- 系统辅助 ---
+cask "tencent-lemon"               # 柠檬清理（系统垃圾清理）
 
 # ===== Mac App Store 应用 (mas) =====
+# 查询 ID：`mas search <名字>` ；验证：`mas info <id>`
 
-mas "TestFlight", id: 899247664            # 苹果官方测试应用平台
-mas "The Unarchiver", id: 425424353       # 解压缩工具
+# --- 苹果官方 ---
+mas "Xcode", id: 497799835                 # Xcode 开发环境
+mas "TestFlight", id: 899247664            # 测试版应用分发
+mas "Pages", id: 361309726                 # iWork - Pages（中区"Pages 文稿"）
+mas "Numbers", id: 361304891               # iWork - Numbers（中区"Numbers 表格"）
+mas "Keynote", id: 361285480               # iWork - Keynote（中区"Keynote 讲演"）
 
-mas "Xcode", id: 497799835                 # 苹果官方开发环境
-mas "Ridill SQLIte", id: 1058773711       # SQLite 数据库管理工具
-mas "MindNode", id: 1289197285             # 思维导图
-mas "Microsoft Word", id: 462054704        # 微软 Word 文档处理
-mas "Microsoft PowerPoint", id: 462062816  # 微软 PowerPoint 演示文稿
-mas "Pages", id: 361309726                 # 苹果 Pages 文档处理（中区显示为"Pages 文稿"）
-mas "Numbers", id: 361304891               # 苹果 Numbers 表格处理（中区显示为"Numbers 表格"）
-mas "Keynote", id: 361285480               # 苹果 Keynote 演示文稿（中区显示为"Keynote 讲演"）
+# --- 微软 Office ---
+mas "Microsoft Word", id: 462054704        # Word 文档
+mas "Microsoft PowerPoint", id: 462062816  # PowerPoint 演示
 
-mas "uPic", id: 1549159979                 # 图片上传工具
+# --- 笔记 / 阅读 ---
+mas "MindNode", id: 1289197285             # 思维导图（已改名 MindNode Classic）
+mas "Exporter", id: 1099120373             # 备忘录批量导出 Markdown
 
-
-mas "Immersive Translate", id: 6447957425  # 沉浸式翻译工具
-
-mas "Windows App", id: 1295203466          # Windows 远程桌面
-
-mas "Boop", id: 1518425043                 # 开发者文本处理工具
-mas "1-Click Video Converter", id: 717545086 # 视频格式转换
-mas "Exporter", id: 1099120373             # 备忘录导出工具
-
-
-
-
-
+# --- 开发 / 工具 ---
+mas "Ridill SQLIte", id: 1058773711        # 轻量 SQLite 客户端
+mas "Boop", id: 1518425043                 # 开发者文本处理工具（Base64/格式化等）
+mas "uPic", id: 1549159979                 # 图床上传工具
+mas "1-Click Video Converter", id: 717545086  # 视频格式转换
+mas "Immersive Translate", id: 6447957425  # 沉浸式翻译（网页双语）
+mas "Windows App", id: 1295203466          # 微软官方 RDP 客户端
