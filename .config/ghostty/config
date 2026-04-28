@@ -9,7 +9,7 @@ clipboard-paste-protection = false
 # auto-update-channel = tip
 auto-update-channel = stable
 
-theme = Raycast Light
+# theme = Raycast Light
 
 clipboard-read=allow
 
