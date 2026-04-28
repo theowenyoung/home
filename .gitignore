@@ -22,6 +22,14 @@ node_modules
 !.codex/skills
 !.codex/skills/**
 
+!.agents/
+.agents/*
+!.agents/.skill-lock.json
+
+!.claude/
+.claude/*
+!.claude/settings.json
+
 !README.md
 !nix/
 !nix/**

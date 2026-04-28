@@ -29,16 +29,26 @@ brew "mkcert"
 brew "telnet"
 brew "gh"
 cask "cc-switch"
+cask "wechat"
+cask "tencent-lemon"
 
 # ===== 应用程序 (cask) =====
 
+cask "marta"               # 双面板文件管理器
+  cask "keyboard-maestro"
 cask "telegram"
 cask "google-chrome"               # Google Chrome 浏览器
 cask "google-chrome@beta" # Google Chrome Beta
 cask "helium-browser" # Helium Browser, Mordern Browser from Chrome
-
+cask "orion" # browser like Safari
+cask "claude-code@latest"
 cask "font-fira-code-nerd-font"
 
+  cask "notion"
+  cask "obsidian"
+  cask "downie"       # 视频下载
+cask "heynote"
+cask "spotify"
 cask "visual-studio-code"          # Visual Studio Code 代码编辑器
 cask "sequel-ace"                  # MySQL/MariaDB 数据库管理工具
 cask "zed"                         # 高性能代码编辑器
@@ -54,6 +64,14 @@ cask "calibre"                     # 电子书管理和转换工具
 cask "tencent-meeting"             # 腾讯会议
 cask "netnewswire"                 # RSS 阅读器
 cask "keepingyouawake"             # 菜单栏防睡眠工具
+
+
+  cask "claude"              # Claude 桌面端
+  cask "chatgpt"             # ChatGPT 桌面端
+  cask "codex"               # OpenAI Codex 桌面端
+  cask "postico"             # PostgreSQL GUI
+
+
 
 # ===== Mac App Store 应用 (mas) =====
 

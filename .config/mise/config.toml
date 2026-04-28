@@ -18,3 +18,10 @@ flux = "latest"
 
 [settings]
 trusted_config_paths = ["~/project/jant", "~/project"]
+
+[tasks.skills-restore]
+description = "Reinstall global npx skills from ~/.agents/.skill-lock.json"
+run = '''
+jq -r '.skills | to_entries[] | "\(.value.source) -s \(.key)"' ~/.agents/.skill-lock.json \
+  | while read -r args; do npx skills add $args -g -y; done
+'''

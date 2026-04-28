@@ -161,6 +161,56 @@ pbpaste | gpg --import
 2. 剪贴板管理快捷键：`Cmd+Cmd`（双击 Cmd）
 3. Text action 快捷键：`Option+Cmd`
 
+### 其他没有在 brew 管理的软件
+
+1. [Clash](https://github.com/MetaCubeX/ClashX.Meta/releases)
+2. [闪电说](https://shandianshuo.cn/)
+
+自定义词典：
+
+```
+mise
+jant
+Mise
+小象
+tumblr
+通义千问
+变体
+最佳实践
+Obsidian
+网址
+app store
+apple store
+windows
+iOS
+macOS
+PWA
+Chrome
+Blog
+APP
+Touch grass
+gemini
+markdown
+AI
+LLM
+ChatGPT
+rss
+Owen
+Claude
+prompt
+Claude 4.6
+wrangler
+repo
+Jant
+CLAUDE.md
+commands
+command
+AGENTS.md
+sql
+sqlite
+build
+```
+
 ## 日常使用
 
 ### 升级所有软件
@@ -185,6 +235,18 @@ mise install
 
 当前通过 mise 管理的运行时（见 `.config/mise/config.toml`）：
 node, deno, bun, python, ruby, rust, go, zig, uv, redis, zola, awscli, neovim, ansible(pipx)
+
+### AI Agent skills 管理
+
+通过 [`npx skills`](https://github.com/vercel-labs/skills) 管理 Claude Code / Codex 等 agent 的 skills，全局清单保存在 `~/.agents/.skill-lock.json`（类似 Brewfile 的角色，已纳入 git）。
+
+新机器一键还原:
+
+```bash
+mise run skills-restore
+```
+
+该 task 会读取 lock 文件，逐个执行 `npx skills add ... -g`，自动重建 `~/.agents/skills/` 目录和各 agent 目录下的符号链接（如 `~/.claude/skills/`）。
 
 ### 密钥管理
 
