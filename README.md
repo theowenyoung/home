@@ -182,7 +182,6 @@ cd ~ && brew bundle
 如果需要保持同一个 GPG 签名身份，GPG 私钥同样以文本形式存储在 Passwords app 中。
 
 > 私钥已经包含公钥，导入后 `gpg --list-keys` 自动可见，无需单独导出公钥。
-> `ownertrust` 单独存在信任数据库里，不随私钥走，需要单独备份。
 
 **备份密钥到 Passwords app：**
 
@@ -192,9 +191,6 @@ gpg --armor --export-secret-keys 6453791878A4BC69317FEF9DA5142BBAFFEF7028 | pbco
 
 # 账户 2: owen@owenyoung.com (Main)
 gpg --armor --export-secret-keys B12C44A2E9386B993A8FFC53F822CE4444B1D606 | pbcopy
-
-# 信任度（一份即可，包含所有账户）
-gpg --export-ownertrust | pbcopy
 ```
 
 每条命令执行后，去 Passwords app 新建对应条目粘贴保存。
@@ -204,7 +200,6 @@ gpg --export-ownertrust | pbcopy
 ```bash
 # 依次从 Passwords app 复制每个条目的内容，然后执行：
 pbpaste | gpg --import                  # 导入私钥（两个账户各执行一次）
-pbpaste | gpg --import-ownertrust       # 恢复信任度
 
 gpg --list-secret-keys                  # 验证
 ```
