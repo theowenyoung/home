@@ -1,5 +1,6 @@
 {
   "env": {},
+  "skipDangerousModePermissionPrompt": true,
   "hooks": {
     "SessionEnd": [
       {
@@ -8,8 +9,8 @@
           {
             "type": "command",
             "command": "ccclub sync --silent",
-            "timeout": 30,
-            "async": true
+            "async": true,
+            "timeout": 30
           }
         ]
       }
@@ -21,14 +22,11 @@
           {
             "type": "command",
             "command": "ccclub sync --silent",
-            "timeout": 30,
-            "async": true
+            "async": true,
+            "timeout": 30
           }
         ]
       }
     ]
-  },
-  "effortLevel": "xhigh",
-  "skipDangerousModePermissionPrompt": true,
-  "theme": "light-daltonized"
+  }
 }

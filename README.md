@@ -117,8 +117,9 @@ git branch --set-upstream-to origin/main main
 - `google-chrome`：日常浏览器（登录账号 / 同步扩展用）
 
 ```bash
-brew install bash
+brew install bash mise
 brew install --cask ghostty google-chrome
+mise install
 ```
 
 ### 6. 切换默认 Shell 为 Homebrew Bash

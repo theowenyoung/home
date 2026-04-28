@@ -108,6 +108,5 @@ mas "Exporter", id: 1099120373             # 备忘录批量导出 Markdown
 mas "Ridill SQLIte", id: 1058773711        # 轻量 SQLite 客户端
 mas "Boop", id: 1518425043                 # 开发者文本处理工具（Base64/格式化等）
 mas "uPic", id: 1549159979                 # 图床上传工具
-mas "1-Click Video Converter", id: 717545086  # 视频格式转换
 mas "Immersive Translate", id: 6447957425  # 沉浸式翻译（网页双语）
 mas "Windows App", id: 1295203466          # 微软官方 RDP 客户端
