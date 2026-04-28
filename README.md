@@ -43,7 +43,7 @@
 1. 输入法设置为双拼，caps 切换中英输入法
 2. Settings -> Keyboard：按键速度和延迟都调到最快
 4. Settings -> Trackpad：启用 Tap to click
-3. Settings -> Accessibility -> Pointer Control -> Trackpad Options ：启用三指拖动（Three Finger Drag）
+3. Settings -> Accessibility -> Pointer Control -> Trackpad Options > enable Use trackpad for draffing -> Dragging style -> 三指拖动（Three Finger Drag）
 5. Settings -> Dock：自动隐藏 Dock 栏
 6. [HyperKey.app](https://hyperkey.app/) 设置 caps lock 为 Hyper 键
 
