@@ -181,18 +181,32 @@ cd ~ && brew bundle
 
 如果需要保持同一个 GPG 签名身份，GPG 私钥同样以文本形式存储在 Passwords app 中。
 
+> 私钥已经包含公钥，导入后 `gpg --list-keys` 自动可见，无需单独导出公钥。
+> `ownertrust` 单独存在信任数据库里，不随私钥走，需要单独备份。
+
 **备份密钥到 Passwords app：**
 
 ```bash
-# 导出私钥内容到剪贴板，然后在 Passwords app 中新建条目粘贴保存
-gpg --export-secret-keys --armor | pbcopy
+# 账户 1: theowenyoung@gmail.com
+gpg --armor --export-secret-keys 6453791878A4BC69317FEF9DA5142BBAFFEF7028 | pbcopy
+
+# 账户 2: owen@owenyoung.com (Main)
+gpg --armor --export-secret-keys B12C44A2E9386B993A8FFC53F822CE4444B1D606 | pbcopy
+
+# 信任度（一份即可，包含所有账户）
+gpg --export-ownertrust | pbcopy
 ```
+
+每条命令执行后，去 Passwords app 新建对应条目粘贴保存。
 
 **在新机器上恢复密钥：**
 
 ```bash
-# 在 Passwords app 中找到 GPG 条目，复制内容，然后导入
-pbpaste | gpg --import
+# 依次从 Passwords app 复制每个条目的内容，然后执行：
+pbpaste | gpg --import                  # 导入私钥（两个账户各执行一次）
+pbpaste | gpg --import-ownertrust       # 恢复信任度
+
+gpg --list-secret-keys                  # 验证
 ```
 
 ### 10. Alfred 配置
