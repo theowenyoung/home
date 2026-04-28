@@ -168,6 +168,8 @@ source ~/.bash_profile
 ```
 
 > 说明：`~/.bash_profile` 中其它工具自动写入的片段（iTerm2 shell integration、Windsurf PATH、`~/.local/bin/env`、Kiro CLI 等）会在对应工具安装/首次运行时自动追加，无需手工维护。API token 等敏感信息通过 `sec add <KEY> "<value>"` 写入 macOS Keychain（见后文「密钥管理」），共享 bashrc 会在启动时自动读取。
+>
+> 如果是从旧 Mac 迁移：在旧机 `sec export` 写入剪贴板，本机（已登录同一 iCloud，Universal Clipboard 自动同步）执行 `sec import` 即可一次性灌入全部 token，无需逐个 `sec add`。
 
 ### 8. 安装所有软件
 
@@ -213,6 +215,15 @@ gpg --list-secret-keys                  # 验证
 4. Advanced sync 选择 icloud drive Documents/alfred-settings
 5. 参考 [alfred-workflows](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows), 安装自己写的 alfred workflow
 
+
+### 11. Bartender 配置
+
+菜单栏整理工具（已通过 Brewfile 安装），首次启动需要做几件事：
+
+1. 授予 **Accessibility** 权限（System Settings → Privacy & Security → Accessibility）
+2. 授予 **Screen Recording** 权限（用于读取菜单栏图标）
+3. 设置开机自启（Bartender → Settings → General → Launch at login）
+4. 配置 iCloud 同步（Bartender → Settings → Profiles → 启用 iCloud sync），新机器会自动拉到同样的隐藏/显示规则
 
 
 ### 其他没有在 brew 管理的软件
@@ -408,6 +419,8 @@ mise install
 
 ## 迁移
 
-1. 最好保留旧的mac 电脑，这样可以同步复制，粘贴。
+旧机器在弃用 / 抹除前要做的清单：
 
-1. 迁移 `~/.ssh/`, 直接复制粘贴
+1. 最好保留旧的 Mac，这样可以同步复制粘贴（依赖 iCloud Universal Clipboard）。
+2. 迁移 `~/.ssh/`：直接复制粘贴。
+3. 迁移 keychain 中的 API token：在旧机执行 `sec export`（写入剪贴板），新机 `sec import` 一次性灌入。详见「密钥管理」。
