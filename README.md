@@ -424,3 +424,6 @@ mise install
 1. 最好保留旧的 Mac，这样可以同步复制粘贴（依赖 iCloud Universal Clipboard）。
 2. 迁移 `~/.ssh/`：直接复制粘贴。
 3. 迁移 keychain 中的 API token：在旧机执行 `sec export`（写入剪贴板），新机 `sec import` 一次性灌入。详见「密钥管理」。
+4. 复制 Chrome 插件的本地设置（账号同步不会带过来的部分），常见的：
+   - **Claude**：扩展里的快捷键设置（chrome://extensions/shortcuts）
+   - 其他扩展中靠本地存储而非账号同步的偏好（如自定义快捷键、白名单域名等）
