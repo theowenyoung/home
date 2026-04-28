@@ -1,10 +1,6 @@
 # Homebrew 软件包管理器配置文件
-# 使用 `brew bundle install --file=~/Brewfile` 安装全部
+# 使用 `brew bundle ` 安装全部
 # 使用 `brew bundle check --file=~/Brewfile` 检查缺失项
-
-# ===== Homebrew Taps (第三方软件源) =====
-tap "homebrew/bundle"              # Brewfile 本身的支持
-tap "homebrew/services"            # `brew services` 守护进程管理
 
 # ===== 命令行工具 (brew) =====
 brew "bash"                        # 新版 Bash（macOS 自带版本太旧）
@@ -105,7 +101,7 @@ mas "MindNode", id: 1289197285             # 思维导图（已改名 MindNode C
 mas "Exporter", id: 1099120373             # 备忘录批量导出 Markdown
 
 # --- 开发 / 工具 ---
-mas "Ridill SQLIte", id: 1058773711        # 轻量 SQLite 客户端
+# mas "Ridill SQLIte", id: 1058773711        # 轻量 SQLite 客户端
 mas "Boop", id: 1518425043                 # 开发者文本处理工具（Base64/格式化等）
 mas "uPic", id: 1549159979                 # 图床上传工具
 mas "Immersive Translate", id: 6447957425  # 沉浸式翻译（网页双语）
