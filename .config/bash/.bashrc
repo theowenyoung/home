@@ -230,6 +230,33 @@ sec() {
   esac
 }
 
+# ==============================================================================
+# 环境变量：API token / 端点配置（通过 sec 函数从 macOS Keychain 读取）
+#
+# 这些行不是密钥本身——只是"运行时从 Keychain 读"的指令。真正的 secret 锁在
+# Keychain 里。如果某个 key 没存，sec get 返回空字符串，对应的变量就是空，无害。
+# 在新机器上配置：sec add <KEY> "<value>"
+# ==============================================================================
+export BEDROCK_KEYS=$(sec get BEDROCK_KEYS 2>/dev/null)
+export CUSTOM_ANTHROPIC_API_KEY=$(sec get ANTHROPIC_API_KEY 2>/dev/null)
+export AZURE_OPENAI_API_KEY=$(sec get AZURE_OPENAI_API_KEY 2>/dev/null)
+export AWS_BEARER_TOKEN_BEDROCK=$(sec get AWS_BEARER_TOKEN_BEDROCK 2>/dev/null)
+export GITHUB_API_TOKEN=$(sec get GITHUB_API_TOKEN 2>/dev/null)
+export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
+export HF_TOKEN=$(sec get HF_TOKEN 2>/dev/null)
+export CUSTOM_OPENAI_API_ENDPOINT=$(sec get CUSTOM_OPENAI_API_ENDPOINT 2>/dev/null)
+export CUSTOM_OPENAI_BASE_URL="$CUSTOM_OPENAI_API_ENDPOINT"
+export CUSTOM_OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
+export SHOWBOAT_REMOTE_URL=$(sec get SHOWBOAT_REMOTE_URL 2>/dev/null)
+export CUSTOM_CLAUDE_CODE_OAUTH_TOKEN=$(sec get CLAUDE_CODE_OAUTH_TOKEN 2>/dev/null)
+# export CLAUDE_CODE_USE_BEDROCK=1
+# export CLAUDE_CODE_MAX_OUTPUT_TOKENS=1000000
+export AWS_REGION=us-west-2
+
+# cloudflare
+CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-$(sec get CLOUDFLARE_API_TOKEN 2>/dev/null)}
+CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-$(sec get CLOUDFLARE_ACCOUNT_ID 2>/dev/null)}
+
 # other config
 # if [ -t 1 ]; then
 # bash config

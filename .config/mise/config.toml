@@ -14,7 +14,6 @@ hugo = "0.160"
 awscli = { version = "2.22.35", symlink_bins = "true" }
 go = "latest"
 neovim = "latest"
-flux = "latest"
 
 [settings]
 trusted_config_paths = ["~/project/jant", "~/project"]

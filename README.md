@@ -60,6 +60,18 @@ sudo xcodebuild -license   # 仅在装了完整 Xcode 时需要；只装 Command
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+安装完成后，`brew` 还不在 PATH 里，需要先把它加载进当前 shell（之后 step 7 加载 bashrc 后会自动处理，这里只是为了让后续步骤能用）：
+
+```bash
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+或直接关闭并重开终端。验证：
+
+```bash
+brew --version
+```
+
 ### 3. SSH 密钥
 
 SSH 私钥以文本形式存储在 macOS Passwords app 中（作为密码条目的值），通过 iCloud 在设备间同步。
@@ -96,15 +108,22 @@ git reset --hard origin/main
 git branch --set-upstream-to origin/main main
 ```
 
-### 5. 安装所有软件
+### 5. 安装 Bash / Ghostty / Chrome
 
-home repo 已在 `$HOME`，直接用 Brewfile 安装：
+提前装好后续要用到的几个基础软件：
+
+- `bash`：后续 bashrc 依赖较新版本（macOS 自带的是 3.x）
+- `ghostty`：日常用的终端（之后切到 Ghostty 里继续操作更顺）
+- `google-chrome`：日常浏览器（登录账号 / 同步扩展用）
 
 ```bash
-cd ~ && brew bundle
+brew install bash
+brew install --cask ghostty google-chrome
 ```
 
 ### 6. 切换默认 Shell 为 Homebrew Bash
+
+> 装完 Ghostty 后，建议在 Ghostty 里继续后面的步骤，体验更好。
 
 ```bash
 # 添加 homebrew bash 到合法 shell 列表
@@ -114,16 +133,31 @@ chsh -s /opt/homebrew/bin/bash
 
 ### 7. 加载自定义 bashrc
 
+`~/.bash_profile` 与 `~/.bashrc` 都被 `.gitignore` 屏蔽，新机器需要手动建立两条最小引导：
+
+- `~/.bashrc`：source 仓库里的共享配置（PATH、aliases、`sec` 函数、API token 导出等都在 `~/.config/bash/.bashrc` 里集中管理）
+- `~/.bash_profile`：登录 shell 入口，source `~/.bashrc`（macOS 登录 shell 默认不会自动读 `.bashrc`）
+
 ```bash
-if ! grep -q "# green-bashrc-start" ~/.bash_profile; then
-cat >>~/.bash_profile <<EOF
+# 1) ~/.bashrc 接入共享配置
+if ! grep -q "# green-bashrc-start" ~/.bashrc 2>/dev/null; then
+cat >>~/.bashrc <<'EOF'
 # green-bashrc-start
 
 if [ -f ~/.config/bash/.bashrc ]; then
-    source ~/.config/bash/.bashrc
+  source ~/.config/bash/.bashrc
 fi
 
 # green-bashrc-end
+EOF
+fi
+
+# 2) ~/.bash_profile source ~/.bashrc
+if ! grep -q "source ~/.bashrc\|\. ~/.bashrc" ~/.bash_profile 2>/dev/null; then
+cat >>~/.bash_profile <<'EOF'
+if [ -f ~/.bashrc ]; then
+  source ~/.bashrc
+fi
 EOF
 fi
 ```
@@ -132,7 +166,17 @@ fi
 source ~/.bash_profile
 ```
 
-### 8. GPG 密钥（可选）
+> 说明：`~/.bash_profile` 中其它工具自动写入的片段（iTerm2 shell integration、Windsurf PATH、`~/.local/bin/env`、Kiro CLI 等）会在对应工具安装/首次运行时自动追加，无需手工维护。API token 等敏感信息通过 `sec add <KEY> "<value>"` 写入 macOS Keychain（见后文「密钥管理」），共享 bashrc 会在启动时自动读取。
+
+### 8. 安装所有软件
+
+home repo 已在 `$HOME`，直接用 Brewfile 安装其余软件：
+
+```bash
+cd ~ && brew bundle
+```
+
+### 9. GPG 密钥（可选）
 
 如果需要保持同一个 GPG 签名身份，GPG 私钥同样以文本形式存储在 Passwords app 中。
 
@@ -150,7 +194,7 @@ gpg --export-secret-keys --armor | pbcopy
 pbpaste | gpg --import
 ```
 
-### 9. Alfred 配置
+### 10. Alfred 配置
 
 参考 [alfred-workflows](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
