@@ -197,11 +197,14 @@ pbpaste | gpg --import
 
 ### 10. Alfred 配置
 
-参考 [alfred-workflows](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows)
 
 1. 快捷键改为 `Cmd+Space`，移除默认 Spotlight 快捷键
 2. 剪贴板管理快捷键：`Cmd+Cmd`（双击 Cmd）
-3. Text action 快捷键：`Option+Cmd`
+3. 主题改为 Alfred macOS
+4. Advanced sync 选择 icloud drive Documents/alfred-settings
+5. 参考 [alfred-workflows](https://github.com/theowenyoung/home/tree/main/.config/alfred-workflows), 安装自己写的 alfred workflow
+
+
 
 ### 其他没有在 brew 管理的软件
 

@@ -7,8 +7,7 @@
 ## 如何安装 all-in-one 工作流
 
 ```bash
-cd ~/.config/alfred-workflows/all-in-one
-./install.sh
+~/.config/alfred-workflows/all-in-one/install.sh
 ```
 
 安装之后，需要在 workflow 中配置 deepl key

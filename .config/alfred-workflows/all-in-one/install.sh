@@ -4,7 +4,15 @@
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # 设置 Alfred Workflow 目录
-ALFRED_WORKFLOWS_DIR="$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/workflows"
+# 优先读取 Alfred 配置的 syncfolder（用户可能把偏好同步到 iCloud 等位置）
+SYNC_FOLDER=$(defaults read com.runningwithcrayons.Alfred-Preferences syncfolder 2>/dev/null)
+if [ -n "$SYNC_FOLDER" ]; then
+  # defaults 输出的 ~ 需要展开
+  SYNC_FOLDER="${SYNC_FOLDER/#\~/$HOME}"
+  ALFRED_WORKFLOWS_DIR="$SYNC_FOLDER/Alfred.alfredpreferences/workflows"
+else
+  ALFRED_WORKFLOWS_DIR="$HOME/Library/Application Support/Alfred/Alfred.alfredpreferences/workflows"
+fi
 
 # 检查 info.plist 是否存在
 INFO_PLIST="$SOURCE_DIR/info.plist"
