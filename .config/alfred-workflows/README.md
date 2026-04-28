@@ -12,7 +12,7 @@
 
 安装之后，需要在 workflow 中配置 deepl key
 
-然后设置一些动作显示在 Fallback 结果中：
+然后设置一些动作显示在 Fallback 结果中(这一步好像不再需要里，alfred 会自动同步)
 
 [设置]-> [Features] -> [Default Results] -> [Fallbacks] -> [Setup fallback results] -> [Add default workflow trigger] -> [添加你需要的默认trigger]
 

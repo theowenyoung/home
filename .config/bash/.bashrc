@@ -225,8 +225,38 @@ sec() {
     add) security add-generic-password -a "$USER" -s "$prefix/$2" -w "$3" ;;
     get) security find-generic-password -a "$USER" -s "$prefix/$2" -w ;;
     rm) security delete-generic-password -a "$USER" -s "$prefix/$2" ;;
-    ls) security dump-keychain | grep "svce" | grep "$prefix/" | awk -F'"' '{print $4}' | sed "s|$prefix/||" ;;
-    *) echo "usage: sec <add|get|rm|ls> [key] [value]" ;;
+    ls) security dump-keychain | grep "svce" | grep "$prefix/" | awk -F'"' '{print $4}' | sed "s|$prefix/||" | sort -u ;;
+    export)
+      local count=0 out="# sec-export v1"$'\n'
+      while IFS= read -r k; do
+        [ -z "$k" ] && continue
+        local v
+        v=$(security find-generic-password -a "$USER" -s "$prefix/$k" -w 2>/dev/null) || continue
+        out+="$k=$(printf '%s' "$v" | base64 | tr -d '\n')"$'\n'
+        count=$((count + 1))
+      done < <(sec ls)
+      printf '%s' "$out" | pbcopy
+      echo "exported $count keys to clipboard"
+      ;;
+    import)
+      local input
+      input=$(pbpaste)
+      if [ "$(printf '%s\n' "$input" | head -n1)" != "# sec-export v1" ]; then
+        echo "error: clipboard is not a sec-export v1 payload" >&2
+        return 1
+      fi
+      local count=0
+      while IFS='=' read -r k v; do
+        [ -z "$k" ] || [ "${k:0:1}" = "#" ] && continue
+        local decoded
+        decoded=$(printf '%s' "$v" | base64 -D 2>/dev/null) \
+          || { echo "skip $k (base64 decode failed)" >&2; continue; }
+        security add-generic-password -U -a "$USER" -s "$prefix/$k" -w "$decoded"
+        count=$((count + 1))
+      done <<< "$input"
+      echo "imported $count keys"
+      ;;
+    *) echo "usage: sec <add|get|rm|ls|export|import> [key] [value]" ;;
   esac
 }
 

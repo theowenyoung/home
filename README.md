@@ -304,7 +304,7 @@ mise run skills-restore
 
 ### 密钥管理
 
-API token 等敏感信息不应该写死在 bashrc 。这里用 macOS Keychain（iCloud 同步）来存储，通过定义在 bashrc 中的 `sec` 函数操作：
+API token 等敏感信息不应该写死在 bashrc 。这里用 macOS Keychain 来存储（本地 login keychain，不走 iCloud Keychain 同步），通过定义在 bashrc 中的 `sec` 函数操作：
 
 ```bash
 sec add GITHUB_TOKEN "ghp_xxx"    # 添加
@@ -315,6 +315,15 @@ sec ls                            # 列出所有
 # 配合 export 使用
 export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
 ```
+
+跨机器迁移：通过剪贴板（配合 macOS Universal Clipboard，可在登录同一 iCloud 的 Mac 之间无缝传输）：
+
+```bash
+sec export    # 在源机：把所有 secret/* 编码（base64）后写入剪贴板
+sec import    # 在目标机：从剪贴板读入并校验 magic header，逐个写入 keychain
+```
+
+剪贴板里短暂存在 base64 编码的明文 token，不在同一 iCloud 时可手动粘到加密笔记中转。
 
 ## Linux 服务器初始化
 

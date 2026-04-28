@@ -51,6 +51,7 @@ cask "postico"                     # PostgreSQL GUI
 cask "claude"                      # Claude 桌面端
 cask "chatgpt"                     # ChatGPT 桌面端
 cask "codex"                       # OpenAI Codex 桌面端
+cask "codex-app"
 
 # --- 效率工具 ---
 cask "alfred"                      # 启动器 + 工作流
