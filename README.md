@@ -51,7 +51,7 @@
 
 ```bash
 xcode-select --install
-sudo xcodebuild -license
+sudo xcodebuild -license   # 仅在装了完整 Xcode 时需要；只装 Command Line Tools 可跳过
 ```
 
 ### 2. 安装 Homebrew
@@ -60,17 +60,7 @@ sudo xcodebuild -license
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-### 3. 安装所有软件
-
-先将 Repo 克隆到临时目录，用 Brewfile 安装所有软件：
-
-```bash
-mkdir -p ~/inbox
-git clone https://github.com/theowenyoung/home ~/inbox/home
-cd ~/inbox/home && brew bundle
-```
-
-### 4. SSH 密钥
+### 3. SSH 密钥
 
 SSH 私钥以文本形式存储在 macOS Passwords app 中（作为密码条目的值），通过 iCloud 在设备间同步。
 
@@ -94,17 +84,24 @@ chmod 600 ~/.ssh/id_ed25519
 ssh-keygen -y -f ~/.ssh/id_ed25519 > ~/.ssh/id_ed25519.pub
 ```
 
-### 5. 将 home repo 初始化到 $HOME
+### 4. 将 home repo 初始化到 $HOME
 
 ```bash
 cd "$HOME"
 rm -rf .git
 git init -b main
-git remote add origin https://github.com/theowenyoung/home.git
+git remote add origin git@github.com:theowenyoung/home.git
 git fetch origin main
 git reset --hard origin/main
 git branch --set-upstream-to origin/main main
-git remote set-url --push origin git@github.com:theowenyoung/home.git
+```
+
+### 5. 安装所有软件
+
+home repo 已在 `$HOME`，直接用 Brewfile 安装：
+
+```bash
+cd ~ && brew bundle
 ```
 
 ### 6. 切换默认 Shell 为 Homebrew Bash
@@ -341,3 +338,10 @@ mise install
 ## 部署
 
 服务器部署和基础设施即代码在单独的仓库管理：[theowenyoung/studio-example](https://github.com/theowenyoung/studio-example)
+
+
+## 迁移
+
+1. 最好保留旧的mac 电脑，这样可以同步复制，粘贴。
+
+1. 迁移 `~/.ssh/`, 直接复制粘贴
