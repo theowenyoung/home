@@ -44,18 +44,15 @@ async function main() {
       const soundUrl = getSoundUrl(icibaResult);
       if (soundUrl) {
         const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-        const nodePath = getNodeExecPath();
-        if (nodePath) {
-          const child = spawn(
-            nodePath,
-            [path.join(__dirname, "./play.mjs"), soundUrl],
-            {
-              detached: true,
-              stdio: "ignore",
-            },
-          );
-          child.unref();
-        }
+        const child = spawn(
+          process.execPath,
+          [path.join(__dirname, "./play.mjs"), soundUrl],
+          {
+            detached: true,
+            stdio: "ignore",
+          },
+        );
+        child.unref();
       }
 
       console.log(
@@ -596,21 +593,6 @@ export function getSoundUrl(icibaResult) {
       : symbol.ph_en_mp3;
   if (phoneticUrl.length) {
     return phoneticUrl;
-  }
-}
-
-function getNodeExecPath() {
-  const nodePaths = [
-    path.join(process.env.HOME, ".nix-profile", "bin", "node"),
-    "/usr/local/bin/node",
-    "/usr/bin/node",
-    "/opt/local/bin/node",
-  ];
-
-  for (const nodePath of nodePaths) {
-    if (fs.existsSync(nodePath)) {
-      return nodePath;
-    }
   }
 }
 

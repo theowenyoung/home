@@ -320,26 +320,9 @@
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="time.mjs" # Change this to your script's path
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/time.mjs"
 
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
-
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -448,25 +431,9 @@ exit 1
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="string2json.mjs" # Change this to your script's path
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/string2json.mjs"
 
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -518,25 +485,9 @@ exit 1
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="json2string.mjs" # Change this to your script's path
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/json2string.mjs"
 
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -628,25 +579,9 @@ exit 1
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="zh-hant-zh-hans.mjs" # Change this to your script's path
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/zh-hant-zh-hans.mjs"
 
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -717,25 +652,9 @@ exit 1
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="length.mjs" # Change this to your script's path
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/length.mjs"
 
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>
@@ -889,26 +808,9 @@ exit 1
 				<key>script</key>
 				<string>#!/bin/bash
 
-SCRIPT_PATH="pass.mjs" # Change this to your script's path
+SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/pass.mjs"
 
-# List of common locations where Node.js might be installed
-NODE_PATHS=(
-  "$HOME/.local/share/mise/shims/node"
-  "/usr/local/bin/node"
-  "/usr/bin/node"
-  "/opt/local/bin/node"
-)
-
-# Loop through the paths and use the first one that exists
-for node in "${NODE_PATHS[@]}"; do
-  if [ -f "$node" ]; then
-    "$node" $SCRIPT_PATH "$@"
-    exit
-  fi
-done
-
-echo "Node.js not found. Please install it or check your paths."
-exit 1
+exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 </string>
 				<key>scriptargtype</key>
 				<integer>1</integer>

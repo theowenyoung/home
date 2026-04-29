@@ -107,6 +107,7 @@ mas "Boop", id: 1518425043                 # 开发者文本处理工具（Base6
 mas "uPic", id: 1549159979                 # 图床上传工具
 mas "Immersive Translate", id: 6447957425  # 沉浸式翻译（网页双语）
 mas "Windows App", id: 1295203466          # 微软官方 RDP 客户端
+mas "S3 Client", id: 6447647340            # S3 客户端（Files 集成）
 
 # --- 健康 / 提醒 ---
 mas "Eye Monitor", id: 1527031341          # 护眼休息提醒
