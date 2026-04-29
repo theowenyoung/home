@@ -225,6 +225,11 @@ gpg --list-secret-keys                  # 验证
 3. 设置开机自启（Bartender → Settings → General → Launch at login）
 4. 配置 iCloud 同步（Bartender → Settings → Profiles → 启用 iCloud sync），新机器会自动拉到同样的隐藏/显示规则
 
+### 12. Cleanshot 配置
+
+1. 根据提示配置系统快捷键
+2. 打开截图后，自动复制到剪贴板和 Downloads 文件夹
+
 
 ### 其他没有在 brew 管理的软件
 
