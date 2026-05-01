@@ -175,6 +175,15 @@ async function main() {
   }
 }
 
+// 兼容多种 base URL 写法（OpenAI / OpenRouter / 自建代理等）
+function resolveChatCompletionsUrl(base) {
+  if (!base) return "https://api.openai.com/v1/chat/completions";
+  const trimmed = base.replace(/\/+$/, "");
+  if (/\/chat\/completions$/.test(trimmed)) return trimmed;
+  if (/\/v\d+$/.test(trimmed)) return `${trimmed}/chat/completions`;
+  return `${trimmed}/v1/chat/completions`;
+}
+
 // 启动 OpenAI 流式翻译
 async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
   const systemPrompt =
@@ -198,17 +207,16 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
 
   // 使用 curl 进行流式请求
   const errFile = streamFile + ".err";
+  const endpoint = resolveChatCompletionsUrl(process.env.OPENAI_API_ENDPOINT);
   const curlArgs = [
-    process.env.OPENAI_API_ENDPOINT
-      ? `${process.env.OPENAI_API_ENDPOINT}/v1/chat/completions`
-      : "https://api.openai.com/v1/chat/completions",
+    endpoint,
     "--silent",
     "--show-error",
     "--no-buffer",
     "--speed-limit",
     "0",
     "--speed-time",
-    "10",
+    "30",
     "--header",
     "Content-Type: application/json",
     "--header",
@@ -218,6 +226,19 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
     "--output",
     streamFile,
   ];
+
+  console.error(
+    "=== startOpenAIStream ===\nEndpoint:",
+    endpoint,
+    "\nModel:",
+    process.env.OPENAI_MODEL || "gpt-5-mini",
+    "\nAPI key:",
+    process.env.OPENAI_API_KEY
+      ? `set (len=${process.env.OPENAI_API_KEY.length})`
+      : "NOT set",
+    "\nRequest body:",
+    requestBody,
+  );
 
   try {
     const errFd = fs.openSync(errFile, "w");
@@ -231,6 +252,7 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
     fs.writeFileSync(pidFile, curlProcess.pid.toString());
     curlProcess.unref();
   } catch (error) {
+    console.error("启动 curl 失败:", error.stack || error.message);
     throw new Error(`启动 OpenAI 流式翻译失败: ${error.message}`);
   }
 }
@@ -247,8 +269,20 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
     try {
       streamContent = fs.readFileSync(streamFile, "utf8");
     } catch (e) {
-      // 文件可能正在写入中
+      console.error("读取 streamFile 失败:", e.message);
     }
+  }
+
+  // 顺带把 curl 的 stderr 也打印出来，便于排查 OpenRouter 之类的问题
+  const errFile = streamFile + ".err";
+  let curlErrSnapshot = "";
+  if (fs.existsSync(errFile)) {
+    try {
+      curlErrSnapshot = fs.readFileSync(errFile, "utf8").trim();
+    } catch (e) {}
+  }
+  if (curlErrSnapshot) {
+    console.error("=== curl stderr ===\n" + curlErrSnapshot);
   }
 
   // 检查是否是 API 错误
@@ -256,6 +290,9 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
     try {
       const errorObj = JSON.parse(streamContent);
       if (errorObj.error) {
+        console.error(
+          "=== OpenAI/OpenRouter error response ===\n" + streamContent,
+        );
         cleanup(streamFile, pidFile);
         return {
           sourceText: state.sourceText,
@@ -265,24 +302,39 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
         };
       }
     } catch (e) {
-      // 不是错误 JSON，继续处理
+      console.error(
+        "响应以 { 开头但 JSON 解析失败:",
+        e.message,
+        "\n内容前 500 字符:",
+        streamContent.slice(0, 500),
+      );
     }
   }
 
   // 解析流式响应
-  const chunks = streamContent
-    .split("\n")
-    .filter((line) => line.trim())
+  const rawLines = streamContent.split("\n").filter((line) => line.trim());
+  const parseFailures = [];
+  const chunks = rawLines
     .map((line) => line.replace(/^data: /, ""))
     .filter((line) => line !== "[DONE]")
     .map((line) => {
       try {
         return JSON.parse(line);
-      } catch {
+      } catch (e) {
+        parseFailures.push({ line, error: e.message });
         return null;
       }
     })
     .filter(Boolean);
+
+  if (parseFailures.length) {
+    console.error(
+      "=== 流式响应中有",
+      parseFailures.length,
+      "行无法解析为 JSON ===\n",
+      parseFailures.slice(0, 5),
+    );
+  }
 
   const responseText = chunks
     .map((chunk) => chunk.choices?.[0]?.delta?.content || "")
@@ -294,26 +346,40 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
   // 检查连接是否超时
   if (!finished && fs.existsSync(streamFile)) {
     const stats = fs.statSync(streamFile);
-    const stalled = Date.now() - stats.mtime.getTime() > 10000; // 10秒超时
+    const stalled = Date.now() - stats.mtime.getTime() > 30000; // 30秒超时
 
     if (stalled && streamContent.length === 0) {
-      // 读取 curl 错误信息
-      let curlErr = "";
-      const errFile = streamFile + ".err";
-      try {
-        if (fs.existsSync(errFile)) {
-          curlErr = fs.readFileSync(errFile, "utf8").trim();
-        }
-      } catch (e) {}
+      console.error(
+        "=== 翻译超时 ===\nstreamFile 10s 内无写入，curlErr:",
+        curlErrSnapshot || "(空)",
+      );
       cleanup(streamFile, pidFile, stateFile);
       return {
         sourceText: state.sourceText,
         openaiResult: {
-          error: curlErr ? `连接失败: ${curlErr}` : "OpenAI 连接超时",
+          error: curlErrSnapshot
+            ? `连接失败: ${curlErrSnapshot}`
+            : "OpenAI 连接超时",
         },
         finished: true,
       };
     }
+  }
+
+  // 上游返回了 HTML（非 SSE），多半是 endpoint 错误（404 之类）—— 立刻报错并清理
+  if (!finished && /^\s*<(?:!doctype|html|\?xml)/i.test(streamContent)) {
+    console.error(
+      "=== 上游返回 HTML 而不是 SSE，按错误处理 ===\n内容前 1000 字符:\n" +
+        streamContent.slice(0, 1000),
+    );
+    cleanup(streamFile, pidFile, stateFile);
+    return {
+      sourceText: state.sourceText,
+      openaiResult: {
+        error: "上游返回了 HTML 而不是流式响应（多半是 endpoint 错误，比如 404）",
+      },
+      finished: true,
+    };
   }
 
   if (finished) {
