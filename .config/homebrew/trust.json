@@ -1,0 +1,5 @@
+{
+  "trustedformulae": [
+    "stripe/stripe-cli/stripe"
+  ]
+}

@@ -2,6 +2,9 @@
 # 使用 `brew bundle ` 安装全部
 # 使用 `brew bundle check --file=~/Brewfile` 检查缺失项
 
+# ===== 第三方 Tap =====
+tap "stripe/stripe-cli"            # Stripe 官方 CLI 的 tap
+
 # ===== 命令行工具 (brew) =====
 brew "bash"                        # 新版 Bash（macOS 自带版本太旧）
 brew "curl"                        # 命令行 HTTP 客户端（比系统自带更新）
@@ -25,6 +28,7 @@ brew "fzf"                         # 模糊查找（含 shell 集成脚本）
 brew "mkcert"                      # 本地 HTTPS 证书生成
 brew "telnet"                      # 网络端口调试（macOS 已移除）
 brew "gh"                          # GitHub 官方 CLI
+brew "stripe/stripe-cli/stripe"    # Stripe CLI（stripe login / listen 等）
 
 # ===== 应用程序 (cask) =====
 

@@ -1,6 +1,5 @@
 {
   "env": {},
-  "skipDangerousModePermissionPrompt": true,
   "hooks": {
     "SessionEnd": [
       {
@@ -9,8 +8,8 @@
           {
             "type": "command",
             "command": "ccclub sync --silent",
-            "async": true,
-            "timeout": 30
+            "timeout": 30,
+            "async": true
           }
         ]
       }
@@ -22,11 +21,15 @@
           {
             "type": "command",
             "command": "ccclub sync --silent",
-            "async": true,
-            "timeout": 30
+            "timeout": 30,
+            "async": true
           }
         ]
       }
     ]
+  },
+  "skipDangerousModePermissionPrompt": true,
+  "enabledPlugins": {
+    "commit-commands@claude-plugins-official": true
   }
 }
