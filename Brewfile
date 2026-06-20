@@ -37,6 +37,7 @@ cask "google-chrome"               # Chrome 主浏览器
 cask "google-chrome@beta"          # Chrome Beta（提前体验新特性）
 cask "helium-browser"              # Helium，基于 Chromium 的现代浏览器
 cask "orion"                       # 类 Safari 但支持 Chrome 扩展
+cask "neteasemusic"                # 网易云音乐
 
 # --- 编辑器 / 终端 ---
 cask "visual-studio-code"          # VSCode 代码编辑器

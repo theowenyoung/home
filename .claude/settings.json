@@ -28,8 +28,9 @@
       }
     ]
   },
-  "skipDangerousModePermissionPrompt": true,
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": true
-  }
+  },
+  "effortLevel": "xhigh",
+  "skipDangerousModePermissionPrompt": true
 }
