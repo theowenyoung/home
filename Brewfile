@@ -51,6 +51,7 @@ cask "cc-switch"                   # Claude Code 多账号/配置切换
 cask "orbstack"                    # Docker Desktop 替代品（更轻量）
 cask "sequel-ace"                  # MySQL / MariaDB GUI
 cask "postico"                     # PostgreSQL GUI
+cask "android-platform-tools"      # Android SDK 工具, adb devices
 
 # --- AI 桌面端 ---
 cask "claude"                      # Claude 桌面端
