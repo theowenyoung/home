@@ -355,6 +355,36 @@ sec import    # 在目标机：从剪贴板读入并校验 magic header，逐个
 
 剪贴板里短暂存在 base64 编码的明文 token，不在同一 iCloud 时可手动粘到加密笔记中转。
 
+
+## 常见的脚本记录（防止丢失）
+
+
+### 1. miniflux rss 自定义 javascript 
+
+
+超链接改成 新窗口打开，点击 标记 已读，不需要确认弹窗
+
+```
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("h2.item-title > a").forEach((a) => {
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+  });
+
+document.addEventListener("click", (event) => {
+  const button = event.target.closest('button[data-action="markPageAsRead"]');
+  if (!button) return;
+
+  setTimeout(() => {
+    const yesButton = [...document.querySelectorAll("button")]
+      .find((btn) => btn.textContent.trim().toLowerCase() === "yes");
+
+    yesButton?.click();
+  }, 100);
+}, true);
+});
+```
+
 ## Linux 服务器初始化
 
 适用于需要复用 bash 和 mise 配置的 Linux 服务器环境。
