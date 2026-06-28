@@ -150,6 +150,20 @@ if [ -f ~/.config/bash/.bashrc ]; then
 fi
 
 # green-bashrc-end
+
+# use pp or nopp to toggle
+
+# proxy_start
+#export HTTP_PROXY=http://127.0.0.1:7890
+#export HTTPS_PROXY=http://127.0.0.1:7890
+#export ALL_PROXY=socks5://127.0.0.1:7890
+#export http_proxy=http://127.0.0.1:7890
+#export https_proxy=http://127.0.0.1:7890
+#export all_proxy=socks5://127.0.0.1:7890
+#export NO_PROXY="localhost,127.0.0.1,::1,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,*.local"
+#export no_proxy="$NO_PROXY"
+# proxy_end
+
 EOF
 fi
 
