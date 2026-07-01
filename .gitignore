@@ -54,6 +54,7 @@ node_modules
 !flake.nix
 !flake.lock
 .config/raycast
+.config/codexbar
 .config/swiftpm
 .config/systemd
 .config/hydra/

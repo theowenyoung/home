@@ -39,6 +39,7 @@ cask "helium-browser"              # Helium，基于 Chromium 的现代浏览器
 cask "orion"                       # 类 Safari 但支持 Chrome 扩展
 cask "neteasemusic"                # 网易云音乐
 
+
 # --- 编辑器 / 终端 ---
 cask "visual-studio-code"          # VSCode 代码编辑器
 cask "zed"                         # Zed 高性能编辑器
@@ -48,6 +49,7 @@ cask "font-fira-code-nerd-font"    # 等宽字体含图标（终端/编辑器用
 # --- 开发工具 ---
 cask "claude-code@latest"          # Claude Code CLI（最新版）
 cask "cc-switch"                   # Claude Code 多账号/配置切换
+cask "steipete/tap/codexbar"       # codexbar
 cask "orbstack"                    # Docker Desktop 替代品（更轻量）
 cask "sequel-ace"                  # MySQL / MariaDB GUI
 cask "postico"                     # PostgreSQL GUI

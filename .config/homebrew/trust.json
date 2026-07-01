@@ -1,5 +1,8 @@
 {
   "trustedformulae": [
     "stripe/stripe-cli/stripe"
+  ],
+  "trustedcasks": [
+    "steipete/tap/codexbar"
   ]
 }
