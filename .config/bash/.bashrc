@@ -366,8 +366,24 @@ complete -F _pnpm_completion pp
 
 alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
 
+# claude
+unalias c cc cccc ccccc 2>/dev/null
 alias c="claude --dangerously-skip-permissions"
 alias cc="claude --dangerously-skip-permissions --permission-mode plan"
 alias cccc="claude --dangerously-skip-permissions --continue"
 alias ccccc="claude --dangerously-skip-permissions --resume"
+
+# codex
+unalias x xx xxx xxxx xxxxx 2>/dev/null
+alias x="codex --dangerously-bypass-approvals-and-sandbox"
+function xx() {
+  if [[ $# -eq 0 ]]; then
+    codex --dangerously-bypass-approvals-and-sandbox "/plan"
+  else
+    codex --dangerously-bypass-approvals-and-sandbox "/plan $*"
+  fi
+}
+alias xxx="codex exec --dangerously-bypass-approvals-and-sandbox"
+alias xxxx="codex resume --last --dangerously-bypass-approvals-and-sandbox"
+alias xxxxx="codex resume --dangerously-bypass-approvals-and-sandbox"
 alias upnode="mise u -g node@lts --force"
