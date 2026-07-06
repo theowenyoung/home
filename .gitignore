@@ -51,6 +51,7 @@ node_modules
 
 # and then ignore things we don't want
 .DS_Store
+__pycache__/
 !flake.nix
 !flake.lock
 .config/raycast

@@ -366,22 +366,736 @@ sec import    # 在目标机：从剪贴板读入并校验 magic header，逐个
 
 ```
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll("h2.item-title > a").forEach((a) => {
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-  });
+  const MINIFLUX_API_TOKEN = "xxx";
 
-document.addEventListener("click", (event) => {
-  const button = event.target.closest('button[data-action="markPageAsRead"]');
-  if (!button) return;
+  const DEBUG = false;
+  const BYPASS_CACHE = false;
 
-  setTimeout(() => {
-    const yesButton = [...document.querySelectorAll("button")]
-      .find((btn) => btn.textContent.trim().toLowerCase() === "yes");
+  function debug(...args) {
+    if (DEBUG) console.log("[Miniflux Summary]", ...args);
+  }
 
-    yesButton?.click();
-  }, 100);
-}, true);
+  const FEEDS = {
+    direct: [
+      "awealthofcommonsense.com",
+      "www.macworld.com",
+      "https://www.datagubbe.se",
+      "https://boz.com",
+      "iankduncan.com",
+      "www.nplusonemag.com",
+      "nplusonemag.com",
+      "blog.michalprzadka.com",
+      // "https://news.ycombinator.com",
+      // "https://www.reddit.com",
+    ],
+  };
+
+  const SUMMARY = {
+    enabled: true,
+    maxChars: 500,
+    maxParagraphs: 6,
+    chunkTargetChars: 260,
+    concurrency: 3,
+    cachePrefix: "miniflux_entry_summary:",
+    cacheVersion: "v15-br-rendered-preview",
+    cacheMaxItems: 300,
+    placeholderText: "Loading summary…",
+  };
+
+  function normalizeUrl(url) {
+    return String(url || "")
+      .trim()
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/^www\./, "")
+      .replace(/\/$/, "");
+  }
+
+  function matchFeed(feedUrl, prefixes) {
+    const normalizedFeedUrl = normalizeUrl(feedUrl);
+
+    return prefixes.some((prefix) => {
+      const normalizedPrefix = normalizeUrl(prefix);
+
+      return (
+        normalizedFeedUrl === normalizedPrefix ||
+        normalizedFeedUrl.startsWith(`${normalizedPrefix}/`)
+      );
+    });
+  }
+
+  function getHostnameFromUrlLike(urlLike) {
+    if (!urlLike) return "";
+
+    try {
+      const value = String(urlLike).trim();
+      const withProtocol = /^https?:\/\//i.test(value)
+        ? value
+        : `https://${value}`;
+
+      const parsed = new URL(withProtocol, window.location.origin);
+
+      return parsed.hostname.toLowerCase().replace(/^www\./, "");
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function isDifferentExternalDomain(feedUrl, originalUrl) {
+    const feedHost = getHostnameFromUrlLike(feedUrl);
+    const originalHost = getHostnameFromUrlLike(originalUrl);
+
+    if (!feedHost || !originalHost) return false;
+
+    return feedHost !== originalHost;
+  }
+
+  function injectSummaryStyles() {
+    if (document.getElementById("custom-entry-summary-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "custom-entry-summary-style";
+    style.textContent = `
+      .custom-entry-summary {
+        margin-top: 0.45rem;
+        margin-bottom: 0.25rem;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        opacity: 0.82;
+        overflow-wrap: anywhere;
+      }
+
+      .custom-entry-summary.is-loading {
+        opacity: 0.45;
+        font-style: italic;
+      }
+
+      .custom-entry-summary.is-empty {
+        display: none;
+      }
+
+      .custom-entry-summary.is-error {
+        display: none;
+      }
+
+      .custom-timestamp-link {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .custom-timestamp-link:hover {
+        text-decoration: underline;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function getEntryIDFromUrl(url) {
+    try {
+      const parsed = new URL(url, window.location.origin);
+      const match = parsed.pathname.match(/\/(?:entry|entries)\/(\d+)/);
+      return match ? match[1] : "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function getCacheKey(entryID) {
+    return `${SUMMARY.cachePrefix}${SUMMARY.cacheVersion}:${entryID}`;
+  }
+
+  const memoryCache = new Map();
+
+  function getCachedSummary(entryID) {
+    if (BYPASS_CACHE) return null;
+
+    if (memoryCache.has(entryID)) {
+      return memoryCache.get(entryID);
+    }
+
+    try {
+      const value = sessionStorage.getItem(getCacheKey(entryID));
+      if (value != null) {
+        memoryCache.set(entryID, value);
+        return value;
+      }
+    } catch (_) {}
+
+    return null;
+  }
+
+  function setCachedSummary(entryID, summary) {
+    if (BYPASS_CACHE) return;
+
+    memoryCache.set(entryID, summary);
+
+    try {
+      sessionStorage.setItem(getCacheKey(entryID), summary);
+      trimSummaryCache();
+    } catch (_) {}
+  }
+
+  function trimSummaryCache() {
+    try {
+      const keys = [];
+
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key?.startsWith(SUMMARY.cachePrefix)) {
+          keys.push(key);
+        }
+      }
+
+      if (keys.length <= SUMMARY.cacheMaxItems) return;
+
+      keys
+        .slice(0, keys.length - SUMMARY.cacheMaxItems)
+        .forEach((key) => sessionStorage.removeItem(key));
+    } catch (_) {}
+  }
+
+  function htmlToTextWithBoundaries(html) {
+    if (!html) return "";
+
+    let prepared = html;
+
+    prepared = prepared
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "")
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, "")
+      .replace(/<noscript\b[^>]*>[\s\S]*?<\/noscript>/gi, "")
+      .replace(/<audio\b[^>]*>[\s\S]*?<\/audio>/gi, "")
+      .replace(/<video\b[^>]*>[\s\S]*?<\/video>/gi, "")
+      .replace(/<iframe\b[^>]*>[\s\S]*?<\/iframe>/gi, "")
+      .replace(/<svg\b[^>]*>[\s\S]*?<\/svg>/gi, "")
+      .replace(/<canvas\b[^>]*>[\s\S]*?<\/canvas>/gi, "")
+      .replace(/<figure\b[^>]*>[\s\S]*?<\/figure>/gi, "")
+      .replace(/<form\b[^>]*>[\s\S]*?<\/form>/gi, "")
+      .replace(/<button\b[^>]*>[\s\S]*?<\/button>/gi, "");
+
+    prepared = prepared
+      .replace(/<img\b[^>]*>/gi, "")
+      .replace(/<picture\b[^>]*>[\s\S]*?<\/picture>/gi, "")
+      .replace(/<source\b[^>]*>/gi, "");
+
+    prepared = prepared
+      .replace(/<br\s*\/?>/gi, "\n")
+      .replace(/<\/p\s*>/gi, "\n\n")
+      .replace(/<p\b[^>]*>/gi, "")
+      .replace(/<\/div\s*>/gi, "\n\n")
+      .replace(/<div\b[^>]*>/gi, "")
+      .replace(/<\/section\s*>/gi, "\n\n")
+      .replace(/<section\b[^>]*>/gi, "")
+      .replace(/<\/article\s*>/gi, "\n\n")
+      .replace(/<article\b[^>]*>/gi, "")
+      .replace(/<\/blockquote\s*>/gi, "\n\n")
+      .replace(/<blockquote\b[^>]*>/gi, "")
+      .replace(/<\/pre\s*>/gi, "\n\n")
+      .replace(/<pre\b[^>]*>/gi, "")
+      .replace(/<\/h[1-6]\s*>/gi, "\n\n")
+      .replace(/<h[1-6]\b[^>]*>/gi, "")
+      .replace(/<\/li\s*>/gi, "\n")
+      .replace(/<li\b[^>]*>/gi, "• ")
+      .replace(/<\/ul\s*>/gi, "\n\n")
+      .replace(/<ul\b[^>]*>/gi, "\n")
+      .replace(/<\/ol\s*>/gi, "\n\n")
+      .replace(/<ol\b[^>]*>/gi, "\n")
+      .replace(/<\/tr\s*>/gi, "\n")
+      .replace(/<tr\b[^>]*>/gi, "")
+      .replace(/<\/t[dh]\s*>/gi, " ")
+      .replace(/<t[dh]\b[^>]*>/gi, "");
+
+    const doc = new DOMParser().parseFromString(prepared, "text/html");
+    const text = doc.body.textContent || "";
+
+    return cleanPreviewText(text);
+  }
+
+  function normalizeText(text) {
+    return String(text || "")
+      .replace(/\u00a0/g, " ")
+      .replace(/\r/g, "\n")
+      .replace(/[ \t\f\v]+/g, " ")
+      .replace(/[ \t]*\n[ \t]*/g, "\n")
+      .replace(/\n{4,}/g, "\n\n\n")
+      .trim();
+  }
+
+  function cleanPreviewText(text) {
+    return normalizeText(text)
+      .replace(/\bSpeed:\s*\(?\d+(\.\d+)?x\)?\b/gi, "")
+      .replace(/\bShare this:\b/gi, "")
+      .replace(/\bShare\b\s+(Facebook|Twitter|X|LinkedIn|Reddit|Email)\b/gi, "")
+      .replace(/\bFiled under:.*$/gim, "")
+      .replace(/\bTags?:.*$/gim, "")
+      .replace(/\bCategories?:.*$/gim, "")
+      .replace(/\bRead more\b/gi, "")
+      .replace(/\bContinue reading\b/gi, "")
+      .replace(/\bClick here to unsubscribe\b/gi, "")
+      .replace(/\bView this email in your browser\b/gi, "")
+      .replace(/([.!?])([A-Z])/g, "$1 $2")
+      .replace(/([\u4e00-\u9fff])([A-Za-z0-9])/g, "$1 $2")
+      .replace(/([A-Za-z0-9])([\u4e00-\u9fff])/g, "$1 $2")
+      .replace(/[ \t]{2,}/g, " ")
+      .replace(/\n{4,}/g, "\n\n\n")
+      .trim();
+  }
+
+  function isBadParagraph(paragraph) {
+    const text = cleanPreviewText(paragraph);
+    const lower = text.toLowerCase();
+
+    if (!text) return true;
+    if (text.length < 12) return true;
+
+    return (
+      lower === "attachments" ||
+      lower === "comments" ||
+      lower === "read more" ||
+      lower === "continue reading" ||
+      lower === "advertisement" ||
+      lower === "sponsored content" ||
+      lower === "related posts" ||
+      lower === "you may also like" ||
+      lower === "subscribe" ||
+      lower === "share this" ||
+      lower === "listen to this article" ||
+      lower === "audio player" ||
+      lower === "video player" ||
+      /^speed\s*:/i.test(text) ||
+      /^\d+(\.\d+)?x$/.test(text) ||
+      lower.includes("click here to unsubscribe") ||
+      lower.includes("view this email in your browser") ||
+      (lower.startsWith("the post ") && lower.includes(" appeared first on "))
+    );
+  }
+
+  function splitIntoRealParagraphs(text) {
+    return normalizeText(text)
+      .split(/\n{2,}/)
+      .map((paragraph) => cleanPreviewText(paragraph.replace(/\n/g, " ")))
+      .filter((paragraph) => !isBadParagraph(paragraph));
+  }
+
+  function splitIntoSentences(text) {
+    const clean = cleanPreviewText(text);
+    if (!clean) return [];
+
+    const sentences = clean
+      .split(/(?<=[。！？])|(?<=[.!?])\s+/)
+      .map((sentence) => cleanPreviewText(sentence))
+      .filter(Boolean);
+
+    return sentences.length > 0 ? sentences : [clean];
+  }
+
+  function splitLongTextIntoPreviewChunks(text) {
+    const sentences = splitIntoSentences(text);
+    const chunks = [];
+    let current = "";
+
+    for (const sentence of sentences) {
+      const next = current ? `${current} ${sentence}` : sentence;
+
+      if (next.length <= SUMMARY.chunkTargetChars || !current) {
+        current = next;
+      } else {
+        chunks.push(current);
+        current = sentence;
+      }
+    }
+
+    if (current) chunks.push(current);
+
+    return chunks;
+  }
+
+  function dedupeParagraphs(paragraphs) {
+    const seen = new Set();
+    const result = [];
+
+    for (const paragraph of paragraphs) {
+      const clean = cleanPreviewText(paragraph);
+      const key = clean.toLowerCase().replace(/\s+/g, " ");
+
+      if (!clean || seen.has(key)) continue;
+
+      seen.add(key);
+      result.push(clean);
+    }
+
+    return result;
+  }
+
+  function getPreviewParagraphs(text) {
+    const realParagraphs = dedupeParagraphs(splitIntoRealParagraphs(text));
+    const flattened = cleanPreviewText(realParagraphs.join(" "));
+
+    debug("paragraph debug", {
+      realParagraphsCount: realParagraphs.length,
+      realParagraphsPreview: realParagraphs.slice(0, 8).map((p) => p.slice(0, 120)),
+      flattenedLength: flattened.length,
+      newlineCount: (text.match(/\n/g) || []).length,
+      doubleNewlineCount: (text.match(/\n\n/g) || []).length,
+    });
+
+    if (
+      realParagraphs.length < 3 &&
+      flattened.length > SUMMARY.chunkTargetChars * 1.5
+    ) {
+      return dedupeParagraphs(splitLongTextIntoPreviewChunks(flattened));
+    }
+
+    return dedupeParagraphs(
+      realParagraphs.flatMap((paragraph) => {
+        const clean = cleanPreviewText(paragraph);
+
+        if (clean.length > SUMMARY.chunkTargetChars * 1.4) {
+          return splitLongTextIntoPreviewChunks(clean);
+        }
+
+        return [clean];
+      })
+    );
+  }
+
+  function trimAtSentence(text, maxChars) {
+    const clean = cleanPreviewText(text);
+    if (clean.length <= maxChars) return clean;
+
+    const slice = clean.slice(0, maxChars + 1);
+
+    const boundary = Math.max(
+      slice.lastIndexOf("。"),
+      slice.lastIndexOf("！"),
+      slice.lastIndexOf("？"),
+      slice.lastIndexOf(". "),
+      slice.lastIndexOf("! "),
+      slice.lastIndexOf("? "),
+      slice.lastIndexOf("；"),
+      slice.lastIndexOf("; "),
+      slice.lastIndexOf("："),
+      slice.lastIndexOf(": "),
+      slice.lastIndexOf("，"),
+      slice.lastIndexOf(", ")
+    );
+
+    if (boundary > maxChars * 0.45) {
+      return slice.slice(0, boundary + 1).trim();
+    }
+
+    const lastSpace = slice.lastIndexOf(" ");
+    if (lastSpace > maxChars * 0.55) {
+      return slice.slice(0, lastSpace).trim() + "…";
+    }
+
+    return clean.slice(0, maxChars).trim() + "…";
+  }
+
+  function makePreview(text, maxChars) {
+    const paragraphs = getPreviewParagraphs(text);
+
+    const selected = [];
+    let total = 0;
+
+    for (const paragraph of paragraphs) {
+      if (selected.length >= SUMMARY.maxParagraphs) break;
+
+      const clean = cleanPreviewText(paragraph);
+      if (!clean) continue;
+
+      const nextTotal = total + clean.length + (selected.length ? 2 : 0);
+
+      if (selected.length === 0) {
+        const first = trimAtSentence(
+          clean,
+          Math.min(maxChars, SUMMARY.chunkTargetChars)
+        );
+        selected.push(first);
+        total = first.length;
+        continue;
+      }
+
+      if (nextTotal <= maxChars) {
+        selected.push(clean);
+        total = nextTotal;
+        continue;
+      }
+
+      break;
+    }
+
+    return selected.join("\n\n").trim();
+  }
+
+  function extractPreviewFromEntryContent(contentHtml) {
+    const text = htmlToTextWithBoundaries(contentHtml);
+
+    debug("text after boundary parse", {
+      textLength: text.length,
+      newlineCount: (text.match(/\n/g) || []).length,
+      doubleNewlineCount: (text.match(/\n\n/g) || []).length,
+      preview: text.slice(0, 500),
+    });
+
+    return makePreview(text, SUMMARY.maxChars);
+  }
+
+  async function fetchEntrySummary(entryID) {
+    const cached = getCachedSummary(entryID);
+    if (cached != null) return cached;
+
+    if (!MINIFLUX_API_TOKEN || MINIFLUX_API_TOKEN === "PASTE_YOUR_TOKEN_HERE") {
+      throw new Error("Missing Miniflux API token");
+    }
+
+    const response = await fetch(`/v1/entries/${entryID}`, {
+      method: "GET",
+      credentials: "same-origin",
+      headers: {
+        "X-Auth-Token": MINIFLUX_API_TOKEN,
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch entry via API: ${response.status}`);
+    }
+
+    const entry = await response.json();
+    const contentHtml = entry.content || entry.summary || entry.description || "";
+    const summary = extractPreviewFromEntryContent(contentHtml);
+
+    setCachedSummary(entryID, summary);
+    return summary;
+  }
+
+  const queue = [];
+  let activeCount = 0;
+
+  function enqueue(task) {
+    queue.push(task);
+    runQueue();
+  }
+
+  function runQueue() {
+    while (activeCount < SUMMARY.concurrency && queue.length > 0) {
+      const task = queue.shift();
+      activeCount++;
+
+      Promise.resolve()
+        .then(task)
+        .catch(() => {})
+        .finally(() => {
+          activeCount--;
+          runQueue();
+        });
+    }
+  }
+
+  function createSummaryElement(item) {
+    let summaryEl = item.querySelector(".custom-entry-summary");
+    if (summaryEl) return summaryEl;
+
+    summaryEl = document.createElement("div");
+    summaryEl.className = "custom-entry-summary entry-content is-loading";
+    summaryEl.textContent = SUMMARY.placeholderText;
+
+    const title = item.querySelector("h2.item-title");
+    const meta =
+      item.querySelector(".item-meta") ||
+      item.querySelector(".entry-meta") ||
+      item.querySelector("footer");
+
+    if (title) {
+      title.insertAdjacentElement("afterend", summaryEl);
+    } else if (meta) {
+      meta.insertAdjacentElement("beforebegin", summaryEl);
+    } else {
+      item.appendChild(summaryEl);
+    }
+
+    return summaryEl;
+  }
+
+  function renderTextWithBreaks(container, text) {
+    container.textContent = "";
+
+    const paragraphs = String(text || "").split(/\n{2,}/);
+
+    paragraphs.forEach((paragraph, index) => {
+      if (index > 0) {
+        container.appendChild(document.createElement("br"));
+      }
+
+      container.appendChild(document.createTextNode(paragraph));
+    });
+  }
+
+  function renderSummary(summaryEl, summary) {
+    if (summary) {
+      renderTextWithBreaks(summaryEl, summary);
+      summaryEl.classList.remove("is-loading", "is-empty", "is-error");
+    } else {
+      summaryEl.textContent = "";
+      summaryEl.classList.remove("is-loading", "is-error");
+      summaryEl.classList.add("is-empty");
+    }
+  }
+
+  function renderSummaryError(summaryEl) {
+    summaryEl.textContent = "";
+    summaryEl.classList.remove("is-loading");
+    summaryEl.classList.add("is-error");
+  }
+
+  function enhanceEntrySummary(item) {
+    if (!SUMMARY.enabled) return;
+    if (item.dataset.summaryEnhanced === "true") return;
+
+    const titleLink = item.querySelector("h2.item-title > a");
+    if (!titleLink) return;
+
+    const entryID =
+      titleLink.dataset.entryId ||
+      getEntryIDFromUrl(titleLink.dataset.readerUrl || titleLink.href);
+
+    if (!entryID) return;
+
+    titleLink.dataset.entryId = entryID;
+    item.dataset.summaryEnhanced = "true";
+
+    const summaryEl = createSummaryElement(item);
+
+    const cached = getCachedSummary(entryID);
+    if (cached != null) {
+      renderSummary(summaryEl, cached);
+      return;
+    }
+
+    enqueue(async () => {
+      try {
+        const summary = await fetchEntrySummary(entryID);
+
+        if (!summaryEl.isConnected) return;
+
+        renderSummary(summaryEl, summary);
+      } catch (_) {
+        if (!summaryEl.isConnected) return;
+        renderSummaryError(summaryEl);
+      }
+    });
+  }
+
+  function setupSummaryLoading() {
+    if (!SUMMARY.enabled) return;
+
+    injectSummaryStyles();
+
+    const items = [...document.querySelectorAll("article.entry-item")];
+    if (items.length === 0) return;
+
+    items.forEach(enhanceEntrySummary);
+  }
+
+  function getFinalEntryLinkUrl(item) {
+    const titleLink = item.querySelector("h2.item-title > a");
+    const feedLink = item.querySelector('a[data-feed-link="true"]');
+    const originalLink = item.querySelector('a[data-original-link="true"]');
+
+    if (!titleLink) return "";
+
+    if (!titleLink.dataset.readerUrl) {
+      titleLink.dataset.readerUrl = titleLink.href;
+    }
+
+    const readerUrl = titleLink.dataset.readerUrl;
+    const feedUrl = (feedLink?.title || feedLink?.textContent || "").trim();
+    const originalUrl = originalLink?.href || "";
+
+    const shouldOpenOriginal =
+      feedLink &&
+      originalLink &&
+      originalUrl &&
+      (
+        matchFeed(feedUrl, FEEDS.direct) ||
+        isDifferentExternalDomain(feedUrl, originalUrl)
+      );
+
+    if (shouldOpenOriginal) {
+      return originalUrl;
+    }
+
+    return readerUrl;
+  }
+
+  function setupEntryLinks() {
+    document.querySelectorAll("article.entry-item").forEach((item) => {
+      const titleLink = item.querySelector("h2.item-title > a");
+      if (!titleLink) return;
+
+      if (!titleLink.dataset.readerUrl) {
+        titleLink.dataset.readerUrl = titleLink.href;
+      }
+
+      const entryID = getEntryIDFromUrl(titleLink.dataset.readerUrl);
+      if (entryID) {
+        titleLink.dataset.entryId = entryID;
+      }
+
+      const finalUrl = getFinalEntryLinkUrl(item);
+      if (finalUrl) {
+        titleLink.href = finalUrl;
+      }
+
+      titleLink.target = "_blank";
+      titleLink.rel = "noopener noreferrer";
+    });
+  }
+
+  function setupTimestampLinks() {
+    document.querySelectorAll("article.entry-item").forEach((item) => {
+      const timeEl = item.querySelector(".item-meta-info-timestamp time");
+      if (!timeEl) return;
+
+      const finalUrl = getFinalEntryLinkUrl(item);
+      if (!finalUrl) return;
+
+      let link = timeEl.closest("a.custom-timestamp-link");
+
+      if (!link) {
+        link = document.createElement("a");
+        link.className = "custom-timestamp-link";
+
+        timeEl.parentNode.insertBefore(link, timeEl);
+        link.appendChild(timeEl);
+      }
+
+      link.href = finalUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    });
+  }
+
+  setupEntryLinks();
+  setupTimestampLinks();
+  setupSummaryLoading();
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const button = event.target.closest('button[data-action="markPageAsRead"]');
+      if (!button) return;
+
+      setTimeout(() => {
+        const yesButton = [...document.querySelectorAll("button")].find(
+          (btn) => btn.textContent.trim().toLowerCase() === "yes"
+        );
+
+        yesButton?.click();
+      }, 100);
+    },
+    true
+  );
 });
 ```
 
