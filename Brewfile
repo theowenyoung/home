@@ -29,6 +29,7 @@ brew "mkcert"                      # 本地 HTTPS 证书生成
 brew "telnet"                      # 网络端口调试（macOS 已移除）
 brew "gh"                          # GitHub 官方 CLI
 brew "stripe/stripe-cli/stripe"    # Stripe CLI（stripe login / listen 等）
+brew "yt-dlp"                      # YouTube 视频下载
 
 # ===== 应用程序 (cask) =====
 
@@ -41,7 +42,6 @@ cask "neteasemusic"                # 网易云音乐
 
 
 # --- 编辑器 / 终端 ---
-cask "visual-studio-code"          # VSCode 代码编辑器
 cask "zed"                         # Zed 高性能编辑器
 cask "ghostty"                     # 现代 GPU 终端
 cask "font-fira-code-nerd-font"    # 等宽字体含图标（终端/编辑器用）
@@ -88,8 +88,6 @@ cask "spotify"                     # 音乐流媒体
 cask "downie"                      # 视频下载
 cask "calibre"                     # 电子书管理 / 转换
 
-# --- 系统辅助 ---
-cask "tencent-lemon"               # 柠檬清理（系统垃圾清理）
 
 # ===== Mac App Store 应用 (mas) =====
 # 查询 ID：`mas search <名字>` ；验证：`mas info <id>`
@@ -119,3 +117,7 @@ mas "S3 Client", id: 6447647340            # S3 客户端（Files 集成）
 
 # --- 健康 / 提醒 ---
 mas "Eye Monitor", id: 1527031341          # 护眼休息提醒
+
+#  --- 需要密码 ----
+cask "visual-studio-code"          # VSCode 代码编辑器
+cask "tencent-lemon"               # 柠檬清理（系统垃圾清理）
