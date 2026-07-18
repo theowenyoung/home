@@ -14,14 +14,44 @@ if [ ! -f "$config_linux_add_path" ]; then
 fi
 
 if [ ! -f "$config_source_path" ]; then
-  echo "config_source_path config.yaml not exist"
+  config_source_path="$HOME/secret/clash/config.yml"
+fi
+
+if [ ! -f "$config_source_path" ]; then
+  echo "shared config not found (config.yaml or config.yml)" >&2
   exit 1
 fi
 
-# merge config_linux_add.yml content to config_linux.yml
-# clean config_linux.yml
-echo "" >"$config_target_path"
+config_tmp_path="$(mktemp "${config_target_path}.tmp.XXXXXX")"
+trap 'rm -f "$config_tmp_path"' EXIT
 
-# concat config.yaml to config_linux_add.yml
-cat "$config_linux_add_path" >>"$config_target_path"
-cat "$config_source_path" >>"$config_target_path"
+# Both files own distinct top-level sections, so no external YAML processor is
+# needed. Keep an explicit separator in case the first file lacks a final LF.
+{
+  cat "$config_source_path"
+  printf '\n'
+  cat "$config_linux_add_path"
+} >"$config_tmp_path"
+chmod 600 "$config_tmp_path"
+
+if ! duplicate_keys="$(awk '
+  match($0, /^[[:alnum:]_-]+[[:space:]]*:/) {
+    key = substr($0, RSTART, RLENGTH)
+    sub(/[[:space:]]*:$/, "", key)
+    if (++seen[key] == 2) {
+      duplicates = duplicates (duplicates ? ", " : "") key
+    }
+  }
+  END {
+    if (duplicates) {
+      print duplicates
+      exit 1
+    }
+  }
+' "$config_tmp_path")"; then
+  echo "duplicate top-level YAML keys: $duplicate_keys" >&2
+  exit 1
+fi
+
+mv "$config_tmp_path" "$config_target_path"
+trap - EXIT

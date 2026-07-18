@@ -45,7 +45,7 @@ EOF
 
 echo "$service_content" >/etc/systemd/system/$PNAME.service
 
-sudo systemctl enable $PNAME
-sudo systemctl daemon-reload
-sudo systemctl restart $PNAME
-sudo systemctl status $PNAME
+systemctl enable $PNAME
+systemctl daemon-reload
+systemctl restart $PNAME
+systemctl status $PNAME
