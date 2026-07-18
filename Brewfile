@@ -30,6 +30,7 @@ brew "telnet"                      # 网络端口调试（macOS 已移除）
 brew "gh"                          # GitHub 官方 CLI
 brew "stripe/stripe-cli/stripe"    # Stripe CLI（stripe login / listen 等）
 brew "yt-dlp"                      # YouTube 视频下载
+brew "gh"                          # GitHub 官方 CLI        
 
 # ===== 应用程序 (cask) =====
 

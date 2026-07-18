@@ -56,6 +56,8 @@ __pycache__/
 !flake.lock
 .config/raycast
 .config/codexbar
+.config/amp
+.config/devin
 .config/swiftpm
 .config/systemd
 .config/hydra/
