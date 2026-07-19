@@ -1,0 +1,7 @@
+interface:
+  display_name: "JJ 网页收藏"
+  short_description: "读取当前网页，生成中文摘要并附上完整中文或双语正文后收藏"
+  default_prompt: "Use $jj to save the current webpage as a polished link record."
+
+policy:
+  allow_implicit_invocation: false

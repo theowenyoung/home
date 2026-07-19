@@ -1,0 +1,4 @@
+interface:
+  display_name: "OO 网页收藏标注"
+  short_description: "把当前网页或链接整理成便于半年后回忆的收藏标题和大纲描述"
+  default_prompt: "使用 $oo 总结当前网页，生成适合收藏的标题和描述。"
