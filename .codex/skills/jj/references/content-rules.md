@@ -31,6 +31,8 @@ Examples:
 
 ## Description
 
+Write the description in Simplified Chinese. Preserve product names, proper nouns, code, identifiers, numbers, and units when translating them would reduce accuracy.
+
 Write only the one or two facts that make this page or product memorable among close alternatives. Use concise Markdown outline bullets, one fact per line. Add an indented sub-bullet only when a concrete detail is needed. Usually use 1–3 top-level bullets.
 
 Prefer:

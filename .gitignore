@@ -57,6 +57,7 @@ __pycache__/
 .config/raycast
 .config/codexbar
 .config/amp
+.config/gatsby
 .config/devin
 .config/swiftpm
 .config/systemd

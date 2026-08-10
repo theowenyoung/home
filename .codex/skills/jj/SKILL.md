@@ -1,6 +1,6 @@
 ---
 name: jj
-description: Save the currently active browser page to the link collection at saved.owenyoung.com. Use when explicitly invoked as $jj, or when the user asks to bookmark or collect the current page there. Read the page without navigating, generate a concise Chinese title, SEO slug, and distinctive Markdown description, attach the complete article or main-page text in Markdown with Chinese translation when needed, match collections, create one authenticated link record, and return its clickable URL.
+description: Save the currently active browser page to the link collection at saved.owenyoung.com. Use when explicitly invoked as $jj, or when the user asks to bookmark or collect the current page there. Read the page without navigating, generate a concise Chinese title, SEO slug, and distinctive Chinese Markdown description, attach the complete article or main-page text as Chinese-only Markdown, match collections, create one authenticated link record, and return its clickable URL.
 ---
 
 # Save the Current Page
@@ -25,13 +25,16 @@ Use this non-secret base URL:
 https://saved.owenyoung.com
 ```
 
-Load the token without displaying it, in this order:
+Load the token without displaying it, in this order. On macOS, an unelevated or sandboxed Keychain lookup is not authoritative: it can incorrectly report that an existing item was not found.
 
 1. Read `JJ_API_TOKEN` from the JavaScript runtime's process environment.
-2. On macOS, if the environment variable is absent, read the Generic Password whose Keychain service name is `codex-jj-api-token` by calling `/usr/bin/security find-generic-password -s codex-jj-api-token -w` from the JavaScript runtime. Capture stdout directly into an in-memory variable and make the tool expression return only a boolean or a fixed success label.
-3. If neither source exists, stop before any API call. Ask the user to configure the environment variable or add the token to macOS Keychain; do not ask them to paste the token into chat.
+2. On macOS, if the environment variable is absent, use a fixed Node helper to call `/usr/bin/security find-generic-password -s codex-jj-api-token -w`. Run that helper with elevated permissions by setting `sandbox_permissions: "require_escalated"` and providing a concise Keychain-access justification. Capture stdout directly into an in-memory variable and make the helper return only a boolean, a fixed success label such as `FOUND`, or a sanitized error category.
+3. If an earlier unelevated JavaScript-runtime or sandboxed lookup returns an empty value, exit code `44`, `ITEM_NOT_FOUND`, or any other failure, treat the result as inconclusive. You MUST perform the elevated lookup before reporting that the token is missing. Do not ask the user to configure a token based only on the unelevated result.
+4. Only when the elevated lookup explicitly reports that the Keychain item is absent may you stop before any API call and ask the user to configure `JJ_API_TOKEN` or add the token to macOS Keychain. Do not ask them to paste the token into chat.
 
 Keep the loaded token in a JavaScript variable such as `globalThis.jjApiToken`. Build the `Authorization` header from that variable. Never inspect browser cookies, browser storage, passwords, or session stores to find the token.
+
+When Keychain access requires elevation, keep the token inside the elevated fixed Node process and perform the related `fetch()` call from that process. Do not return the token to the parent tool session. For API calls that need separate processes, let each elevated helper read the token directly from Keychain.
 
 ## Workflow
 
@@ -56,10 +59,12 @@ Base claims only on the current page. Do not invent capabilities, numbers, limit
 Read [article-attachment.md](references/article-attachment.md) completely. Convert the complete article or cleaned main-page content to faithful Markdown, then apply its language rules:
 
 - Keep Chinese content as displayed.
-- Translate a predominantly English article completely into Simplified Chinese.
-- Preserve an already translated Chinese view or a true bilingual view exactly as currently rendered; do not translate it again.
+- Translate all substantive non-Chinese prose completely into Simplified Chinese.
+- When the rendered page contains paired source and Chinese translation blocks, keep only the Chinese block from each pair and omit the duplicated non-Chinese block.
+- If a substantive non-Chinese block has no Chinese counterpart, translate it before inclusion rather than retaining the source-language prose.
+- Preserve proper nouns, product names, code, commands, identifiers, filenames, URLs, numbers, units, citations, and mathematical expressions when translating them would reduce accuracy.
 
-For long pages, extract and translate in ordered chunks at heading or block boundaries, then concatenate them. Verify that every substantive source block appears once in the final Markdown. Never replace a long section with a summary, placeholder, or ellipsis.
+For long pages, extract and translate in ordered chunks at heading or block boundaries, then concatenate them. Verify that every substantive semantic unit appears exactly once in Chinese in the final Markdown. Treat a paired source block and its Chinese translation as one semantic unit, not two. Never replace a long section with a summary, placeholder, or ellipsis.
 
 Create one text attachment:
 
@@ -72,7 +77,7 @@ Create one text attachment:
 }
 ```
 
-Set `summary` to one of `网页全文（中文翻译）`, `网页全文（中文原文）`, `网页全文（双语）`, or `网页主要内容`, matching the actual content. The API allows up to 20 attachments, requires non-empty text content, and limits an attachment summary to 300 characters. It documents no `content` length cap. Keep this as one attachment; if the API rejects its size, report the validation error instead of truncating or splitting it silently.
+Set `summary` to one of `网页全文（中文翻译）`, `网页全文（中文原文）`, or `网页主要内容`, matching the actual content. Use `网页全文（中文翻译）` when any substantive prose was translated or when the Chinese half of a rendered bilingual view was retained. The API allows up to 20 attachments, requires non-empty text content, and limits an attachment summary to 300 characters. It documents no `content` length cap. Keep this as one attachment; if the API rejects its size, report the validation error instead of truncating or splitting it silently.
 
 ### 4. Fetch and match collections
 
@@ -120,7 +125,7 @@ Construct the request body with no token. Include only the generated link fields
 
 Omit `collectionIds` if empty. Do not include both `bodyMarkdown` and `body`. Keep the concise description in `bodyMarkdown`; do not move it into the attachment. Rely on the service defaults of `status: "published"` and `visibility: "public"` unless the user explicitly requests different values.
 
-When the elevated Node fallback is required, pass the non-secret JSON payload to the fixed Node process through stdin rather than shell interpolation or command-line arguments. Let that process read the token directly from Keychain and call `fetch()`. Do not write the token to stdin or to the payload.
+When the elevated Node fallback is required, pass the non-secret JSON payload to the fixed Node process through stdin rather than shell interpolation or command-line arguments. Let that process read the token directly from Keychain and call `fetch()`. Do not write the token to stdin or to the payload. Use a non-TTY process so the full-text attachment is not echoed. For long payloads, write only the non-secret JSON payload to a workspace temporary file with `apply_patch`, then redirect that file to the helper's stdin; never put the token in the file.
 
 Send exactly one request:
 

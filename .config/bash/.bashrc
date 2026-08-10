@@ -387,3 +387,8 @@ alias xxx="codex exec --dangerously-bypass-approvals-and-sandbox"
 alias xxxx="codex resume --last --dangerously-bypass-approvals-and-sandbox"
 alias xxxxx="codex resume --dangerously-bypass-approvals-and-sandbox"
 alias upnode="mise u -g node@lts --force"
+
+# 静态服务：默认 8000，有 index.html 就渲染，否则目录页按修改时间倒序，禁缓存
+# 用法: http [port] [dir]
+alias http="python3 $HOME/.config/bash/serve.py"
+complete -o dirnames http
