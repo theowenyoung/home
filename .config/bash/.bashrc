@@ -249,11 +249,14 @@ sec() {
       while IFS='=' read -r k v; do
         [ -z "$k" ] || [ "${k:0:1}" = "#" ] && continue
         local decoded
-        decoded=$(printf '%s' "$v" | base64 -D 2>/dev/null) \
-          || { echo "skip $k (base64 decode failed)" >&2; continue; }
+        decoded=$(printf '%s' "$v" | base64 -D 2>/dev/null) ||
+          {
+            echo "skip $k (base64 decode failed)" >&2
+            continue
+          }
         security add-generic-password -U -a "$USER" -s "$prefix/$k" -w "$decoded"
         count=$((count + 1))
-      done <<< "$input"
+      done <<<"$input"
       echo "imported $count keys"
       ;;
     *) echo "usage: sec <add|get|rm|ls|export|import> [key] [value]" ;;
@@ -287,8 +290,8 @@ export CUSTOM_CLAUDE_CODE_OAUTH_TOKEN=$(sec get CLAUDE_CODE_OAUTH_TOKEN 2>/dev/n
 export AWS_REGION=us-west-2
 
 # cloudflare
-CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-$(sec get CLOUDFLARE_API_TOKEN 2>/dev/null)}
-CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-$(sec get CLOUDFLARE_ACCOUNT_ID 2>/dev/null)}
+export CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-$(sec get CLOUDFLARE_API_TOKEN 2>/dev/null)}
+export CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-$(sec get CLOUDFLARE_ACCOUNT_ID 2>/dev/null)}
 
 # other config
 # if [ -t 1 ]; then

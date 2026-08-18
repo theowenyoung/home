@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.6.13 sync --silent",
+            "command": "npx --yes ccclub@0.6.17 sync --silent",
             "timeout": 30,
             "async": true
           }
@@ -29,7 +29,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.6.13 sync --silent",
+            "command": "npx --yes ccclub@0.6.17 sync --silent",
             "timeout": 30,
             "async": true
           }
@@ -145,7 +145,23 @@
     "command": "ccclub-statusline"
   },
   "enabledPlugins": {
-    "commit-commands@claude-plugins-official": true
+    "commit-commands@claude-plugins-official": true,
+    "startup@startup-skill": true,
+    "idea-to-ship@nelsonwerd": true
+  },
+  "extraKnownMarketplaces": {
+    "startup-skill": {
+      "source": {
+        "source": "github",
+        "repo": "ferdinandobons/startup-skill"
+      }
+    },
+    "nelsonwerd": {
+      "source": {
+        "source": "github",
+        "repo": "nelsonwerd/idea-to-ship-skills"
+      }
+    }
   },
   "effortLevel": "xhigh",
   "tui": "fullscreen",
