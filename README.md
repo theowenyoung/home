@@ -1131,7 +1131,10 @@ cat /home/green/.ssh/id_ed25519.pub
 
 ### 2. 初始化 home repo
 
+
 ```bash
+# 切换到 green 用户
+su green
 # 将 repo 初始化到 $HOME
 cd "$HOME"
 rm -rf .git
