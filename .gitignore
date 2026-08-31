@@ -31,10 +31,10 @@ node_modules
 !.claude/settings.json
 
 !README.md
-!nix/
-!nix/**
 !deploy/
 !deploy/**
+!envs/
+!envs/**
 !.sops.yaml
 !Makefile
 !.meta
@@ -52,8 +52,6 @@ node_modules
 # and then ignore things we don't want
 .DS_Store
 __pycache__/
-!flake.nix
-!flake.lock
 .config/raycast
 .config/codexbar
 .config/amp
@@ -105,7 +103,6 @@ __pycache__/
 .config/gh/state.yml
 .config/github-copilot
 .config/iterm2/
-.config/nixpkgs/**/result
 .config/nvim/.netrwhist
 .config/nvim/autoload
 .config/nvim/tmp/bak/*~

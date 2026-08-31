@@ -6,9 +6,6 @@ fi
 # if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
 #   source "$GHOSTTY_RESOURCES_DIR/shell-integration/bash/ghostty.bash"
 # fi
-# nix allow unfree
-export NIXPKGS_ALLOW_UNFREE=1
-
 # path first
 
 # add path
@@ -318,12 +315,6 @@ export EDITOR=$MAIN_EDITOR
 export VISUAL=$EDITOR
 export TMUX_EDITOR="tmux-$EDITOR"
 alias vi="$EDITOR"
-
-# direnv init
-# if ~/.nix-profile/bin/direnv exists, load it.
-# if [[ -x ~/.nix-profile/bin/direnv ]]; then
-# 	eval "$(~/.nix-profile/bin/direnv hook bash)"
-# fi
 
 # homebrew
 # no analytics

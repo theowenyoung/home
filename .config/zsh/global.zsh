@@ -19,14 +19,6 @@ export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/sbin
 
 
-# Nix
-# please remove /etc/zshrc 
-
-if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-    . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-fi
-# End Nix
-
 # homebrew
 # no analytics
 export HOMEBREW_NO_ANALYTICS=1

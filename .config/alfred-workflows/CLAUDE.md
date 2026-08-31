@@ -38,7 +38,7 @@ The "all-in-one" workflow consists of several Node.js scripts that output Alfred
 
 1. **Alfred Script Filter Output**: All scripts output JSON in Alfred's Script Filter format with `items` array or Text View format with `response` field
 2. **Streaming Translation**: Uses `rerun` feature with state files in `alfred_workflow_cache` directory for OpenAI streaming responses
-3. **Node.js Path Detection**: Scripts detect Node.js from common paths (`~/.nix-profile/bin/node`, `/usr/local/bin/node`, etc.)
+3. **Node.js Path Detection**: Scripts detect Node.js from common paths (`~/.local/share/mise/shims/node`, `/usr/local/bin/node`, etc.)
 
 ### Environment Variables
 
