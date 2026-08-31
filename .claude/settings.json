@@ -7,9 +7,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.6.17 sync --silent",
-            "timeout": 30,
-            "async": true
+            "command": "npx --yes ccclub@0.9.3 sync --silent",
+            "async": true,
+            "timeout": 30
           }
         ]
       }
@@ -29,9 +29,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.6.17 sync --silent",
-            "timeout": 30,
-            "async": true
+            "command": "npx --yes ccclub@0.9.3 sync --silent",
+            "async": true,
+            "timeout": 30
           }
         ]
       }
@@ -166,5 +166,6 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "agentPushNotifEnabled": true,
   "defaultMode": "auto"
 }

@@ -6,7 +6,7 @@ fullscreen = true
 font-family = "FiraCode Nerd Font Mono"
 font-size = 12
 clipboard-paste-protection = false
-# auto-update-channel = tip
+#auto-update-channel = tip
 auto-update-channel = stable
 
 # theme = Raycast Light
