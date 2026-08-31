@@ -3,6 +3,8 @@ tun:
   stack: system # or gvisor
   auto-route: true # auto set global route
   auto-detect-interface: true # conflict with interface-name
+  exclude-interface:            # ← 新增
+    - tailscale0
 
 hosts:
   "*.test": 192.168.31.2
@@ -29,6 +31,8 @@ dns:
   # i.e. questions to these domain names will always be answered with their
   # real IP addresses
   fake-ip-filter:
+    - "+.tailscale.com"         # ← 新增
+    - "+.tailscale.io"          # ← 新增
     - "*.lan"
     - "*.local"
     - "*.test"
