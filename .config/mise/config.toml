@@ -13,7 +13,19 @@ zola = "0.21"
 hugo = "0.160"
 awscli = { version = "2.22.35", symlink_bins = "true" }
 go = "latest"
-neovim = "latest"
+# neovim / tree-sitter：官方预编译二进制需要 glibc >= 2.34（neovim 从 0.11.0 起），
+# 而 Debian 11 只有 glibc 2.31，跑不起来。所以用 os 过滤按平台分流：
+#   - macOS：照常用 mise 的预编译版本
+#   - Linux：neovim 从源码编译装在 /usr/local（源码 ~/.local/src/neovim，
+#     升级：git fetch --tags && git checkout <tag> && make CMAKE_BUILD_TYPE=Release && sudo make install）
+#     tree-sitter 用 cargo 从源码编译（nvim-treesitter main 分支需要这个 CLI 才能编译 parser）
+neovim = { version = "latest", os = ["macos"] }
+tree-sitter = { version = "latest", os = ["macos"] }
+"cargo:tree-sitter-cli" = { version = "latest", os = ["linux"] }
+# stylua 同理：预编译二进制要 glibc >= 2.32，Debian 11 用 cargo 编译
+stylua = { version = "latest", os = ["macos"] }
+"cargo:stylua" = { version = "latest", os = ["linux"] }
+pnpm = "latest"
 
 [settings]
 trusted_config_paths = ["~/project/jant", "~/project"]

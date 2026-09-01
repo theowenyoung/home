@@ -98,7 +98,7 @@
   - `prettier_from_project`: 仅在项目中有 `.prettierrc` 等配置文件时使用
   - `deno_fmt`: 仅在有 `deno.json`/`deno.jsonc` 时使用
   - `.min.js` 文件自动排除
-- **Lua**: `stylua`
+- **Lua**: `stylua`（由 mise 提供，不走 mason，见下方跨平台说明）
 - **Shell**: `shfmt`（2 空格缩进）
 - 保存时自动格式化（500ms 超时，LSP fallback）
 - `:FormatToggle` 命令可切换保存时自动格式化
@@ -173,9 +173,75 @@
 
 - **高亮复制**: 复制后短暂高亮选中文本
 - **保存时格式化**: conform.nvim format_on_save
+- **Treesitter 缩进**: 有 parser 的 buffer 自动设置 `indentexpr`
+  （nvim-treesitter 的 `main` 分支重写后不再支持 `indent = { enable = true }`）
 - **VimLeave fix**: 退出时 sleep 10ms（修复 neovim#21856）
 
+## 工具安装
+
+LSP / formatter 由 mason 管理，清单在 `lua/configs/overrides.lua` 的 `M.mason.ensure_installed`。
+
+```vim
+:MasonInstallAll   " 按清单一次性安装（本配置自建的命令）
+```
+
+> mason v2 本身不认 `ensure_installed`，NvChad 新版也删掉了官方的 `:MasonInstallAll`，
+> 所以这个命令在 `lua/plugins/init.lua` 的 mason spec 里自己实现了一遍。
+
+Treesitter parser 用 `:TSInstallAll`（NvChad 提供）。注意 nvim-treesitter 的 `main`
+分支重写后**必须有外部 `tree-sitter` CLI** 才能编译 parser，由 mise 提供。
+
+## 插件版本同步（lazy-lock.json）
+
+`lazy-lock.json` **纳入版本控制**，它记录每个插件锁定的 git commit，是两台机器行为一致
+的唯一依据。注意 lazy 只在**安装新插件**时按锁文件 checkout，对已装插件不会在启动时
+强制对齐，所以更新后要显式 restore：
+
+```bash
+# A 机：更新插件
+nvim -c 'Lazy update'
+git -C ~ diff .config/nvim/lazy-lock.json   # 看清楚什么动了
+git -C ~ commit -am 'nvim: update plugins' && git -C ~ push
+
+# B 机：拉取后对齐
+git -C ~ pull
+nvim -c 'Lazy restore'                       # 强制 checkout 到锁定的 commit
+```
+
+两边都更新过会产生冲突，不用手工 merge —— 随便保留一边，然后 `:Lazy restore`。
+
+## 跨平台说明（macOS / Debian 11）
+
+Debian 11 的 glibc 是 2.31，而现在很多项目的官方预编译二进制要 glibc ≥ 2.32/2.34，
+在这台机器上会直接 `version GLIBC_2.xx not found` 起不来。受影响的和处理方式：
+
+| 工具 | macOS | Debian 11 |
+|------|-------|-----------|
+| neovim | mise 预编译 | 源码编译到 `/usr/local`（源码在 `~/.local/src/neovim`） |
+| tree-sitter CLI | mise 预编译 | `cargo:tree-sitter-cli`（mise 用 cargo 编译） |
+| stylua | mise 预编译 | `cargo:stylua`（同上，所以从 mason 清单里去掉了） |
+
+分流写在 `~/.config/mise/config.toml`，用 mise 的 `os = [...]` 过滤，两边共用一份配置。
+
+neovim 升级（Linux）：
+
+```bash
+cd ~/.local/src/neovim && git fetch --tags
+git checkout <tag> && make CMAKE_BUILD_TYPE=Release && sudo make install
+```
+
 ## 故障排除
+
+### 插件报 `module 'core.utils' not found` / base46 cache 打不开
+
+多半是这台机器的插件版本和框架对不上（比如锁文件还把 `ui`/`base46` 钉在 NvChad v2.0
+分支，而框架是 v2.5）。先试 `:Lazy restore` 对齐到锁文件；还不行就把该机器本地的插件
+数据删掉重装（`~/.local/share/nvim` 等目录不跨机器同步，删了不影响其他机器）：
+
+```bash
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
+nvim --headless "+Lazy! sync" +qa
+```
 
 ### LuaSnip jsregexp git 错误
 ```
