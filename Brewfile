@@ -15,6 +15,7 @@ brew "git"                         # 版本控制
 brew "jq"                          # JSON 命令行处理器
 brew "wget"                        # 文件下载工具
 brew "tmux"                        # 终端复用器
+brew "mosh"                        # 移动终端
 brew "coreutils"                   # GNU 核心工具集（gls/gdate 等）
 brew "gnupg"                       # GPG 加密 / 签名
 brew "age"                         # 现代化文件加密（配合 sops 用）
@@ -55,6 +56,7 @@ cask "orbstack"                    # Docker Desktop 替代品（更轻量）
 cask "sequel-ace"                  # MySQL / MariaDB GUI
 cask "postico"                     # PostgreSQL GUI
 cask "android-platform-tools"      # Android SDK 工具, adb devices
+cask "tailscale"                   # Tailscale VPN
 
 # --- AI 桌面端 ---
 cask "claude"                      # Claude 桌面端
