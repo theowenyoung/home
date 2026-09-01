@@ -86,9 +86,6 @@ map("n", "<C-A-r>", "<cmd>Telescope resume<CR>", { desc = "Resume last results" 
 -- Far
 map("n", "<Leader>S", ":Farr<cr>", { desc = "Find and replace" })
 
--- Open URL
-map("n", "gx", "<Plug>(open-url-browser)", { silent = true, desc = "Open URL" })
-
 -- NvimTree grep in folder
 map("n", "<C-A-n>", grep_in, { desc = "Search this folder" })
 
@@ -105,7 +102,44 @@ map("x", "<Leader>c", [["+c]], { desc = "Change with cut" })
 map("x", "<Leader>D", [["+D]], { desc = "Delete with cut" })
 map("x", "<C-r>", [["hy:%s/<C-r>h//g<left><left>]], { desc = "Replace selected word" })
 map("x", "<Leader>S", ":Farr<cr>", { desc = "Find and replace" })
-map("x", "gx", "<Plug>(open-url-browser)", { silent = true, desc = "Open URL" })
+
+-- NvChad only maps <C-c> in normal mode ("yank the whole file"); in visual mode
+-- it was unmapped and just cancelled the selection. Make it copy the selection.
+map("x", "<C-c>", [["+y]], { desc = "Copy selection to system clipboard" })
+
+-- ============================================================
+-- Open URL (gx) -- OS dependent
+-- ============================================================
+-- macOS: vim-open-url 调本地 `open`，直接弹浏览器。
+-- 这台 headless Debian 上没有浏览器、也没有 xdg-open（vim-open-url 的默认
+-- browser 就是 xdg-open，所以 gx 在这里一直是死的）。改为把 URL 送进
+-- *本地 mac* 的剪贴板 -- 走 options.lua 里配的 OSC 52 -- 然后 Cmd-Tab, Cmd-V。
+if vim.uv.os_uname().sysname == "Darwin" then
+  map({ "n", "x" }, "gx", "<Plug>(open-url-browser)", { silent = true, desc = "Open URL" })
+else
+  local function yank_url(url)
+    if not url or url == "" then
+      vim.notify("gx: no URL under cursor", vim.log.levels.WARN)
+      return
+    end
+    vim.fn.setreg("+", url)
+    vim.notify("copied to local clipboard: " .. url)
+  end
+
+  map("n", "gx", function()
+    -- _get_urls() 是私有 API（LSP documentLink + extmark + treesitter 三级探测），
+    -- 比 <cfile> 准得多；万一将来上游改名了就退回 <cfile>。
+    local ok, urls = pcall(function()
+      return require("vim.ui")._get_urls()
+    end)
+    yank_url(ok and urls and urls[1] or vim.fn.expand "<cfile>")
+  end, { desc = "Copy URL to local clipboard" })
+
+  map("x", "gx", function()
+    local lines = vim.fn.getregion(vim.fn.getpos ".", vim.fn.getpos "v", { type = vim.fn.mode() })
+    yank_url(table.concat(vim.iter(lines):map(vim.trim):totable()))
+  end, { desc = "Copy URL to local clipboard" })
+end
 
 -- ============================================================
 -- Insert mode

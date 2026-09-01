@@ -111,6 +111,8 @@ __pycache__/
 .config/op/*
 .config/ssh/keys/*.pem
 .config/tmux/plugins
+.config/Code/
+.config/tailscale/
 .config/wslu
 bin/**
 
