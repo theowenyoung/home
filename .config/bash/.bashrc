@@ -217,6 +217,13 @@ nopp() {
 #   export OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
 # ==============================================================================
 sec() {
+  # security 是 macOS Keychain 的命令。非 macOS 上直接返回，
+  # 否则每次调用都会落进 bash 的 command_not_found_handle（mise 的钩子约 0.8s/次），
+  # 19 个 `sec get` 会让交互式 shell 启动慢 15 秒。
+  if ! command -v security >/dev/null 2>&1; then
+    return 1
+  fi
+
   local prefix="secret"
   case "$1" in
     add) security add-generic-password -a "$USER" -s "$prefix/$2" -w "$3" ;;
@@ -267,28 +274,35 @@ sec() {
 # Keychain 里。如果某个 key 没存，sec get 返回空字符串，对应的变量就是空，无害。
 # 在新机器上配置：sec add <KEY> "<value>"
 # ==============================================================================
-export BEDROCK_KEYS=$(sec get BEDROCK_KEYS 2>/dev/null)
-export CUSTOM_ANTHROPIC_API_KEY=$(sec get ANTHROPIC_API_KEY 2>/dev/null)
-export AZURE_OPENAI_API_KEY=$(sec get AZURE_OPENAI_API_KEY 2>/dev/null)
-export AWS_BEARER_TOKEN_BEDROCK=$(sec get AWS_BEARER_TOKEN_BEDROCK 2>/dev/null)
-export AWS_ACCESS_KEY_ID=$(sec get AWS_ACCESS_KEY_ID 2>/dev/null)
-export AWS_SECRET_ACCESS_KEY=$(sec get AWS_SECRET_ACCESS_KEY 2>/dev/null)
 export AWS_REGION=us-west-2
-export GITHUB_API_TOKEN=$(sec get GITHUB_API_TOKEN 2>/dev/null)
-export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
-export HF_TOKEN=$(sec get HF_TOKEN 2>/dev/null)
-export CUSTOM_OPENAI_API_ENDPOINT=$(sec get CUSTOM_OPENAI_API_ENDPOINT 2>/dev/null)
-export CUSTOM_OPENAI_BASE_URL="$CUSTOM_OPENAI_API_ENDPOINT"
-export CUSTOM_OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
-export SHOWBOAT_REMOTE_URL=$(sec get SHOWBOAT_REMOTE_URL 2>/dev/null)
-export CUSTOM_CLAUDE_CODE_OAUTH_TOKEN=$(sec get CLAUDE_CODE_OAUTH_TOKEN 2>/dev/null)
+
+# 只在 macOS 上从 Keychain 取。非 macOS 上跳过整块，而不是让每个变量被赋成空字符串——
+# 空字符串是"已设置"，AWS SDK 会认为凭证已提供但无效，反而截断凭证链（IMDS / ~/.aws）。
+if [[ "$OSTYPE" == darwin* ]]; then
+  export BEDROCK_KEYS=$(sec get BEDROCK_KEYS 2>/dev/null)
+  export CUSTOM_ANTHROPIC_API_KEY=$(sec get ANTHROPIC_API_KEY 2>/dev/null)
+  export AZURE_OPENAI_API_KEY=$(sec get AZURE_OPENAI_API_KEY 2>/dev/null)
+  export AWS_BEARER_TOKEN_BEDROCK=$(sec get AWS_BEARER_TOKEN_BEDROCK 2>/dev/null)
+  export AWS_ACCESS_KEY_ID=$(sec get AWS_ACCESS_KEY_ID 2>/dev/null)
+  export AWS_SECRET_ACCESS_KEY=$(sec get AWS_SECRET_ACCESS_KEY 2>/dev/null)
+  export GITHUB_API_TOKEN=$(sec get GITHUB_API_TOKEN 2>/dev/null)
+  export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
+  export HF_TOKEN=$(sec get HF_TOKEN 2>/dev/null)
+  export CUSTOM_OPENAI_API_ENDPOINT=$(sec get CUSTOM_OPENAI_API_ENDPOINT 2>/dev/null)
+  export CUSTOM_OPENAI_BASE_URL="$CUSTOM_OPENAI_API_ENDPOINT"
+  export CUSTOM_OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
+  export SHOWBOAT_REMOTE_URL=$(sec get SHOWBOAT_REMOTE_URL 2>/dev/null)
+  export CUSTOM_CLAUDE_CODE_OAUTH_TOKEN=$(sec get CLAUDE_CODE_OAUTH_TOKEN 2>/dev/null)
+fi
 # export CLAUDE_CODE_USE_BEDROCK=1
 # export CLAUDE_CODE_MAX_OUTPUT_TOKENS=1000000
 export AWS_REGION=us-west-2
 
 # cloudflare
-export CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-$(sec get CLOUDFLARE_API_TOKEN 2>/dev/null)}
-export CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-$(sec get CLOUDFLARE_ACCOUNT_ID 2>/dev/null)}
+if [[ "$OSTYPE" == darwin* ]]; then
+  export CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN:-$(sec get CLOUDFLARE_API_TOKEN 2>/dev/null)}
+  export CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID:-$(sec get CLOUDFLARE_ACCOUNT_ID 2>/dev/null)}
+fi
 
 # other config
 # if [ -t 1 ]; then
