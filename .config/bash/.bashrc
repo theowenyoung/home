@@ -342,7 +342,6 @@ source "$HOME/.config/bash/ssh-completion.bash"
 source "$HOME/.config/bash/make-completion.bash"
 
 source "$HOME/.config/bash/pnpm-completion.bash"
-complete -o default -o bashdefault -F _mise mr
 if command -v git >/dev/null 2>&1; then
   source "$HOME/.config/bash/git-completion.bash"
 fi
@@ -355,14 +354,26 @@ fi
 # 改成类似 kubectl的,mise completion bash
 source <(mise completion bash --include-bash-completion-lib)
 
-# 把 mr 的补全指向 mise 的补全函数（名字通常叫 _mise）
-# 注意：这行要在上面的 completion 加载之后
-# add alias
-# 推荐：函数转发 + 绑定补全
+# mr = mise run 的快捷方式
 function mr() {
   mise run "$@"
 }
-#
+
+# 把 mr 的补全接到 mise 上。
+# 注意：新版 mise 生成的补全函数叫 _usage_complete_mise（旧版才是 _mise），
+# 而且它是按 $COMP_LINE 文本去问 `mise __complete_word__` 的，
+# 所以必须先把命令行前缀 "mr" 改写成 "mise run" 再转发，否则补出来的是顶层子命令。
+_mr_complete() {
+  local COMP_LINE="mise run${COMP_LINE#mr}"
+  local COMP_POINT=$((COMP_POINT + 6))  # len("mise run") - len("mr")
+  _usage_complete_mise "$@"
+}
+if declare -F _usage_complete_mise >/dev/null; then
+  complete -F _mr_complete mr
+elif declare -F _mise >/dev/null; then
+  complete -o default -o bashdefault -F _mise mr
+fi
+
 if [[ "$TERM_PROGRAM" == "iTerm.app" ]] && test -e "${HOME}/.config/bash/.iterm2_shell_integration.bash"; then
   source "${HOME}/.config/bash/.iterm2_shell_integration.bash"
 fi
