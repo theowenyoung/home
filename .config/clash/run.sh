@@ -3,6 +3,8 @@
 # is linux, we need to merge tun config  to config.yml
 #
 
+TUN_NAME="${TUN_NAME:-Meta}"
+
 function cleanup {
 	EXIT_CODE=$?
 	set +e # disable termination on error
@@ -14,6 +16,11 @@ function cleanup {
 	else
 		echo "file /etc/resolv.conf.bak not exists"
 	fi
+	for direction in -o -i; do
+		while iptables -C FORWARD $direction "$TUN_NAME" -j ACCEPT 2>/dev/null; do
+			iptables -D FORWARD $direction "$TUN_NAME" -j ACCEPT
+		done
+	done
 	sysctl -w net.ipv4.ip_forward=0
 	exit $EXIT_CODE
 }
@@ -138,6 +145,19 @@ elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
 
 	# set ip forward
 	sysctl -w net.ipv4.ip_forward=1
+
+	# Docker (installed 2026-09-01) sets `-P FORWARD DROP` every time the daemon
+	# starts, which silently black-holes every packet forwarded from the LAN.
+	# Before Docker the FORWARD policy was the kernel default ACCEPT and
+	# ip_forward alone was enough -- that is why this used to be unnecessary.
+	# Match on the TUN only, never on the physical NIC, so a renamed interface
+	# cannot silently break routing again.
+	# Tell-tale when this is missing: LAN clients reach nothing while curl on
+	# this box still works, because local traffic never traverses FORWARD.
+	for direction in -o -i; do
+		iptables -C FORWARD $direction "$TUN_NAME" -j ACCEPT 2>/dev/null ||
+			iptables -I FORWARD $direction "$TUN_NAME" -j ACCEPT
+	done
 
 else
 	echo "unknow os"

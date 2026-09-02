@@ -1180,12 +1180,18 @@ mise install
 
 `debianlocal`（192.168.31.2）作为局域网软路由网关，LAN 客户端的流量经它走 mihomo 的 TUN（`Meta` 接口）出网。
 
-### 转发依赖两件事
+转发所需的全部内核/防火墙状态都由 `~/.config/clash/run.sh` 负责，跟随 mihomo 服务的生命周期启停：
 
-1. **`net.ipv4.ip_forward=1`** —— 由 `~/.config/clash/run.sh` 在启动时设置，随 mihomo 服务生效，**已在本仓库内**。
-2. **`FORWARD` 链放行 LAN ↔ TUN** —— **不在本仓库内**，是机器本地文件，见下面的"重建方法"。
+| 启动时设置 | `cleanup` 时撤销 |
+| --- | --- |
+| `sysctl -w net.ipv4.ip_forward=1` | `sysctl -w net.ipv4.ip_forward=0` |
+| `iptables -I FORWARD -i/-o Meta -j ACCEPT` | 删除对应规则 |
 
-第 2 点在装 Docker 之前根本不需要：`FORWARD` 链的默认策略就是内核默认的 `ACCEPT`，只要开了 `ip_forward`，转发就通。**2026-09-01 装 Docker 之后，dockerd 每次启动都会把策略设回 `-P FORWARD DROP`**，转发流量随即被静默丢弃。
+### 为什么需要那两条 iptables 规则
+
+装 Docker 之前不需要：`FORWARD` 链的默认策略就是内核默认的 `ACCEPT`，只要开了 `ip_forward` 转发就通。**2026-09-01 装 Docker 之后，dockerd 每次启动都会把策略设回 `-P FORWARD DROP`**，转发流量随即被静默丢弃。
+
+规则只匹配 TUN（`-i Meta` / `-o Meta`），刻意不写物理网卡名，这样网卡改名不会再一次悄无声息地搞坏路由。
 
 ### 故障特征（很有迷惑性，记一下省得再查一遍）
 
@@ -1197,61 +1203,14 @@ mise install
 ```bash
 iptables -L FORWARD -v -n | head -1
 # 看 "policy DROP N packets" 里的 N 是否在持续增长
+sudo systemctl restart mihomo   # run.sh 会重新补上规则
 ```
 
-### 重建方法
+### 备选方案（没有采用）
 
-规则放在 `DOCKER-USER` 链——这是 Docker 官方留给用户的钩子链，保证先于 Docker 自身规则被遍历，且 Docker 重启/升级时不会清空或重排它。
+Docker 28+ 提供了 `--ip-forward-no-drop`，在 `/etc/docker/daemon.json` 里写 `"ip-forward-no-drop": true` 可以让 dockerd 不去改 `FORWARD` 策略，一行解决。没采用是因为它把策略全局恢复成 `ACCEPT`，等于放弃 Docker 给容器的那层默认拒绝；而且 `daemon.json` 不在本仓库内，属于机器本地状态。
 
-> 不要用 `/etc/docker/daemon.json` 里的 `"iptables": false` 来绕开。那会废掉容器的端口发布，这台机器上 caddy 占 80/443、postgres 占 5432，全都得手工接管。
-
-`/usr/local/sbin/lan-gateway-forward.sh`（`chmod 755`）：
-
-```bash
-#!/bin/bash
-set -e
-LAN_IF="${LAN_IF:-enp0s25}"
-TUN_IF="${TUN_IF:-Meta}"
-
-if iptables -L DOCKER-USER -n >/dev/null 2>&1; then
-	CHAIN=DOCKER-USER
-else
-	CHAIN=FORWARD
-fi
-
-add_rule() {
-	if ! iptables -C "$CHAIN" "$@" >/dev/null 2>&1; then
-		iptables -I "$CHAIN" "$@"
-	fi
-}
-
-add_rule -i "$LAN_IF" -o "$TUN_IF" -j ACCEPT
-add_rule -i "$TUN_IF" -o "$LAN_IF" -j ACCEPT
-```
-
-`/etc/systemd/system/lan-gateway-forward.service`：
-
-```ini
-[Unit]
-Description=LAN -> mihomo TUN forwarding rules (Docker resets FORWARD policy to DROP)
-After=docker.service mihomo.service
-Wants=mihomo.service
-
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/usr/local/sbin/lan-gateway-forward.sh
-
-[Install]
-WantedBy=multi-user.target
-```
-
-启用：
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable --now lan-gateway-forward
-```
+也**不要**用 `"iptables": false`，那会废掉容器的端口发布（这台机器上 caddy 占 80/443、postgres 占 5432）。
 
 注：IPv6 转发目前是关的（`net.ipv6.conf.all.forwarding=0`），LAN 客户端只有 IPv4 出网。
 
