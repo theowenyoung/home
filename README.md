@@ -26,9 +26,7 @@
 │   ├── nvim/                   # Neovim 配置（NvChad）
 │   ├── mise/                   # mise 运行时版本配置
 │   ├── alfred-workflows/       # Alfred 自定义工作流
-│   ├── surfingkeys/            # SurfingKeys 浏览器插件配置
 │   ├── caddy/                  # Caddy 反向代理配置
-│   ├── ss/ sslocal/            # 代理相关配置
 │   ├── clash/                  # Clash 代理配置
 │   ├── systemd/                # systemd 用户服务
 │   └── ...
@@ -1177,6 +1175,85 @@ source ~/.bashrc
 ```bash
 mise install
 ```
+
+## 软路由网关（debianlocal）
+
+`debianlocal`（192.168.31.2）作为局域网软路由网关，LAN 客户端的流量经它走 mihomo 的 TUN（`Meta` 接口）出网。
+
+### 转发依赖两件事
+
+1. **`net.ipv4.ip_forward=1`** —— 由 `~/.config/clash/run.sh` 在启动时设置，随 mihomo 服务生效，**已在本仓库内**。
+2. **`FORWARD` 链放行 LAN ↔ TUN** —— **不在本仓库内**，是机器本地文件，见下面的"重建方法"。
+
+第 2 点在装 Docker 之前根本不需要：`FORWARD` 链的默认策略就是内核默认的 `ACCEPT`，只要开了 `ip_forward`，转发就通。**2026-09-01 装 Docker 之后，dockerd 每次启动都会把策略设回 `-P FORWARD DROP`**，转发流量随即被静默丢弃。
+
+### 故障特征（很有迷惑性，记一下省得再查一遍）
+
+- 客户端能连上 WiFi、能拿到 IP、能 ping 通网关，但**打不开任何网站**
+- 而**网关机器自己 `curl` 完全正常** —— 本机流量走 `lo` 经 OUTPUT 链，根本不经过 `FORWARD`
+
+这个不对称就是钥匙。判据：
+
+```bash
+iptables -L FORWARD -v -n | head -1
+# 看 "policy DROP N packets" 里的 N 是否在持续增长
+```
+
+### 重建方法
+
+规则放在 `DOCKER-USER` 链——这是 Docker 官方留给用户的钩子链，保证先于 Docker 自身规则被遍历，且 Docker 重启/升级时不会清空或重排它。
+
+> 不要用 `/etc/docker/daemon.json` 里的 `"iptables": false` 来绕开。那会废掉容器的端口发布，这台机器上 caddy 占 80/443、postgres 占 5432，全都得手工接管。
+
+`/usr/local/sbin/lan-gateway-forward.sh`（`chmod 755`）：
+
+```bash
+#!/bin/bash
+set -e
+LAN_IF="${LAN_IF:-enp0s25}"
+TUN_IF="${TUN_IF:-Meta}"
+
+if iptables -L DOCKER-USER -n >/dev/null 2>&1; then
+	CHAIN=DOCKER-USER
+else
+	CHAIN=FORWARD
+fi
+
+add_rule() {
+	if ! iptables -C "$CHAIN" "$@" >/dev/null 2>&1; then
+		iptables -I "$CHAIN" "$@"
+	fi
+}
+
+add_rule -i "$LAN_IF" -o "$TUN_IF" -j ACCEPT
+add_rule -i "$TUN_IF" -o "$LAN_IF" -j ACCEPT
+```
+
+`/etc/systemd/system/lan-gateway-forward.service`：
+
+```ini
+[Unit]
+Description=LAN -> mihomo TUN forwarding rules (Docker resets FORWARD policy to DROP)
+After=docker.service mihomo.service
+Wants=mihomo.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/lan-gateway-forward.sh
+
+[Install]
+WantedBy=multi-user.target
+```
+
+启用：
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now lan-gateway-forward
+```
+
+注：IPv6 转发目前是关的（`net.ipv6.conf.all.forwarding=0`），LAN 客户端只有 IPv4 出网。
 
 ## 部署
 
