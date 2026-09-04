@@ -98,9 +98,8 @@ __pycache__/
 .config/dnsproxy/debug.log
 .config/gcloud
 .config/systemd/user/default.target.wants
-.config/gh/hosts.yml
+.config/gh/
 .config/outl/
-.config/gh/state.yml
 .config/github-copilot
 .config/iterm2/
 .config/nvim/.netrwhist

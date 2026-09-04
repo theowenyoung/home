@@ -6,16 +6,33 @@ local del = vim.keymap.del
 -- Delete conflicting NvChad defaults
 del("n", "<leader>x") -- NvChad: close buffer -> we use for clipboard cut
 del("n", "<leader>e") -- NvChad: NvimTree focus -> we use for diagnostic float
-del("i", "<C-j>")     -- NvChad: cursor move -> tmux navigation
-del("i", "<C-k>")     -- NvChad: cursor move -> tmux navigation
+del("i", "<C-j>") -- NvChad: cursor move -> tmux navigation
+del("i", "<C-k>") -- NvChad: cursor move -> tmux navigation
+del("n", "<leader>rn") -- NvChad: toggle relative number -> 是 <leader>r 的前缀
 
 local function termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+-- <leader>r 替换：pattern 填不填，看搜索高亮还在不在
+--   高亮亮着（刚按过 * 或搜过）  -> 填入搜索寄存器 @/，光标落在「替换成什么」那格
+--   高亮已灭（按过 <Esc> / 没搜过）-> 留空，光标落在「找什么」那格
+-- 用 v:hlsearch 判断是因为它和屏幕上看到的高亮完全同步（NvChad 的 <Esc> 就是 :noh），
+-- 光看 @/ 非空不行 -- 它会一直留着上次搜索的陈旧内容。
+-- <C-r><C-r>/ 把 @/ 原样插进命令行（* 存进去的是 \<词\>），双 <C-r> = 按字面插、不解释按键。
+-- 刻意不用 <C-r><C-w>（光标下的词）：光标停在空行上它会报 E348 No string under cursor。
+local function subst(range)
+  return function()
+    if vim.v.hlsearch == 1 and vim.o.hlsearch and vim.fn.getreg "/" ~= "" then
+      return ":" .. range .. [[s/<C-r><C-r>///g<Left><Left>]]
+    end
+    return ":" .. range .. [[s///g<Left><Left><Left>]]
+  end
+end
+
 -- nvim tree grep in folder
 local function grep_in()
-  local api = require("nvim-tree.api")
+  local api = require "nvim-tree.api"
   local node = api.tree.get_node_under_cursor()
   if not node then
     return
@@ -53,9 +70,11 @@ map("n", "<Leader>D", [["+D]], { desc = "Delete with cut" })
 
 map("n", "<Leader>s", ":%sno/", { desc = "Substitute exactly" })
 
+map("n", "<leader>r", subst "%", { expr = true, desc = "Replace in file" })
+
 -- Open parent directory in Finder
 map("n", "<leader>o", function()
-  local api = require("nvim-tree.api")
+  local api = require "nvim-tree.api"
   local node = api.tree.get_node_under_cursor()
   if node then
     vim.cmd("!open " .. node.absolute_path:match "(.*)/[^/]*$")
@@ -101,6 +120,7 @@ map("x", "<Leader>d", [["+d]], { desc = "Delete with cut" })
 map("x", "<Leader>c", [["+c]], { desc = "Change with cut" })
 map("x", "<Leader>D", [["+D]], { desc = "Delete with cut" })
 map("x", "<C-r>", [["hy:%s/<C-r>h//g<left><left>]], { desc = "Replace selected word" })
+map("x", "<leader>r", subst "", { expr = true, desc = "Replace within selection" })
 map("x", "<Leader>S", ":Farr<cr>", { desc = "Find and replace" })
 
 -- NvChad only maps <C-c> in normal mode ("yank the whole file"); in visual mode

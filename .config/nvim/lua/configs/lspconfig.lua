@@ -1,10 +1,14 @@
 require("nvchad.configs.lspconfig").defaults()
 
--- Delete NvChad's default <leader>D mapping (type definition)
--- so our clipboard cut mapping works
+-- 删掉两个 NvChad 默认的 buffer 局部映射（本 autocmd 注册在 defaults() 之后，
+-- 同一 LspAttach 事件按注册顺序触发，所以能删到 on_attach 刚建好的映射）
+--   <leader>D  type definition -> 让位给我们的剪贴板剪切
+--   <leader>ra NvRenamer       -> 它是 <leader>r 的前缀，留着会让 <leader>r
+--                                 等 timeoutlen，且替换成 a 开头的词会误触发 rename
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     pcall(vim.keymap.del, "n", "<leader>D", { buffer = args.buf })
+    pcall(vim.keymap.del, "n", "<leader>ra", { buffer = args.buf })
   end,
 })
 

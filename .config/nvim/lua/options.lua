@@ -19,6 +19,9 @@ wo.relativenumber = true
 opt.foldlevel = 99
 opt.foldmethod = "indent"
 
+-- :s/:g 等命令边打边预览，并在下方 split 窗口列出所有受影响的行
+opt.inccommand = "split"
+
 -- snippets path
 g.vscode_snippets_path = "./snippets"
 

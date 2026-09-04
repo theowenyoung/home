@@ -286,7 +286,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export AWS_ACCESS_KEY_ID=$(sec get AWS_ACCESS_KEY_ID 2>/dev/null)
   export AWS_SECRET_ACCESS_KEY=$(sec get AWS_SECRET_ACCESS_KEY 2>/dev/null)
   export GITHUB_API_TOKEN=$(sec get GITHUB_API_TOKEN 2>/dev/null)
-  export GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
+  export CUSTOM_GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
   export HF_TOKEN=$(sec get HF_TOKEN 2>/dev/null)
   export CUSTOM_OPENAI_API_ENDPOINT=$(sec get CUSTOM_OPENAI_API_ENDPOINT 2>/dev/null)
   export CUSTOM_OPENAI_BASE_URL="$CUSTOM_OPENAI_API_ENDPOINT"
@@ -365,7 +365,7 @@ function mr() {
 # 所以必须先把命令行前缀 "mr" 改写成 "mise run" 再转发，否则补出来的是顶层子命令。
 _mr_complete() {
   local COMP_LINE="mise run${COMP_LINE#mr}"
-  local COMP_POINT=$((COMP_POINT + 6))  # len("mise run") - len("mr")
+  local COMP_POINT=$((COMP_POINT + 6)) # len("mise run") - len("mr")
   _usage_complete_mise "$@"
 }
 if declare -F _usage_complete_mise >/dev/null; then

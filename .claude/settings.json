@@ -8,8 +8,8 @@
           {
             "type": "command",
             "command": "npx --yes ccclub@0.9.3 sync --silent",
-            "async": true,
-            "timeout": 30
+            "timeout": 30,
+            "async": true
           }
         ]
       }
@@ -30,8 +30,8 @@
           {
             "type": "command",
             "command": "npx --yes ccclub@0.9.3 sync --silent",
-            "async": true,
-            "timeout": 30
+            "timeout": 30,
+            "async": true
           }
         ]
       }
