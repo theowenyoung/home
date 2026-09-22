@@ -6,9 +6,9 @@
       "sourceType": "github",
       "sourceUrl": "https://github.com/vercel-labs/skills.git",
       "skillPath": "skills/find-skills/SKILL.md",
-      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
+      "skillFolderHash": "76a98a285cb0434f3d39e1a873823556330e398b",
       "installedAt": "2026-04-27T16:26:56.489Z",
-      "updatedAt": "2026-04-28T19:30:21.478Z"
+      "updatedAt": "2026-09-22T06:22:57.868Z"
     },
     "linear": {
       "source": "openai/skills",

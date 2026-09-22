@@ -32,10 +32,19 @@ g.vscode_snippets_path = "./snippets"
 -- nvim 的 provider 自动探测在 $DISPLAY 非空时会无条件选中 xclip
 -- （autoload/provider/clipboard.vim 里 xclip 分支没有可用性检测），
 -- 于是每次写 "+ 都报 `Can't open display: :0`。
+-- 【实测更正】这台机器上 xclip/xsel 根本没装，自动探测实际选中的是 pbcopy。
+-- 后果比报错更隐蔽：写 "+ 会 *成功* 写进 Mac mini 自己的剪贴板，不报任何错，
+-- 而本地 mac 上 Cmd-V 粘出来的还是旧内容 -- 静默跑错机器。
 --
 -- 改成强制走 OSC 52：把内容以转义序列写到 tty，由 tmux 转发给本地终端，
 -- 本地终端再放进本地系统剪贴板。需要配合 tmux 的 `set-clipboard on`。
-if vim.env.SSH_TTY or vim.env.SSH_CONNECTION then
+--
+-- 条件里必须带上 TMUX：tmux 默认的 update-environment 不含 SSH_TTY，而
+-- SSH_CONNECTION 只在 attach 时刷进 session 环境，且只有此后 *新建* 的 pane
+-- 才拿得到。attach 之前就存在的窗口两个变量都没有，于是悄悄退回 pbcopy。
+-- 在 tmux 里 OSC 52 永远是对的选择：即使人就坐在这台机器前，
+-- OSC 52 -> tmux -> 本地终端 落到的也是 pbcopy 会写的同一个剪贴板。
+if vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.TMUX then
   local osc52 = require "vim.ui.clipboard.osc52"
 
   -- 读方向：nvim 发 `\033]52;c;?`，tmux（get-clipboard=request，需 >= 3.7）
