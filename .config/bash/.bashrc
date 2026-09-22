@@ -226,7 +226,10 @@ sec() {
 
   local prefix="secret"
   case "$1" in
-    add) security add-generic-password -a "$USER" -s "$prefix/$2" -w "$3" ;;
+    # -U：条目已存在时就地更新。没有它的话重复 add 会报
+    # "The specified item already exists in the keychain." 且不改动旧值 ——
+    # 很容易以为改成功了，其实读到的还是老的。
+    add) security add-generic-password -U -a "$USER" -s "$prefix/$2" -w "$3" ;;
     get) security find-generic-password -a "$USER" -s "$prefix/$2" -w ;;
     rm) security delete-generic-password -a "$USER" -s "$prefix/$2" ;;
     ls) security dump-keychain | grep "svce" | grep "$prefix/" | awk -F'"' '{print $4}' | sed "s|$prefix/||" | sort -u ;;
@@ -250,14 +253,29 @@ sec() {
         return 1
       fi
       local count=0
-      while IFS='=' read -r k v; do
-        [ -z "$k" ] || [ "${k:0:1}" = "#" ] && continue
+      # 【不要改回 `while IFS='=' read -r k v`】base64 的填充字符正好是 `=`，
+      # 而 read 在 IFS='=' 时会吃掉行尾的 *单个* `=`（两个则能留下一个）。
+      # 单个 `=` 只在原文长度 ≡ 2 (mod 3) 时出现 —— AWS access key ID 恰好 20 位
+      # （20 mod 3 == 2），于是每次导入都被解成 18 位，base64 -D 还不报错，
+      # 静默损坏，直到 AWS 回 InvalidClientTokenId 才暴露。Cloudflare 的 32 位
+      # account ID 同理。用参数展开按第一个 `=` 切，完整保留右侧。
+      while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        [ "${line:0:1}" = "#" ] && continue
+        local k="${line%%=*}" v="${line#*=}"
+        [ -z "$k" ] && continue
         local decoded
         decoded=$(printf '%s' "$v" | base64 -D 2>/dev/null) ||
           {
             echo "skip $k (base64 decode failed)" >&2
             continue
           }
+        # 往返校验：重新编码应当和 payload 里的完全一致。对不上说明 payload
+        # 在传输途中被截断/改写了 —— 宁可报错，也不要静默写入坏值。
+        if [ "$(printf '%s' "$decoded" | base64 | tr -d '\n')" != "$v" ]; then
+          echo "skip $k (往返校验失败，payload 可能已损坏)" >&2
+          continue
+        fi
         security add-generic-password -U -a "$USER" -s "$prefix/$k" -w "$decoded"
         count=$((count + 1))
       done <<<"$input"
