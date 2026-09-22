@@ -279,13 +279,21 @@ export AWS_REGION=us-west-2
 # 只在 macOS 上从 Keychain 取。非 macOS 上跳过整块，而不是让每个变量被赋成空字符串——
 # 空字符串是"已设置"，AWS SDK 会认为凭证已提供但无效，反而截断凭证链（IMDS / ~/.aws）。
 if [[ "$OSTYPE" == darwin* ]]; then
-  # SSH 会话里 securityd 会拒绝 *首次* keychain 访问（errSecInteractionNotAllowed），
-  # 于是下面每个 sec get 都静默返回空，变量被赋成空字符串 —— 表现为「密钥没存」，
-  # 实际条目一直在。显式调一次 unlock 可以把本会话绑定到 login keychain，之后畅通。
+  # ---- SSH 会话里的 login keychain 问题 ----------------------------------
+  # login keychain 锁着的时候，SSH 会话读不了它：securityd 报
+  # errSecInteractionNotAllowed（"User interaction is not allowed"），
+  # 而下面每个 sec get 的 2>/dev/null 会把错误吞掉、返回空字符串。
+  # 症状是变量全空、看起来像「密钥没存」，实际条目一直在 keychain 里。
   #
-  # keychain 已解锁时这是 no-op（退出码 0、无输出），`-p ""` 不会被当成真密码校验。
-  # 前提是 GUI 会话已登录 —— 自动登录保证了这点；哪天关掉自动登录，这里会退回失败。
-  # 解锁状态不跨会话，所以必须每个 shell 都调一次，不能只在开机时做。
+  # 实测（macOS 27，SSH 会话）：
+  #   - 加 pty 没用，一样被拒
+  #   - `unlock-keychain` 不带 -p（交互式）会直接卡死
+  #   - `unlock-keychain -p <正确密码>` 可行 —— 密码错会明确报 passphrase 错误
+  #   - keychain 恰好已解锁时，任意 -p 都是 no-op 成功，之后读取正常
+  #     （别被这个骗了：那是 keychain 本来就开着，不是 unlock 起了作用）
+  # 所以没有全自动的办法，只能每个会话手动解一次：用下面的 kcunlock。
+  #
+  # 先试一次无害的 no-op：keychain 已解锁时这能把本会话绑上，省掉手动步骤。
   security unlock-keychain -p "" ~/Library/Keychains/login.keychain-db 2>/dev/null
 
   export BEDROCK_KEYS=$(sec get BEDROCK_KEYS 2>/dev/null)
@@ -302,7 +310,35 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export CUSTOM_OPENAI_API_KEY=$(sec get OPENAI_API_KEY 2>/dev/null)
   export SHOWBOAT_REMOTE_URL=$(sec get SHOWBOAT_REMOTE_URL 2>/dev/null)
   export CUSTOM_CLAUDE_CODE_OAUTH_TOKEN=$(sec get CLAUDE_CODE_OAUTH_TOKEN 2>/dev/null)
+
+  # 把「读不到 keychain」这件事变成可见的，而不是一堆空变量。
+  # 只在交互式 SSH 会话里提示，脚本和本地 GUI 会话不打扰。
+  if [ -z "$AWS_ACCESS_KEY_ID" ] && [ -n "$SSH_CONNECTION$TMUX" ] && [[ $- == *i* ]]; then
+    echo "⚠ keychain 未解锁，密钥变量为空。运行 kcunlock 解锁并重新注入。" >&2
+  fi
 fi
+
+# 手动解锁 login keychain 并重新注入依赖它的环境变量。
+# 密码用 read -rs 读，不回显、不进 history、不出现在命令行（ps 看不到）。
+kcunlock() {
+  [[ "$OSTYPE" == darwin* ]] || { echo "仅 macOS 可用" >&2; return 1; }
+  local pw rc
+  read -rsp "login keychain 密码: " pw
+  echo
+  security unlock-keychain -p "$pw" ~/Library/Keychains/login.keychain-db 2>&1
+  rc=$?
+  pw=""
+  if [ $rc -ne 0 ]; then
+    echo "解锁失败" >&2
+    return 1
+  fi
+  source ~/.config/bash/.bashrc
+  if [ -n "$AWS_ACCESS_KEY_ID" ]; then
+    echo "✓ 已解锁，密钥已重新注入（$(sec ls 2>/dev/null | wc -l | tr -d ' ') 个条目可用）"
+  else
+    echo "⚠ 解锁成功但变量仍为空，检查 keychain 里的条目名" >&2
+  fi
+}
 # export CLAUDE_CODE_USE_BEDROCK=1
 # export CLAUDE_CODE_MAX_OUTPUT_TOKENS=1000000
 export AWS_REGION=us-west-2
