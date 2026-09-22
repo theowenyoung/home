@@ -7,8 +7,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.9.3 sync --silent",
-            "timeout": 30,
+            "command": "npx --yes ccclub@0.9.6 sync --silent",
+            "timeout": 120,
             "async": true
           }
         ]
@@ -29,8 +29,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.9.3 sync --silent",
-            "timeout": 30,
+            "command": "npx --yes ccclub@0.9.6 sync --silent",
+            "timeout": 120,
             "async": true
           }
         ]
@@ -138,7 +138,9 @@
           }
         ]
       }
-    ]
+    ],
+    "SessionStart": [],
+    "PreCompact": []
   },
   "statusLine": {
     "type": "command",
@@ -147,7 +149,8 @@
   "enabledPlugins": {
     "commit-commands@claude-plugins-official": true,
     "startup@startup-skill": true,
-    "idea-to-ship@nelsonwerd": true
+    "idea-to-ship@nelsonwerd": true,
+    "i-have-adhd@i-have-adhd": true
   },
   "extraKnownMarketplaces": {
     "startup-skill": {
@@ -160,6 +163,12 @@
       "source": {
         "source": "github",
         "repo": "nelsonwerd/idea-to-ship-skills"
+      }
+    },
+    "i-have-adhd": {
+      "source": {
+        "source": "github",
+        "repo": "ayghri/i-have-adhd"
       }
     }
   },
