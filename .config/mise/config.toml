@@ -11,7 +11,7 @@ rust = "1.91.1"
 "pipx:ansible" = "13"
 zola = "0.21"
 hugo = "0.160"
-awscli = { version = "2.22.35", symlink_bins = "true" }
+awscli = { version = "2.36.50", symlink_bins = "true" }
 go = "latest"
 # neovim / tree-sitter：官方预编译二进制需要 glibc >= 2.34（neovim 从 0.11.0 起），
 # 而 Debian 11 只有 glibc 2.31，跑不起来。所以用 os 过滤按平台分流：
