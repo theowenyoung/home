@@ -175,6 +175,7 @@
   "effortLevel": "xhigh",
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "agentPushNotifEnabled": true,
   "defaultMode": "auto"
 }
