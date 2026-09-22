@@ -279,6 +279,15 @@ export AWS_REGION=us-west-2
 # 只在 macOS 上从 Keychain 取。非 macOS 上跳过整块，而不是让每个变量被赋成空字符串——
 # 空字符串是"已设置"，AWS SDK 会认为凭证已提供但无效，反而截断凭证链（IMDS / ~/.aws）。
 if [[ "$OSTYPE" == darwin* ]]; then
+  # SSH 会话里 securityd 会拒绝 *首次* keychain 访问（errSecInteractionNotAllowed），
+  # 于是下面每个 sec get 都静默返回空，变量被赋成空字符串 —— 表现为「密钥没存」，
+  # 实际条目一直在。显式调一次 unlock 可以把本会话绑定到 login keychain，之后畅通。
+  #
+  # keychain 已解锁时这是 no-op（退出码 0、无输出），`-p ""` 不会被当成真密码校验。
+  # 前提是 GUI 会话已登录 —— 自动登录保证了这点；哪天关掉自动登录，这里会退回失败。
+  # 解锁状态不跨会话，所以必须每个 shell 都调一次，不能只在开机时做。
+  security unlock-keychain -p "" ~/Library/Keychains/login.keychain-db 2>/dev/null
+
   export BEDROCK_KEYS=$(sec get BEDROCK_KEYS 2>/dev/null)
   export CUSTOM_ANTHROPIC_API_KEY=$(sec get ANTHROPIC_API_KEY 2>/dev/null)
   export AZURE_OPENAI_API_KEY=$(sec get AZURE_OPENAI_API_KEY 2>/dev/null)
