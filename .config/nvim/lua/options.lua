@@ -95,9 +95,30 @@ if vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.TMUX then
     end
   end
 
+  -- 双写。两个剪贴板是彼此独立的东西，没有理由只喂一个：
+  --   OSC 52  -> 本地 mac 的系统剪贴板（Cmd-V 取的是这个）
+  --   pbcopy  -> 这台远程机器自己的剪贴板（远程跑的 `pbpaste` 取的是这个，
+  --              例如 `sec import`、以及任何在服务端读剪贴板的脚本）
+  -- 只写 OSC 52 的话，Cmd-V 能用但服务端 pbpaste 读不到；反之亦然。
+  -- pbcopy 用 vim.system 异步执行，不给每次 yank 增加延迟。
+  local has_pbcopy = vim.fn.executable "pbcopy" == 1
+  local function copy_both(sel)
+    local osc = osc52.copy(sel)
+    return function(lines, regtype)
+      osc(lines, regtype)
+      if has_pbcopy then
+        local text = table.concat(lines, "\n")
+        if regtype == "V" then
+          text = text .. "\n" -- 行模式保留结尾换行，和 osc52 的行为一致
+        end
+        pcall(vim.system, { "pbcopy" }, { stdin = text })
+      end
+    end
+  end
+
   vim.g.clipboard = {
-    name = "OSC 52",
-    copy = { ["+"] = osc52.copy "+", ["*"] = osc52.copy "*" },
+    name = "OSC 52 + pbcopy",
+    copy = { ["+"] = copy_both "+", ["*"] = copy_both "*" },
     paste = { ["+"] = make_paste "c", ["*"] = make_paste "p" },
   }
 end
