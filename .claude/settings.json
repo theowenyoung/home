@@ -176,6 +176,7 @@
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",
+  "switchModelsOnFlag": false,
   "agentPushNotifEnabled": true,
   "defaultMode": "auto"
 }
