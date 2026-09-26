@@ -49,7 +49,6 @@ cask "ghostty"                     # 现代 GPU 终端
 cask "font-fira-code-nerd-font"    # 等宽字体含图标（终端/编辑器用）
 
 # --- 开发工具 ---
-cask "claude-code@latest"          # Claude Code CLI（最新版）
 cask "cc-switch"                   # Claude Code 多账号/配置切换
 cask "steipete/tap/codexbar"       # codexbar
 cask "orbstack"                    # Docker Desktop 替代品（更轻量）
