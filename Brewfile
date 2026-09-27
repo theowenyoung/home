@@ -89,6 +89,7 @@ cask "iina"                        # 视频播放器
 cask "spotify"                     # 音乐流媒体
 cask "downie"                      # 视频下载
 cask "calibre"                     # 电子书管理 / 转换
+cask "cyberduck"                   # 文件同步工具
 
 
 # ===== Mac App Store 应用 (mas) =====
