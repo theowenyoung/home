@@ -13,19 +13,44 @@ external-ui: ui
 
 dns:
   enable: true
-  listen: :53
-  ipv6: true # when the false, response to AAAA questions will be empty
+  listen: ":53"
+  ipv6: false # 禁用 AAAA 解析，防止客户端拿到国内 IPv6 绕过代理泄露
+  enhanced-mode: fake-ip
+  respect-rules: true
+
+  # 纯 IP 国内引导 DNS（仅用于解析下方加密 DoH 域名本身）
   default-nameserver:
-    - 192.168.31.1
+    - 223.5.5.5
     - 119.29.29.29
+
+  # 专门用于解析机场订阅节点自身的服务器域名，确保开机/重连不死锁
+  proxy-server-nameserver:
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - 119.29.29.29
+
   nameserver-policy:
     "+.cloud-nodes.com":
       - "124.221.68.73:1053"
-    "+.oix_nodes.com": 
+    "+.oix_nodes.com":
       - "124.221.68.73:1053"
-  enhanced-mode: fake-ip # or redir-host (not recommended)
-  # fake-ip-range: 198.18.0.1/16 # Fake IP addresses pool CIDR
-  # use-hosts: true # lookup hosts and return IP record
+    # 局域网域名交给华硕主路由解析
+    "*.lan,*.local,*.test,+.local.owenyoung.com,+.local.tonormal.com,+.localtest.me,local.jant.me":
+      - 192.168.31.1
+    # 旁路由防失联白名单（Tailscale / NTP / 机场订阅更新 / 网络连通性探测固定走国内，不依赖代理存活）
+    "+.tailscale.com,+.tailscale.io,+.pool.ntp.org,+.ntp.org,captive.apple.com,*.msftconnecttest.com,+.jjsubmarines.com,+.api-huacloud.dev,+.xmancdn.com":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+      - 119.29.29.29
+    # 国内网站与私网域名走国内加密 DoH（不经过主路由，避免牵出运营商联通 DNS / ECS）
+    "geosite:cn,geosite:private":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+      - 119.29.29.29
+    "+.cn":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+      - 119.29.29.29
 
   # Hostnames in this list will not be resolved with fake IPs
   # i.e. questions to these domain names will always be answered with their
@@ -49,19 +74,7 @@ dns:
     - "captive.apple.com"
     - "*.msftconnecttest.com"
 
-  # Supports UDP, TCP, DoT, DoH. You can specify the port to connect to.
-  # All DNS questions are sent directly to the nameserver, without proxies
-  # involved. Clash answers the DNS question with the first result gathered.
+  # 默认兜底 DNS：所有未知/海外域名统一走代理隧道查海外 DoH，绝不向国内发包
   nameserver:
-    # - "[2402:4e00::]:53"
-    - 192.168.31.1
-    - tls://dot.pub
-    - https://doh.pub/dns-query # tencent
-    - tls://dns.alidns.com
-    - https://dns.alidns.com/dns-query
-    - 119.29.29.29
-    # - 114.114.114.114 # default value
-    # - 8.8.8.8 # default value
-    # - tls://dns.rubyfish.cn:853 # DNS over TLS
-    # - https://1.1.1.1/dns-query # DNS over HTTPS
-    # - dhcp://en0 # dns from dhcp
+    - "https://1.1.1.1/dns-query#Proxy"
+    - "https://8.8.8.8/dns-query#Proxy"
