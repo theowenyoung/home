@@ -1,0 +1,6 @@
+{
+  "name": "agent-chrome",
+  "displayName": "Agent Chrome",
+  "version": "1.0.0",
+  "description": "Drives a dedicated local Chrome profile over CDP (127.0.0.1:9333) without triggering Chrome remote-debugging approval dialogs."
+}

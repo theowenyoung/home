@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Ensure common Node/mise/Homebrew paths are available even in GUI-launched shells.
+export PATH="$HOME/.local/share/mise/shims:$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PORT="${AGENT_CHROME_PORT:-9333}"
+
+# Auto-start the dedicated Chrome profile without writing anything to stdout (MCP stdio uses stdout).
+"$SCRIPT_DIR/agent-chrome" ensure >/dev/null 2>&1 || true
+
+exec npx -y chrome-devtools-mcp@latest --browserUrl="http://127.0.0.1:${PORT}" "$@"

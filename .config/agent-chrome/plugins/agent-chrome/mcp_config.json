@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "browser": {
+      "command": "/bin/sh",
+      "args": [
+        "-c",
+        "exec \"$HOME/.config/agent-chrome/bin/agent-chrome-mcp\""
+      ]
+    }
+  }
+}

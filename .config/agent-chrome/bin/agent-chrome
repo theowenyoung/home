@@ -1,0 +1,147 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PORT="${AGENT_CHROME_PORT:-9333}"
+PROFILE_DIR="${AGENT_CHROME_PROFILE:-$HOME/.local/share/agent-chrome-profile}"
+CHROME_BIN="${AGENT_CHROME_BIN:-/Applications/Google Chrome.app/Contents/MacOS/Google Chrome}"
+LOG_FILE="${AGENT_CHROME_LOG:-$HOME/Library/Logs/agent-chrome.log}"
+LAUNCHD_LABEL="com.local.agent-chrome"
+CDP_URL="http://127.0.0.1:${PORT}/json/version"
+
+is_running() {
+  curl -sf --max-time 2 "$CDP_URL" >/dev/null 2>&1
+}
+
+wait_ready() {
+  local tries="${1:-30}"
+  local i=0
+  while (( i < tries )); do
+    if is_running; then
+      return 0
+    fi
+    sleep 0.5
+    (( i += 1 ))
+  done
+  return 1
+}
+
+cmd_status() {
+  if is_running; then
+    echo "running on http://127.0.0.1:${PORT}"
+    curl -sf "$CDP_URL"
+    echo
+    return 0
+  else
+    echo "stopped (port ${PORT} not listening)"
+    return 1
+  fi
+}
+
+cmd_foreground() {
+  if [[ ! -x "$CHROME_BIN" ]]; then
+    echo "Error: Google Chrome not found at $CHROME_BIN" >&2
+    exit 1
+  fi
+  mkdir -p "$PROFILE_DIR" "$(dirname "$LOG_FILE")"
+  exec "$CHROME_BIN" \
+    --remote-debugging-port="$PORT" \
+    --remote-debugging-address=127.0.0.1 \
+    --user-data-dir="$PROFILE_DIR" \
+    --no-first-run \
+    --no-default-browser-check
+}
+
+cmd_ensure() {
+  if is_running; then
+    echo "already running on http://127.0.0.1:${PORT}"
+    return 0
+  fi
+
+  if [[ ! -x "$CHROME_BIN" ]]; then
+    echo "Error: Google Chrome not found at $CHROME_BIN" >&2
+    exit 1
+  fi
+
+  mkdir -p "$PROFILE_DIR" "$(dirname "$LOG_FILE")"
+
+  # Prefer launchd if the user agent is registered, to avoid duplicate instances.
+  local uid
+  uid="$(id -u)"
+  if launchctl print "gui/${uid}/${LAUNCHD_LABEL}" >/dev/null 2>&1; then
+    launchctl kickstart "gui/${uid}/${LAUNCHD_LABEL}" >/dev/null 2>&1 || true
+  else
+    nohup "$CHROME_BIN" \
+      --remote-debugging-port="$PORT" \
+      --remote-debugging-address=127.0.0.1 \
+      --user-data-dir="$PROFILE_DIR" \
+      --no-first-run \
+      --no-default-browser-check \
+      </dev/null >>"$LOG_FILE" 2>&1 &
+    disown || true
+  fi
+
+  if wait_ready 30; then
+    echo "started on http://127.0.0.1:${PORT}"
+    return 0
+  else
+    echo "Error: Chrome did not open CDP port ${PORT} in time. Check $LOG_FILE" >&2
+    return 1
+  fi
+}
+
+cmd_stop() {
+  if ! pgrep -f "user-data-dir=${PROFILE_DIR}" >/dev/null 2>&1; then
+    echo "already stopped"
+    return 0
+  fi
+  pkill -TERM -f "user-data-dir=${PROFILE_DIR}" || true
+  local i=0
+  while (( i < 20 )); do
+    if ! pgrep -f "user-data-dir=${PROFILE_DIR}" >/dev/null 2>&1; then
+      echo "stopped"
+      return 0
+    fi
+    sleep 0.25
+    (( i += 1 ))
+  done
+  echo "Warning: process still exiting; check Activity Monitor if needed." >&2
+  return 1
+}
+
+cmd_open() {
+  local target_url="${1:-about:blank}"
+  cmd_ensure >/dev/null
+  "$CHROME_BIN" \
+    --user-data-dir="$PROFILE_DIR" \
+    "$target_url" >/dev/null 2>&1 &
+  disown || true
+  echo "opened ${target_url} in agent-chrome"
+}
+
+case "${1:-ensure}" in
+  ensure|start) cmd_ensure ;;
+  foreground)   cmd_foreground ;;
+  status)       cmd_status ;;
+  stop)         cmd_stop ;;
+  open)         shift; cmd_open "${1:-about:blank}" ;;
+  -h|--help|help)
+    cat <<EOF
+Usage: agent-chrome <command>
+
+Commands:
+  ensure | start   Start the dedicated Chrome profile if not already running (default)
+  status           Show CDP readiness and browser version on 127.0.0.1:${PORT}
+  stop             Gracefully stop the dedicated Chrome profile instance
+  open [url]       Ensure running and open a URL in the dedicated Chrome window
+  foreground       Run Chrome in the foreground (used by macOS LaunchAgent)
+
+Environment:
+  AGENT_CHROME_PORT     CDP port (default: 9333)
+  AGENT_CHROME_PROFILE  User data dir (default: ~/.local/share/agent-chrome-profile)
+EOF
+    ;;
+  *)
+    echo "Unknown command: $1 (try --help)" >&2
+    exit 1
+    ;;
+esac
