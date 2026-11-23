@@ -43,7 +43,7 @@ dns:
       - https://dns.alidns.com/dns-query
       - 119.29.29.29
     # 国内网站与私网域名走国内加密 DoH（不经过主路由，避免牵出运营商联通 DNS / ECS）
-    "geosite:cn,geosite:private":
+    "geosite:cn,private":
       - https://doh.pub/dns-query
       - https://dns.alidns.com/dns-query
       - 119.29.29.29

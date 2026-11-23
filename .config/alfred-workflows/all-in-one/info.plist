@@ -21,6 +21,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>17BD9D99-2E4D-4023-87D2-B22E15D83CEB</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>64CDCE1B-46B5-460F-98C7-658DFF3F8ABF</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
 		<array>
 			<dict>
@@ -111,11 +124,37 @@
 				<false/>
 			</dict>
 		</array>
+		<key>64CDCE1B-46B5-460F-98C7-658DFF3F8ABF</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>9C2C6BA0-E4F3-46FF-9194-599C5BF2FFBB</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 		<key>8828A812-1352-4433-A20D-6679110E2752</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
 				<string>14C47A8B-F73F-45F0-AAE3-384BB2102654</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>9C2C6BA0-E4F3-46FF-9194-599C5BF2FFBB</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>FEEFD068-2DFB-41F3-9E72-EAFC8F0EB245</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -190,50 +229,79 @@
 		<dict>
 			<key>config</key>
 			<dict>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>keyword</key>
+				<string>cc</string>
 				<key>subtext</key>
-				<string>自动识别单词和句子</string>
+				<string></string>
 				<key>text</key>
-				<string>中英互译</string>
+				<string>Copy Path</string>
+				<key>withspace</key>
+				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.trigger.fallback</string>
+			<string>alfred.workflow.input.keyword</string>
 			<key>uid</key>
-			<string>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</string>
+			<string>17BD9D99-2E4D-4023-87D2-B22E15D83CEB</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>behaviour</key>
-				<integer>2</integer>
-				<key>fontmode</key>
-				<integer>0</integer>
-				<key>fontsizing</key>
-				<integer>0</integer>
-				<key>footertext</key>
-				<string>translated</string>
-				<key>inputfile</key>
-				<string>translate_textview</string>
-				<key>inputtype</key>
-				<integer>1</integer>
-				<key>loadingtext</key>
-				<string></string>
-				<key>outputmode</key>
-				<integer>0</integer>
-				<key>scriptinput</key>
-				<integer>0</integer>
-				<key>spellchecking</key>
-				<integer>0</integer>
-				<key>stackview</key>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{var:openai_translation}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
 				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.userinterface.text</string>
+			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
+			<string>FEEFD068-2DFB-41F3-9E72-EAFC8F0EB245</string>
 			<key>version</key>
-			<integer>1</integer>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>tell application "Finder"
+    set theSelection to selection
+    if (count of theSelection) &gt; 0 then
+        set pathList to {}
+        repeat with anItem in theSelection
+            set end of pathList to POSIX path of (anItem as alias)
+        end repeat
+        set AppleScript's text item delimiters to linefeed
+        return pathList as text
+    else if (count of Finder windows) &gt; 0 then
+        return POSIX path of (target of front Finder window as alias)
+    else
+        return POSIX path of (path to desktop folder)
+    end if
+end tell</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>6</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>64CDCE1B-46B5-460F-98C7-658DFF3F8ABF</string>
+			<key>version</key>
+			<integer>2</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -247,6 +315,34 @@
 			<string>alfred.workflow.output.speak</string>
 			<key>uid</key>
 			<string>E4A98DC0-6A53-4FE3-B7C6-66E167930386</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.transform</string>
+			<key>uid</key>
+			<string>9C2C6BA0-E4F3-46FF-9194-599C5BF2FFBB</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>subtext</key>
+				<string>自动识别单词和句子</string>
+				<key>text</key>
+				<string>中英互译</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.fallback</string>
+			<key>uid</key>
+			<string>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</string>
 			<key>version</key>
 			<integer>1</integer>
 		</dict>
@@ -289,6 +385,39 @@
 			<string>BE250A49-3CF5-4F3E-A212-5333D84166B1</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>behaviour</key>
+				<integer>2</integer>
+				<key>fontmode</key>
+				<integer>0</integer>
+				<key>fontsizing</key>
+				<integer>0</integer>
+				<key>footertext</key>
+				<string>translated</string>
+				<key>inputfile</key>
+				<string>translate_textview</string>
+				<key>inputtype</key>
+				<integer>1</integer>
+				<key>loadingtext</key>
+				<string></string>
+				<key>outputmode</key>
+				<integer>0</integer>
+				<key>scriptinput</key>
+				<integer>0</integer>
+				<key>spellchecking</key>
+				<integer>0</integer>
+				<key>stackview</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.userinterface.text</string>
+			<key>uid</key>
+			<string>3D684B33-0345-42E5-90E0-B0865C18E9F3</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -851,6 +980,13 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 			<key>ypos</key>
 			<real>875</real>
 		</dict>
+		<key>17BD9D99-2E4D-4023-87D2-B22E15D83CEB</key>
+		<dict>
+			<key>xpos</key>
+			<real>30</real>
+			<key>ypos</key>
+			<real>15</real>
+		</dict>
 		<key>19239983-96F5-4262-AC24-4372128E5DDC</key>
 		<dict>
 			<key>xpos</key>
@@ -875,9 +1011,9 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 		<key>3D684B33-0345-42E5-90E0-B0865C18E9F3</key>
 		<dict>
 			<key>xpos</key>
-			<real>285</real>
+			<real>325</real>
 			<key>ypos</key>
-			<real>55</real>
+			<real>175</real>
 		</dict>
 		<key>40D87239-5DBD-4052-9EEA-48CE86454C1C</key>
 		<dict>
@@ -896,9 +1032,9 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 		<key>4B3A71E2-90C8-4C8B-858F-D8CDBBF26CFF</key>
 		<dict>
 			<key>xpos</key>
-			<real>65</real>
+			<real>60</real>
 			<key>ypos</key>
-			<real>55</real>
+			<real>100</real>
 		</dict>
 		<key>60559819-5D23-4156-8252-18CBAC9EDE17</key>
 		<dict>
@@ -913,6 +1049,13 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 			<real>70</real>
 			<key>ypos</key>
 			<real>745</real>
+		</dict>
+		<key>64CDCE1B-46B5-460F-98C7-658DFF3F8ABF</key>
+		<dict>
+			<key>xpos</key>
+			<real>190</real>
+			<key>ypos</key>
+			<real>15</real>
 		</dict>
 		<key>7B6BA900-09A6-43CB-8042-E4F94124AADA</key>
 		<dict>
@@ -934,6 +1077,13 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 			<real>80</real>
 			<key>ypos</key>
 			<real>885</real>
+		</dict>
+		<key>9C2C6BA0-E4F3-46FF-9194-599C5BF2FFBB</key>
+		<dict>
+			<key>xpos</key>
+			<real>385</real>
+			<key>ypos</key>
+			<real>90</real>
 		</dict>
 		<key>A9D1B90B-2DAB-4231-B0B7-CD21BF050BED</key>
 		<dict>
@@ -983,6 +1133,13 @@ exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"
 			<real>215</real>
 			<key>ypos</key>
 			<real>210</real>
+		</dict>
+		<key>FEEFD068-2DFB-41F3-9E72-EAFC8F0EB245</key>
+		<dict>
+			<key>xpos</key>
+			<real>495</real>
+			<key>ypos</key>
+			<real>15</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
