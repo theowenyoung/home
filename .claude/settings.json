@@ -150,7 +150,8 @@
     "commit-commands@claude-plugins-official": true,
     "startup@startup-skill": true,
     "idea-to-ship@nelsonwerd": true,
-    "i-have-adhd@i-have-adhd": true
+    "i-have-adhd@i-have-adhd": true,
+    "springbrand@springbrand": true
   },
   "extraKnownMarketplaces": {
     "startup-skill": {
@@ -170,9 +171,20 @@
         "source": "github",
         "repo": "ayghri/i-have-adhd"
       }
+    },
+    "springbrand": {
+      "source": {
+        "source": "github",
+        "repo": "springbrand-lab/springbrand-agent-setup"
+      }
     }
   },
   "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "theme": "dark",

@@ -82,6 +82,7 @@ __pycache__/
 .config/rclone/**
 .config/caddy/autosave.json
 .config/.wrangler
+.config/cloudflare/
 .config/qBittorrent
 .config/zed/**
 !.config/zed/settings.json

@@ -322,6 +322,7 @@ if [[ "$OSTYPE" == darwin* ]]; then
   export AWS_SECRET_ACCESS_KEY=$(sec get AWS_SECRET_ACCESS_KEY 2>/dev/null)
   export GITHUB_API_TOKEN=$(sec get GITHUB_API_TOKEN 2>/dev/null)
   export CUSTOM_GITHUB_TOKEN=$(sec get GITHUB_TOKEN 2>/dev/null)
+  export CUSTOM_STRIPE_SECRET_KEY=$(sec get STRIPE_SECRET_KEY 2>/dev/null)
   export HF_TOKEN=$(sec get HF_TOKEN 2>/dev/null)
   export CUSTOM_OPENAI_API_ENDPOINT=$(sec get CUSTOM_OPENAI_API_ENDPOINT 2>/dev/null)
   export CUSTOM_OPENAI_BASE_URL="$CUSTOM_OPENAI_API_ENDPOINT"
@@ -451,9 +452,13 @@ alias gittree="git ls-tree -r HEAD --name-only | tree --fromfile"
 # claude
 unalias c cc cccc ccccc 2>/dev/null
 alias c="claude --dangerously-skip-permissions"
-alias cc="claude --dangerously-skip-permissions --permission-mode plan"
 alias cccc="claude --dangerously-skip-permissions --continue"
 alias ccccc="claude --dangerously-skip-permissions --resume"
+
+# agy
+unalias g ggg 2>/dev/null
+alias g="agy --dangerously-skip-permissions"
+alias ggg="agy --dangerously-skip-permissions --continue"
 
 # codex
 unalias x xx xxx xxxx xxxxx 2>/dev/null
