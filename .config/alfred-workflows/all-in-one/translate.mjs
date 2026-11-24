@@ -5,6 +5,46 @@ import fs from "node:fs";
 import { encode } from "punycode";
 
 // Alfred translate script with streaming OpenAI
+// 设为 true 时仅打印请求日志，不真实发出翻译请求
+const DRY_RUN_TRANSLATE = false;
+// 流式轮询间隔（秒）
+const STREAM_POLL_INTERVAL = 0.15;
+
+function maskSecret(secret) {
+  if (!secret) return "(NOT SET)";
+  if (secret.length <= 12) return `*** (len=${secret.length})`;
+  return `${secret.slice(0, 8)}...${secret.slice(-4)} (len=${secret.length})`;
+}
+
+function logRequest(engine, req, { dryRun = false } = {}) {
+  const proxyInfo = {
+    HTTP_PROXY: process.env.HTTP_PROXY || process.env.http_proxy || "(unset)",
+    HTTPS_PROXY: process.env.HTTPS_PROXY || process.env.https_proxy || "(unset)",
+    ALL_PROXY: process.env.ALL_PROXY || process.env.all_proxy || "(unset)",
+    NO_PROXY: process.env.NO_PROXY || process.env.no_proxy || "(unset)",
+    NODE_USE_ENV_PROXY: process.env.NODE_USE_ENV_PROXY || "(unset)",
+  };
+
+  const title = dryRun
+    ? `=== [DRY RUN] 未真实发出翻译请求 (${engine}) ===`
+    : `=== 翻译请求 (${engine}) ===`;
+
+  console.error(
+    [
+      title,
+      `Method: ${req.method}`,
+      `URL: ${req.endpoint}`,
+      ...(req.rawEndpointEnv !== undefined
+        ? [`Raw Endpoint Env: ${req.rawEndpointEnv}`]
+        : []),
+      `Proxy Env: ${JSON.stringify(proxyInfo, null, 2)}`,
+      `Headers: ${JSON.stringify(req.maskedHeaders, null, 2)}`,
+      `Body:\n${JSON.stringify(req.bodyObj, null, 2)}`,
+      `=== END ===`,
+    ].join("\n"),
+  );
+}
+
 async function main() {
   const args = process.argv.slice(2);
   let sourceText = args[0];
@@ -76,6 +116,21 @@ async function main() {
   if (engine === "deepl") {
     // DeepL 直接翻译，无需流式
     try {
+      if (DRY_RUN_TRANSLATE) {
+        const req = buildDeeplRequest({
+          to: targetLanguage,
+          text: sourceText,
+        });
+        logRequest("deepl", req, { dryRun: true });
+        console.log(
+          JSON.stringify({
+            response: `## 原文\n\n${sourceText}\n\n## 调试模式（未发送真实请求）\n\n- **引擎**: deepl\n- **请求地址**: \`${req.endpoint}\`\n\n完整请求内容已输出到 Alfred Debugger 日志。`,
+            footer: "调试模式 - 未发送真实请求（请在 Alfred Debugger 查看日志）",
+          }),
+        );
+        return;
+      }
+
       const deeplResult = await translateWithDeepl({
         to: targetLanguage,
         text: sourceText,
@@ -111,6 +166,19 @@ async function main() {
   const pidFile = path.join(cacheDir, "openai_pid.txt");
   const stateFile = path.join(cacheDir, "translate_state.json");
 
+  if (DRY_RUN_TRANSLATE) {
+    cleanup(streamFile, pidFile, stateFile);
+    const req = buildOpenAIRequest(sourceText, targetLanguage);
+    logRequest("openai", req, { dryRun: true });
+    console.log(
+      JSON.stringify({
+        response: `## 原文\n\n${sourceText}\n\n## 调试模式（未发送真实请求）\n\n- **引擎**: openai\n- **请求地址**: \`${req.endpoint}\`\n- **模型**: \`${req.model}\`\n\n完整请求内容已输出到 Alfred Debugger 日志。`,
+        footer: "调试模式 - 未发送真实请求（请在 Alfred Debugger 查看日志）",
+      }),
+    );
+    return;
+  }
+
   let isStreaming = process.env.streaming_now === "1";
 
   if (isStreaming) {
@@ -129,7 +197,7 @@ async function main() {
     if (state) {
       console.log(
         JSON.stringify({
-          rerun: 0.5,
+          rerun: STREAM_POLL_INTERVAL,
           variables: { streaming_now: "1" },
           response: formatResponse({
             sourceText: state.sourceText,
@@ -153,7 +221,7 @@ async function main() {
 
     console.log(
       JSON.stringify({
-        rerun: 0.5,
+        rerun: STREAM_POLL_INTERVAL,
         variables: { streaming_now: "1" },
         response: formatResponse({
           sourceText,
@@ -184,8 +252,7 @@ function resolveChatCompletionsUrl(base) {
   return `${trimmed}/v1/chat/completions`;
 }
 
-// 启动 OpenAI 流式翻译
-async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
+function buildOpenAIRequest(text, targetLang) {
   const systemPrompt =
     targetLang === "zh"
       ? "You are a professional translator. Translate the given text to Chinese. Only output the translation result, no explanations."
@@ -196,18 +263,53 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
     { role: "user", content: text },
   ];
 
-  const requestBody = JSON.stringify({
-    model: process.env.OPENAI_MODEL || "gpt-5-mini",
-    messages: messages,
+  const model = process.env.OPENAI_MODEL || "gpt-5-mini";
+  const endpoint = resolveChatCompletionsUrl(process.env.OPENAI_API_ENDPOINT);
+  const bodyObj = {
+    model,
+    messages,
     stream: true,
-  });
+  };
+
+  // 默认关闭 reasoning/thinking 以显著降低翻译首字延迟（可通过 OPENAI_REASONING_EFFORT 覆盖，设为 default 可不传）
+  const reasoningEffort = (process.env.OPENAI_REASONING_EFFORT ?? "none").trim();
+  if (reasoningEffort && reasoningEffort !== "default") {
+    if (/openrouter\.ai/i.test(endpoint)) {
+      bodyObj.reasoning = { effort: reasoningEffort };
+    } else {
+      bodyObj.reasoning_effort = reasoningEffort;
+    }
+  }
+
+  return {
+    method: "POST",
+    endpoint,
+    rawEndpointEnv: process.env.OPENAI_API_ENDPOINT || "(unset)",
+    model,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    },
+    maskedHeaders: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${maskSecret(process.env.OPENAI_API_KEY)}`,
+    },
+    bodyObj,
+    bodyString: JSON.stringify(bodyObj),
+  };
+}
+
+// 启动 OpenAI 流式翻译
+async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
+  const req = buildOpenAIRequest(text, targetLang);
+  const requestBody = req.bodyString;
 
   // 确保流文件存在
   fs.writeFileSync(streamFile, "");
 
   // 使用 curl 进行流式请求
   const errFile = streamFile + ".err";
-  const endpoint = resolveChatCompletionsUrl(process.env.OPENAI_API_ENDPOINT);
+  const endpoint = req.endpoint;
   const curlArgs = [
     endpoint,
     "--silent",
@@ -220,25 +322,14 @@ async function startOpenAIStream(text, targetLang, streamFile, pidFile) {
     "--header",
     "Content-Type: application/json",
     "--header",
-    `Authorization: Bearer ${process.env.OPENAI_API_KEY}`,
+    `Authorization: ${req.headers.Authorization}`,
     "--data",
     requestBody,
     "--output",
     streamFile,
   ];
 
-  console.error(
-    "=== startOpenAIStream ===\nEndpoint:",
-    endpoint,
-    "\nModel:",
-    process.env.OPENAI_MODEL || "gpt-5-mini",
-    "\nAPI key:",
-    process.env.OPENAI_API_KEY
-      ? `set (len=${process.env.OPENAI_API_KEY.length})`
-      : "NOT set",
-    "\nRequest body:",
-    requestBody,
-  );
+  logRequest("openai", req, { dryRun: false });
 
   try {
     const errFd = fs.openSync(errFile, "w");
@@ -311,17 +402,20 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
     }
   }
 
-  // 解析流式响应
-  const rawLines = streamContent.split("\n").filter((line) => line.trim());
+  // 解析流式响应（按 SSE 规范跳过空行与 ":" 开头的注释/心跳行，如 ": OPENROUTER PROCESSING"）
+  const rawLines = streamContent
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith("data:"));
   const parseFailures = [];
   const chunks = rawLines
-    .map((line) => line.replace(/^data: /, ""))
-    .filter((line) => line !== "[DONE]")
-    .map((line) => {
+    .map((line) => line.slice(5).trim())
+    .filter((data) => data && data !== "[DONE]")
+    .map((data) => {
       try {
-        return JSON.parse(line);
+        return JSON.parse(data);
       } catch (e) {
-        parseFailures.push({ line, error: e.message });
+        parseFailures.push({ line: data, error: e.message });
         return null;
       }
     })
@@ -343,6 +437,16 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
   const finishReason = chunks.slice(-1)[0]?.choices?.[0]?.finish_reason;
   const finished = !!finishReason;
 
+  // 若 curl 已退出且有 stderr 错误且无任何响应内容，立即报错而不必等待超时
+  if (!finished && curlErrSnapshot && streamContent.length === 0 && !isPidAlive(pidFile)) {
+    cleanup(streamFile, pidFile, stateFile, errFile);
+    return {
+      sourceText: state.sourceText,
+      openaiResult: { error: `连接失败: ${curlErrSnapshot}` },
+      finished: true,
+    };
+  }
+
   // 检查连接是否超时
   if (!finished && fs.existsSync(streamFile)) {
     const stats = fs.statSync(streamFile);
@@ -350,10 +454,10 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
 
     if (stalled && streamContent.length === 0) {
       console.error(
-        "=== 翻译超时 ===\nstreamFile 10s 内无写入，curlErr:",
+        "=== 翻译超时 ===\nstreamFile 30s 内无写入，curlErr:",
         curlErrSnapshot || "(空)",
       );
-      cleanup(streamFile, pidFile, stateFile);
+      cleanup(streamFile, pidFile, stateFile, errFile);
       return {
         sourceText: state.sourceText,
         openaiResult: {
@@ -372,7 +476,7 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
       "=== 上游返回 HTML 而不是 SSE，按错误处理 ===\n内容前 1000 字符:\n" +
         streamContent.slice(0, 1000),
     );
-    cleanup(streamFile, pidFile, stateFile);
+    cleanup(streamFile, pidFile, stateFile, errFile);
     return {
       sourceText: state.sourceText,
       openaiResult: {
@@ -387,7 +491,7 @@ async function readOpenAIStream(streamFile, pidFile, stateFile) {
     try {
       fs.copyFileSync(streamFile, streamFile + ".raw");
     } catch (e) {}
-    cleanup(streamFile, pidFile);
+    cleanup(streamFile, pidFile, errFile);
   }
 
   return {
@@ -434,7 +538,7 @@ function outputStreamingResult(result, streamFile) {
     };
   } else {
     // 继续流式传输
-    output.rerun = 0.5;
+    output.rerun = STREAM_POLL_INTERVAL;
     output.variables = { streaming_now: "1" };
     output.footer = "OpenAI 翻译生成中...";
   }
@@ -489,9 +593,21 @@ function readState(stateFile) {
   }
 }
 
+function isPidAlive(pidFile) {
+  if (!fs.existsSync(pidFile)) return false;
+  try {
+    const pid = Number(fs.readFileSync(pidFile, "utf8").trim());
+    if (!Number.isInteger(pid) || pid <= 0) return false;
+    process.kill(pid, 0);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 // 清理文件
-function cleanup(streamFile, pidFile, stateFile) {
-  [streamFile, pidFile, stateFile].filter(Boolean).forEach((file) => {
+function cleanup(...files) {
+  files.filter(Boolean).forEach((file) => {
     if (fs.existsSync(file)) {
       try {
         fs.unlinkSync(file);
@@ -502,8 +618,7 @@ function cleanup(streamFile, pidFile, stateFile) {
   });
 }
 
-// 保留原有的翻译函数
-export async function translateWithDeepl(options = {}) {
+function buildDeeplRequest(options = {}) {
   let { to, text } = options;
   if (to.startsWith("zh")) {
     to = "ZH";
@@ -513,18 +628,36 @@ export async function translateWithDeepl(options = {}) {
   if (!requestUrl) {
     throw new Error("DEEPL_API_ENDPOINT 未配置");
   }
-  const requestBody = {
+  const bodyObj = {
     text: [text],
     source_lang: "auto",
     target_lang: to.toUpperCase(),
   };
-  const response = await fetch(requestUrl, {
+  return {
     method: "POST",
+    endpoint: requestUrl,
     headers: {
       "Content-Type": "application/json",
       token: process.env.DEEPL_AUTH_KEY,
     },
-    body: JSON.stringify(requestBody),
+    maskedHeaders: {
+      "Content-Type": "application/json",
+      token: maskSecret(process.env.DEEPL_AUTH_KEY),
+    },
+    bodyObj,
+    bodyString: JSON.stringify(bodyObj),
+  };
+}
+
+// 保留原有的翻译函数
+export async function translateWithDeepl(options = {}) {
+  const req = buildDeeplRequest(options);
+  const requestUrl = req.endpoint;
+  const requestBody = req.bodyObj;
+  const response = await fetch(requestUrl, {
+    method: req.method,
+    headers: req.headers,
+    body: req.bodyString,
   });
   const statusCode = response.status;
   const responseText = await response.text();

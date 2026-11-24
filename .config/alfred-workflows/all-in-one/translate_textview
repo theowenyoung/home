@@ -4,6 +4,15 @@ SCRIPT_PATH="$HOME/.config/alfred-workflows/all-in-one/translate.mjs"
 
 export NODE_NO_WARNINGS=1
 
-source "$HOME/.config/alfred-workflows/all-in-one/proxy-env.sh"
+# 轮询流式缓存时不需要读取系统代理
+if [ "$streaming_now" != "1" ]; then
+  source "$HOME/.config/alfred-workflows/all-in-one/proxy-env.sh"
+fi
+
+# 优先直接调用 mise 安装的 node，避免每次轮询额外承担 mise exec 的启动开销
+NODE_BIN="$HOME/.local/share/mise/installs/node/lts/bin/node"
+if [ -x "$NODE_BIN" ]; then
+  exec "$NODE_BIN" "$SCRIPT_PATH" "$@"
+fi
 
 exec /opt/homebrew/bin/mise exec -- node "$SCRIPT_PATH" "$@"

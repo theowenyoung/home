@@ -7,9 +7,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.9.6 sync --silent",
-            "timeout": 120,
-            "async": true
+            "command": "npx --yes ccclub@0.9.9 sync --silent",
+            "async": true,
+            "timeout": 120
           }
         ]
       }
@@ -29,9 +29,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx --yes ccclub@0.9.6 sync --silent",
-            "timeout": 120,
-            "async": true
+            "command": "npx --yes ccclub@0.9.9 sync --silent",
+            "async": true,
+            "timeout": 120
           }
         ]
       }

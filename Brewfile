@@ -65,7 +65,6 @@ cask "codex-app"
 
 # --- 效率工具 ---
 cask "alfred"                      # 启动器 + 工作流
-cask "cleanshot"                   # 截图 / 录屏
 cask "keyboard-maestro"            # 键盘宏自动化
 cask "bartender"                   # 菜单栏整理
 cask "selfcontrol"                 # 屏蔽干扰网站，专注用
